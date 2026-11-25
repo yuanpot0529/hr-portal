@@ -7,50 +7,166 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, -apple-system, sans-serif;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif;
+      color: #1e293b;
+      background: #f8fafc;
+      margin: 0;
+      padding: 0;
+      line-height: 1.65;
     }
+
+    /* 依提供版型精準還原之計畫卡片與內容樣式 */
     .plan-card {
+      background: #fff;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+      page-break-inside: avoid;
       transition: transform 0.16s ease, box-shadow 0.16s ease;
     }
     .plan-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 24px -10px rgba(15, 23, 42, 0.16);
+      box-shadow: 0 12px 24px -10px rgba(15, 41, 74, 0.16);
+    }
+    .plan-meta {
+      margin-bottom: 8px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #075985;
+      padding: 2px 10px;
+      border-radius: 6px;
+      font-weight: 700;
+      margin-right: 6px;
+    }
+    .badge-num {
+      display: inline-block;
+      background: #0f294a;
+      color: #fff;
+      padding: 2px 10px;
+      border-radius: 6px;
+      font-weight: 700;
+      margin-right: 6px;
+    }
+    .badge-sub {
+      display: inline-block;
+      background: #f1f5f9;
+      color: #334155;
+      padding: 2px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      margin-right: 6px;
+    }
+    .dm-note {
+      color: #0f766e;
+      word-break: break-all;
+      font-size: 12px;
+    }
+    .plan-card h2,
+    .plan-heading {
+      margin: 0 0 10px;
+      font-size: 18px;
+      color: #0f294a;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+    .highlight-box {
+      background: #f0f5fa;
+      border-left: 4px solid #1e4e8c;
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: #0f294a;
+    }
+    .summary-text {
+      margin: 0 0 12px;
+      color: #475569;
+      font-size: 14px;
+    }
+    .content-body h4 {
+      margin: 14px 0 6px;
+      font-size: 15px;
+      color: #0f294a;
+      border-left: 3px solid #0d9488;
+      padding-left: 8px;
+      font-weight: 700;
+    }
+    .content-body ul {
+      margin: 6px 0 12px;
+      padding-left: 20px;
+      list-style-type: disc;
+    }
+    .content-body li {
+      margin-bottom: 4px;
+    }
+    .content-body table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0 14px;
+      font-size: 13px;
+      display: block;
+      overflow-x: auto;
+    }
+    .content-body th,
+    .content-body td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .content-body th {
+      background: #f0f5fa;
+      color: #0f294a;
+      font-weight: 700;
+    }
+    @media (max-width: 640px) {
+      .plan-card {
+        padding: 14px;
+      }
+      .plan-card h2,
+      .plan-heading {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
+<body class="bg-[#f8fafc] text-[#1e293b] min-h-screen flex flex-col">
 
   <!-- 頂部導覽列 -->
-  <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-30 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-3">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-teal-500/20 border border-teal-400/40 flex items-center justify-center text-teal-300 font-extrabold text-base shrink-0">
-          HR
-        </div>
-        <div>
-          <h1 class="text-base sm:text-lg font-extrabold tracking-tight text-white">
-            企業人資補助與就業資源檢索平台
-          </h1>
-          <p class="text-[11px] sm:text-xs text-slate-300">
-            1～37 號方案排序・招募／培訓／留用三大類篩選・無編號方案自動排後・管理者登入即可跨裝置同步
-          </p>
-        </div>
+  <header class="bg-[#0f294a] text-white border-b border-slate-800 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-[960px] mx-auto px-4 py-4 flex flex-wrap items-center justify-between gap-3">
+      <div>
+        <h1 class="m-0 text-lg sm:text-xl font-bold text-white">
+          企業人資補助與就業資源檢索平台
+        </h1>
+        <p class="m-0 mt-1 text-xs sm:text-[13px] text-[#cbd5e1]">
+          1～37 號方案排序・招募／培訓／留用三大類篩選・無編號方案自動排後・管理者登入即可跨裝置同步
+        </p>
       </div>
 
       <div class="flex items-center gap-2 flex-wrap">
-        <span id="authStatusBadge" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700">
+        <span id="authStatusBadge" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-200 border border-slate-700">
           訪客檢視模式
         </span>
 
-        <button type="button" id="btnAddPlan" onclick="openEditModal('')" class="hidden px-3 py-1.5 rounded-xl bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold transition cursor-pointer">
+        <button type="button" id="btnAddPlan" onclick="openEditModal('')" class="hidden px-3 py-1.5 rounded-lg bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold transition cursor-pointer">
           + 新增計畫
         </button>
 
-        <button type="button" id="btnAdminLogin" onclick="openLoginModal()" class="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold transition cursor-pointer">
+        <button type="button" id="btnAdminLogin" onclick="openLoginModal()" class="px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold transition cursor-pointer">
           管理者登入
         </button>
 
-        <button type="button" id="btnAdminLogout" onclick="logoutAdmin()" class="hidden px-3 py-1.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-white text-xs font-semibold transition cursor-pointer">
+        <button type="button" id="btnAdminLogout" onclick="logoutAdmin()" class="hidden px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-xs font-semibold transition cursor-pointer">
           登出
         </button>
       </div>
@@ -58,10 +174,10 @@
   </header>
 
   <!-- 主要內容區 -->
-  <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 flex-1 space-y-6">
+  <main class="max-w-[1280px] w-full mx-auto px-4 py-5 flex-1">
 
     <!-- 搜尋、分類篩選與備份工具列 -->
-    <section class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-2xs space-y-4">
+    <section class="bg-white border border-[#cbd5e1] rounded-xl p-4 sm:p-5 mb-5 space-y-3.5">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div class="relative flex-1">
           <input
@@ -69,26 +185,26 @@
             id="searchInput"
             oninput="renderPlans()"
             placeholder="搜尋計畫編號、子類別（如：招募人才類、分署培訓人才類、先僱後訓類、提供實習類、自行辦訓類、委接分署辦訓類、勞工自行報名類、留用人才類）、名稱或關鍵字..."
-            class="w-full pl-4 pr-10 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+            class="w-full pl-3.5 pr-12 py-2 rounded-lg border border-[#cbd5e1] text-sm focus:outline-none focus:ring-2 focus:ring-[#1e4e8c]"
           />
           <button
             type="button"
             onclick="clearSearch()"
             title="清除搜尋"
-            class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 text-xs font-bold px-1.5 py-0.5 cursor-pointer"
+            class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-900 text-xs font-bold px-1.5 py-0.5 cursor-pointer"
           >
             清除
           </button>
         </div>
 
         <div class="flex items-center gap-2 flex-wrap shrink-0">
-          <button type="button" onclick="fetchPlansFromServer(true)" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold transition cursor-pointer">
+          <button type="button" onclick="fetchPlansFromServer(true)" class="px-3 py-1.5 rounded-lg bg-[#f0f5fa] hover:bg-sky-100 text-[#0f294a] border border-[#cbd5e1] text-xs font-bold transition cursor-pointer">
             重新同步最新資料
           </button>
-          <button type="button" onclick="triggerJsonImport()" class="px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold transition cursor-pointer">
+          <button type="button" onclick="triggerJsonImport()" class="px-3 py-1.5 rounded-lg bg-[#f0f5fa] hover:bg-sky-100 text-[#0f294a] border border-[#cbd5e1] text-xs font-bold transition cursor-pointer">
             匯入備份 JSON
           </button>
-          <button type="button" onclick="exportJsonBackup()" class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition cursor-pointer">
+          <button type="button" onclick="exportJsonBackup()" class="px-3 py-1.5 rounded-lg bg-[#0f294a] hover:bg-slate-800 text-white text-xs font-bold transition cursor-pointer">
             匯出備份 JSON
           </button>
           <input type="file" id="jsonFileInput" accept=".json,application/json" class="hidden" onchange="handleJsonFileImport(event)" />
@@ -96,123 +212,123 @@
       </div>
 
       <!-- 分類標籤：招募、培訓、留用三大類 -->
-      <div class="flex items-center justify-between gap-3 flex-wrap pt-1 border-t border-slate-100">
+      <div class="flex items-center justify-between gap-3 flex-wrap pt-3 border-t border-slate-200">
         <div class="flex items-center gap-1.5 flex-wrap" id="categoryTabs">
-          <button type="button" data-cat="ALL" onclick="setCategoryFilter('ALL')" class="cat-tab px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-900 text-white cursor-pointer">
+          <button type="button" data-cat="ALL" onclick="setCategoryFilter('ALL')" class="cat-tab px-3 py-1 rounded-md text-xs font-bold bg-[#0f294a] text-white cursor-pointer">
             全部計畫
           </button>
-          <button type="button" data-cat="招募" onclick="setCategoryFilter('招募')" class="cat-tab px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">
+          <button type="button" data-cat="招募" onclick="setCategoryFilter('招募')" class="cat-tab px-3 py-1 rounded-md text-xs font-bold bg-[#e0f2fe] text-[#075985] hover:bg-sky-200 cursor-pointer">
             招募
           </button>
-          <button type="button" data-cat="培訓" onclick="setCategoryFilter('培訓')" class="cat-tab px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">
+          <button type="button" data-cat="培訓" onclick="setCategoryFilter('培訓')" class="cat-tab px-3 py-1 rounded-md text-xs font-bold bg-[#e0f2fe] text-[#075985] hover:bg-sky-200 cursor-pointer">
             培訓
           </button>
-          <button type="button" data-cat="留用" onclick="setCategoryFilter('留用')" class="cat-tab px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">
+          <button type="button" data-cat="留用" onclick="setCategoryFilter('留用')" class="cat-tab px-3 py-1 rounded-md text-xs font-bold bg-[#e0f2fe] text-[#075985] hover:bg-sky-200 cursor-pointer">
             留用
           </button>
         </div>
 
-        <div class="text-xs text-slate-600 font-semibold">
-          顯示 <span id="visibleCount" class="text-teal-700 font-extrabold">0</span> / <span id="totalCount" class="font-extrabold">37</span> 筆計畫
+        <div class="text-xs text-slate-600 font-bold">
+          顯示 <span id="visibleCount" class="text-[#0f766e]">0</span> / <span id="totalCount">37</span> 筆計畫
         </div>
       </div>
     </section>
 
     <!-- 勞動部各分署與就業中心諮詢電話參考（預設收合） -->
-    <section class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-2xs">
-      <div class="px-4 sm:px-5 py-3 flex items-center justify-between gap-2 bg-slate-50/80">
-        <div class="text-xs sm:text-sm font-bold text-slate-800">
+    <section class="bg-white border border-[#cbd5e1] rounded-xl p-4 sm:px-6 mb-5">
+      <div class="flex items-center justify-between gap-2">
+        <div class="text-sm font-bold text-[#0f294a]">
           勞動部勞動力發展署各分署與服務窗口諮詢電話參考
         </div>
-        <button type="button" id="btnToggleServiceTable" onclick="toggleServiceTable()" class="px-3 py-1 rounded-lg bg-white hover:bg-slate-100 border border-slate-300 text-xs font-semibold text-slate-700 cursor-pointer">
+        <button type="button" id="btnToggleServiceTable" onclick="toggleServiceTable()" class="px-3 py-1 rounded-md bg-[#f0f5fa] hover:bg-sky-100 border border-[#cbd5e1] text-xs font-bold text-[#0f294a] cursor-pointer">
           展開電話表
         </button>
       </div>
-      <div id="serviceTableWrapper" class="hidden px-4 sm:px-5 pb-4 pt-2 border-t border-slate-100 overflow-x-auto">
-        <table class="w-full text-xs border border-slate-200 border-collapse">
-          <thead class="bg-slate-100">
+      <div id="serviceTableWrapper" class="hidden mt-3 content-body">
+        <table>
+          <thead>
             <tr>
-              <th class="border border-slate-200 p-2 text-left">單位／分署別</th>
-              <th class="border border-slate-200 p-2 text-left">服務轄區</th>
-              <th class="border border-slate-200 p-2 text-left">洽詢專線</th>
+              <th>單位／分署別</th>
+              <th>服務轄區</th>
+              <th>洽詢專線</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td class="border border-slate-200 p-2 font-semibold">勞動力發展署客服中心</td>
-              <td class="border border-slate-200 p-2">全國就業通與各項計畫綜合諮詢</td>
-              <td class="border border-slate-200 p-2">0800-777-888</td>
+              <td><strong>勞動力發展署客服中心</strong></td>
+              <td>全國就業通與各項計畫綜合諮詢</td>
+              <td>0800-777-888</td>
             </tr>
             <tr>
-              <td class="border border-slate-200 p-2 font-semibold">北基宜花金馬分署</td>
-              <td class="border border-slate-200 p-2">臺北市、新北市、基隆市、宜蘭縣、花蓮縣、金門縣、連江縣</td>
-              <td class="border border-slate-200 p-2">02-8995-6399</td>
+              <td><strong>北基宜花金馬分署</strong></td>
+              <td>臺北市、新北市、基隆市、宜蘭縣、花蓮縣、金門縣、連江縣</td>
+              <td>02-8995-6399</td>
             </tr>
             <tr>
-              <td class="border border-slate-200 p-2 font-semibold">桃竹苗分署</td>
-              <td class="border border-slate-200 p-2">桃園市、新竹市、新竹縣、苗栗縣</td>
-              <td class="border border-slate-200 p-2">03-485-5368</td>
+              <td><strong>桃竹苗分署</strong></td>
+              <td>桃園市、新竹市、新竹縣、苗栗縣</td>
+              <td>03-485-5368</td>
             </tr>
             <tr>
-              <td class="border border-slate-200 p-2 font-semibold">中彰投分署</td>
-              <td class="border border-slate-200 p-2">臺中市、彰化縣、南投縣</td>
-              <td class="border border-slate-200 p-2">04-2359-2181</td>
+              <td><strong>中彰投分署</strong></td>
+              <td>臺中市、彰化縣、南投縣</td>
+              <td>04-2359-2181</td>
             </tr>
             <tr>
-              <td class="border border-slate-200 p-2 font-semibold">雲嘉南分署</td>
-              <td class="border border-slate-200 p-2">雲林縣、嘉義市、嘉義縣、臺南市</td>
-              <td class="border border-slate-200 p-2">06-698-5945</td>
+              <td><strong>雲嘉南分署</strong></td>
+              <td>雲林縣、嘉義市、嘉義縣、臺南市</td>
+              <td>06-698-5945</td>
             </tr>
             <tr>
-              <td class="border border-slate-200 p-2 font-semibold">高屏澎東分署</td>
-              <td class="border border-slate-200 p-2">高雄市、屏東縣、澎湖縣、臺東縣</td>
-              <td class="border border-slate-200 p-2">07-821-0171</td>
+              <td><strong>高屏澎東分署</strong></td>
+              <td>高雄市、屏東縣、澎湖縣、臺東縣</td>
+              <td>07-821-0171</td>
             </tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <!-- 計畫卡片網格 -->
-    <section id="plansGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
+    <!-- 計畫卡片清單（首頁改為每列 3 筆專案排列） -->
+    <section id="plansGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch">
       <!-- 由 JavaScript 動態渲染 -->
     </section>
   </main>
 
   <!-- 頁尾 -->
-  <footer class="bg-white border-t border-slate-200 py-4 px-4 sm:px-6 text-center text-xs text-slate-500">
+  <footer class="bg-white border-t border-[#cbd5e1] py-4 px-4 text-center text-xs text-slate-500">
     企業人資補助與就業資源檢索平台・實際補助額度與申請期限請以勞動部勞動力發展署最新公告為準
   </footer>
 
   <!-- Toast 提示訊息 -->
-  <div id="toast" class="hidden fixed bottom-5 right-5 z-50 max-w-sm px-4 py-3 rounded-2xl bg-slate-900 text-white text-xs sm:text-sm font-semibold shadow-xl border border-slate-700"></div>
+  <div id="toast" class="hidden fixed bottom-5 right-5 z-50 max-w-sm px-4 py-3 rounded-xl bg-[#0f294a] text-white text-xs sm:text-sm font-semibold shadow-xl border border-slate-700"></div>
 
   <!-- 計畫詳細內容彈窗 -->
-  <div id="detailModal" onclick="closeDetailModal(event)" class="hidden fixed inset-0 z-40 bg-slate-950/60 backdrop-blur-2xs flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl border border-slate-200 max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
-      <div class="px-5 py-4 border-b border-slate-200 flex items-start justify-between gap-3 bg-slate-50">
+  <div id="detailModal" onclick="closeDetailModal(event)" class="hidden fixed inset-0 z-40 bg-slate-950/60 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl border border-[#cbd5e1] max-w-[960px] w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="px-6 py-4 border-b border-[#cbd5e1] flex items-start justify-between gap-3 bg-[#f8fafc]">
         <div>
-          <div class="flex items-center gap-2 mb-1 flex-wrap">
-            <span id="detailCode" class="px-2.5 py-0.5 rounded-lg bg-slate-900 text-white text-xs font-bold">編號 1</span>
-            <span id="detailCategory" class="px-2.5 py-0.5 rounded-lg bg-teal-100 text-teal-900 text-xs font-bold">分類</span>
-            <span id="detailSubGroup" class="px-2.5 py-0.5 rounded-lg bg-slate-200 text-slate-800 text-xs font-semibold">子類別</span>
+          <div class="mb-1.5 text-xs">
+            <span id="detailCode" class="badge-num">編號 1</span>
+            <span id="detailCategory" class="badge">分類</span>
+            <span id="detailSubGroup" class="badge-sub">子類別</span>
           </div>
-          <h2 id="detailTitle" class="text-lg sm:text-xl font-extrabold text-slate-900">計畫名稱</h2>
+          <h2 id="detailTitle" class="m-0 text-lg font-bold text-[#0f294a]">計畫名稱</h2>
         </div>
-        <button type="button" onclick="hideDetailModal()" class="px-3 py-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold cursor-pointer">
+        <button type="button" onclick="hideDetailModal()" class="px-3 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold cursor-pointer">
           關閉
         </button>
       </div>
 
-      <div id="detailBody" class="p-5 overflow-y-auto space-y-4 flex-1"></div>
+      <div id="detailBody" class="p-6 overflow-y-auto flex-1"></div>
 
-      <div class="px-5 py-3.5 border-t border-slate-200 bg-slate-50 flex items-center justify-between gap-2 flex-wrap">
+      <div class="px-6 py-3.5 border-t border-[#cbd5e1] bg-[#f8fafc] flex items-center justify-between gap-2 flex-wrap">
         <div id="detailDmArea"></div>
         <div class="flex items-center gap-2">
-          <button type="button" id="btnDetailEdit" class="hidden px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs sm:text-sm font-bold cursor-pointer">
+          <button type="button" id="btnDetailEdit" class="hidden px-4 py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs sm:text-sm font-bold cursor-pointer">
             編輯此計畫
           </button>
-          <button type="button" onclick="hideDetailModal()" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-semibold cursor-pointer">
+          <button type="button" onclick="hideDetailModal()" class="px-4 py-2 rounded-lg bg-[#0f294a] hover:bg-slate-800 text-white text-xs sm:text-sm font-semibold cursor-pointer">
             返回清單
           </button>
         </div>
@@ -221,15 +337,15 @@
   </div>
 
   <!-- DM 預覽彈窗 -->
-  <div id="dmPreviewModal" onclick="closeDmPreviewModal(event)" class="hidden fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-2xs flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl border border-slate-200 max-w-4xl w-full h-[85vh] flex flex-col shadow-2xl overflow-hidden">
-      <div class="px-5 py-3.5 border-b border-slate-200 flex items-center justify-between gap-3 bg-slate-50">
-        <h3 id="dmPreviewTitle" class="text-sm sm:text-base font-extrabold text-slate-900 truncate">DM 檔案預覽</h3>
+  <div id="dmPreviewModal" onclick="closeDmPreviewModal(event)" class="hidden fixed inset-0 z-50 bg-slate-950/70 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl border border-[#cbd5e1] max-w-4xl w-full h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="px-5 py-3.5 border-b border-[#cbd5e1] flex items-center justify-between gap-3 bg-[#f8fafc]">
+        <h3 id="dmPreviewTitle" class="text-sm sm:text-base font-bold text-[#0f294a] truncate">DM 檔案預覽</h3>
         <div class="flex items-center gap-2 shrink-0">
-          <a id="dmPreviewNewTab" href="#" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold">
+          <a id="dmPreviewNewTab" href="#" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 rounded-lg bg-[#0f766e] hover:bg-teal-800 text-white text-xs font-bold">
             開新視窗 / 下載
           </a>
-          <button type="button" onclick="hideDmPreviewModal()" class="px-3 py-1.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold cursor-pointer">
+          <button type="button" onclick="hideDmPreviewModal()" class="px-3 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold cursor-pointer">
             關閉
           </button>
         </div>
@@ -239,28 +355,28 @@
   </div>
 
   <!-- 管理者登入彈窗 -->
-  <div id="loginModal" onclick="closeLoginModal(event)" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-2xs flex items-center justify-center p-4">
-    <form onsubmit="submitLogin(event)" class="bg-white rounded-2xl border border-slate-200 max-w-sm w-full p-6 shadow-2xl space-y-4">
+  <div id="loginModal" onclick="closeLoginModal(event)" class="hidden fixed inset-0 z-50 bg-slate-950/60 flex items-center justify-center p-4">
+    <form onsubmit="submitLogin(event)" class="bg-white rounded-xl border border-[#cbd5e1] max-w-sm w-full p-6 shadow-2xl space-y-4">
       <div>
-        <h2 class="text-lg font-extrabold text-slate-900">管理者登入</h2>
+        <h2 class="text-lg font-bold text-[#0f294a]">管理者登入</h2>
         <p class="text-xs text-slate-500 mt-0.5">登入後即可新增、修改、刪除計畫，並同步至所有裝置。</p>
       </div>
 
       <div>
         <label class="block text-xs font-bold text-slate-700 mb-1">管理者帳號</label>
-        <input type="text" id="loginUsername" required autocomplete="username" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500" />
+        <input type="text" id="loginUsername" required autocomplete="username" class="w-full px-3.5 py-2 rounded-lg border border-[#cbd5e1] text-sm focus:outline-none focus:ring-2 focus:ring-[#1e4e8c]" />
       </div>
 
       <div>
         <label class="block text-xs font-bold text-slate-700 mb-1">管理者密碼</label>
-        <input type="password" id="loginPassword" required autocomplete="current-password" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500" />
+        <input type="password" id="loginPassword" required autocomplete="current-password" class="w-full px-3.5 py-2 rounded-lg border border-[#cbd5e1] text-sm focus:outline-none focus:ring-2 focus:ring-[#1e4e8c]" />
       </div>
 
       <div class="flex items-center justify-end gap-2 pt-2">
-        <button type="button" onclick="hideLoginModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-semibold cursor-pointer">
+        <button type="button" onclick="hideLoginModal()" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-semibold cursor-pointer">
           取消
         </button>
-        <button type="submit" class="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs sm:text-sm font-bold cursor-pointer">
+        <button type="submit" class="px-4 py-2 rounded-lg bg-[#0f294a] hover:bg-slate-800 text-white text-xs sm:text-sm font-bold cursor-pointer">
           確認登入
         </button>
       </div>
@@ -268,11 +384,11 @@
   </div>
 
   <!-- 編輯 / 新增計畫彈窗 -->
-  <div id="editModal" onclick="closeEditModal(event)" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-2xs flex items-center justify-center p-4">
-    <form onsubmit="submitPlanEdit(event)" class="bg-white rounded-2xl border border-slate-200 max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
-      <div class="px-5 py-4 border-b border-slate-200 flex items-center justify-between bg-slate-50">
-        <h2 id="editModalHeading" class="text-lg font-extrabold text-slate-900">編輯計畫</h2>
-        <button type="button" onclick="hideEditModal()" class="px-3 py-1 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold cursor-pointer">
+  <div id="editModal" onclick="closeEditModal(event)" class="hidden fixed inset-0 z-50 bg-slate-950/60 flex items-center justify-center p-4">
+    <form onsubmit="submitPlanEdit(event)" class="bg-white rounded-xl border border-[#cbd5e1] max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="px-5 py-4 border-b border-[#cbd5e1] flex items-center justify-between bg-[#f8fafc]">
+        <h2 id="editModalHeading" class="text-lg font-bold text-[#0f294a]">編輯計畫</h2>
+        <button type="button" onclick="hideEditModal()" class="px-3 py-1 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold cursor-pointer">
           關閉
         </button>
       </div>
@@ -283,11 +399,11 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">計畫編號（留白則維持無編號並排在最後）</label>
-            <input type="text" id="editPlanNum" placeholder="例如：1 或留白" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm" />
+            <input type="text" id="editPlanNum" placeholder="例如：1 或留白" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm" />
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">計畫分類（招募、培訓、留用）</label>
-            <select id="editPlanCategory" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm bg-white">
+            <select id="editPlanCategory" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm bg-white">
               <option value="招募">招募</option>
               <option value="培訓">培訓</option>
               <option value="留用">留用</option>
@@ -297,61 +413,61 @@
 
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">細分類別（選填）</label>
-          <input type="text" id="editSubGroup" placeholder="例如：招募人才類、分署培訓人才類、先僱後訓類、提供實習類、自行辦訓類、委接分署辦訓類、勞工自行報名類、留用人才類" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm" />
+          <input type="text" id="editSubGroup" placeholder="例如：招募人才類、分署培訓人才類、先僱後訓類、提供實習類、自行辦訓類、委接分署辦訓類、勞工自行報名類、留用人才類" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm" />
         </div>
 
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">計畫名稱</label>
-          <input type="text" id="editPlanName" required class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm" />
+          <input type="text" id="editPlanName" required class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm" />
         </div>
 
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">適用對象</label>
-          <input type="text" id="editPlanTarget" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm" />
+          <input type="text" id="editPlanTarget" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm" />
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">補助標準與重點摘要</label>
-          <input type="text" id="editPlanAmount" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm" />
+          <label class="block text-xs font-bold text-slate-700 mb-1">補助與重點摘要</label>
+          <input type="text" id="editPlanAmount" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm" />
         </div>
 
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">計畫詳細說明（以提供或公開可查證資料為準）</label>
-          <textarea id="editPlanDesc" rows="6" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm leading-relaxed"></textarea>
+          <textarea id="editPlanDesc" rows="6" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm leading-relaxed"></textarea>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">DM 雲端連結</label>
-            <input type="url" id="editPlanDmUrl" placeholder="https://..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm" />
+            <input type="url" id="editPlanDmUrl" placeholder="https://..." class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm" />
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">DM 顯示名稱</label>
-            <input type="text" id="editPlanDmName" placeholder="例如：計畫簡章.pdf" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm" />
+            <input type="text" id="editPlanDmName" placeholder="例如：計畫簡章.pdf" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm" />
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">卡片背景色</label>
-            <input type="color" id="editCardBg" value="#ffffff" class="h-10 w-full rounded-xl border border-slate-300 cursor-pointer" />
+            <input type="color" id="editCardBg" value="#ffffff" class="h-10 w-full rounded-lg border border-[#cbd5e1] cursor-pointer" />
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">卡片文字色</label>
-            <input type="color" id="editTextColor" value="#0f172a" class="h-10 w-full rounded-xl border border-slate-300 cursor-pointer" />
+            <input type="color" id="editTextColor" value="#1e293b" class="h-10 w-full rounded-lg border border-[#cbd5e1] cursor-pointer" />
           </div>
         </div>
       </div>
 
-      <div class="px-5 py-3.5 border-t border-slate-200 bg-slate-50 flex items-center justify-between gap-2">
-        <button type="button" id="btnDeletePlan" onclick="deleteCurrentPlan()" class="hidden px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-bold cursor-pointer">
+      <div class="px-5 py-3.5 border-t border-[#cbd5e1] bg-[#f8fafc] flex items-center justify-between gap-2">
+        <button type="button" id="btnDeletePlan" onclick="deleteCurrentPlan()" class="hidden px-3.5 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-bold cursor-pointer">
           刪除計畫
         </button>
         <div class="flex items-center gap-2 ml-auto">
-          <button type="button" onclick="hideEditModal()" class="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs sm:text-sm font-semibold cursor-pointer">
+          <button type="button" onclick="hideEditModal()" class="px-4 py-2 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs sm:text-sm font-semibold cursor-pointer">
             取消
           </button>
-          <button type="submit" class="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs sm:text-sm font-bold cursor-pointer">
+          <button type="submit" class="px-4 py-2 rounded-lg bg-[#0f766e] hover:bg-teal-800 text-white text-xs sm:text-sm font-bold cursor-pointer">
             儲存並同步
           </button>
         </div>
@@ -384,10 +500,78 @@
         name: '僱用獎助措施',
         title: '僱用獎助措施',
         target: '僱用經公立就業服務機構推介並核發「僱用獎助推介卡」之失業勞工（特定對象失業滿 30 日或一般失業勞工連續失業滿 3 個月）之雇主',
-        amount: '按月計酬每人每月 9,000～13,000 元（特定對象 11,000～13,000 元、一般失業勞工 9,000 元），最長 12 個月',
-        highlight: '按月計酬每人每月 9,000～13,000 元，最長 12 個月',
-        summary: '鼓勵雇主僱用經公立就業服務機構推介並領有僱用獎助推介卡之失業勞工，連續僱用滿 30 日以上可申請獎助，最長 12 個月。',
-        desc: '【類別】招募／招募人才類（編號 1）\n【計畫重點】雇主僱用經公立就業服務機構推介並發給僱用獎助推介卡之失業勞工（特定對象連續失業滿 30 日、一般失業勞工連續失業滿 3 個月），按月計酬特定對象每人每月 11,000～13,000 元、一般失業勞工每人每月 9,000 元，最長發給 12 個月；非按月計酬依時數或規定標準按比例核發。須先經公立就服機構推介錄取，且不得僱用雇主或負責人三親等內親屬。'
+        amount: '高齡 15,000 元/月｜中高齡/身障/長期失業 13,000 元/月｜特定對象 11,000 元/月（最長 12 個月）',
+        highlight: '高齡 15,000 元/月｜中高齡/身障/長期失業 13,000 元/月｜特定對象 11,000 元/月（最長 12 個月）',
+        summary: '雇主經公立就服機構推介僱用失業者，依身分與計酬方式按月或按時核發僱用獎助，最長 12 個月。',
+        desc: '雇主經公立就服機構推介僱用失業者，依身分與計酬方式按月或按時核發僱用獎助，最長 12 個月。',
+        content: `<div class="plan-quick-grid">
+            <div class="plan-quick-item">
+              <div class="plan-quick-label"><strong>一句話看懂</strong></div>
+              <div class="plan-quick-val">公家推介僱用失業勞工，連續滿 30 日起按月或按時補助雇主，最長 12 個月。</div>
+            </div>
+            <div class="plan-quick-item">
+              <div class="plan-quick-label"><strong>誰可以申請</strong></div>
+              <div class="plan-quick-val">就保投保單位之民營事業單位、團體或私立學校（不含政黨及政治團體）。</div>
+            </div>
+            <div class="plan-quick-item">
+              <div class="plan-quick-label"><strong>申請黃金期限</strong></div>
+              <div class="plan-quick-val">連續僱用滿 30 日起 90 日內向原推介轄區就服機構提出。</div>
+            </div>
+          </div>
+          <h4>計畫目的與適用對象</h4>
+          <ul>
+            <li><strong>計畫目的</strong>：降低雇主進用高齡者、中高齡者、特定對象及失業較久求職者的門檻，協助穩定就業。</li>
+            <li><strong>雇主條件</strong>：須為就業保險投保單位之民營事業單位、團體或私立學校，並依法為受僱勞工投保。</li>
+            <li><strong>勞工條件</strong>：須先至公立就業服務機構辦理求職登記，經評估媒合並開立「僱用獎助推介卡」後錄用。</li>
+          </ul>
+          <h4>獎助額度標準表</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>失業週期</th>
+                <th>身分類別</th>
+                <th>按月計酬</th>
+                <th>非按月計酬</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowspan="2">失業期間連續達 30 日以上</td>
+                <td>高齡者（逾 65 歲）</td>
+                <td>15,000 元/月</td>
+                <td>80 元/時（最高 15,000 元/月）</td>
+              </tr>
+              <tr>
+                <td>年滿 45 歲至 65 歲失業者、身心障礙者、長期失業者</td>
+                <td>13,000 元/月</td>
+                <td>70 元/時（最高 13,000 元/月）</td>
+              </tr>
+              <tr>
+                <td>失業期間連續達 30 日以上之特定對象</td>
+                <td>獨力負擔家計者、原住民、低收入戶或中低收入戶中有工作能力者、更生受保護人、家庭暴力及性侵害被害人、二度就業婦女、其他中央主管機關認為有必要者</td>
+                <td>11,000 元/月</td>
+                <td>60 元/時（最高 11,000 元/月）</td>
+              </tr>
+              <tr>
+                <td>失業期間連續達 3 個月以上</td>
+                <td>一般失業者</td>
+                <td>9,000 元/月</td>
+                <td>50 元/時（最高 9,000 元/月）</td>
+              </tr>
+            </tbody>
+          </table>
+          <h4>申請流程與關鍵提醒</h4>
+          <ul>
+            <li><strong>步驟 1 求才登記</strong>：雇主先向公立就業服務機構辦理求才登記，求職者辦理求職登記並取得推介卡。</li>
+            <li><strong>步驟 2 錄用與投保</strong>：面試錄用後依法投保，連續僱用滿 30 日起 90 日內提出申請（最長補助 12 個月）。</li>
+            <li><strong>關鍵限制</strong>：不得僱用雇主或負責人之配偶、直系血親或三親等內旁系血親，亦不得再僱用離職未滿 1 年之勞工；自行應徵或透過人力銀行投遞錄取不符資格。</li>
+          </ul>`,
+        dmUrl: 'https://drive.google.com/file/d/1HQP21xW1L8LWNy8SNgKlME08x45OlvNZ/view?usp=drive_link',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '僱用獎助措施',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_2',
@@ -398,10 +582,22 @@
         name: '新住民僱用獎助津貼',
         title: '新住民僱用獎助津貼',
         target: '僱用連續失業達 30 日以上且經公立就業服務機構推介並發給「僱用獎助推介卡」之新住民之事業單位、團體或私立學校',
-        amount: '按月計酬每人每月 11,000 元；非按月計酬每人每小時 60 元（每月最高 11,000 元），最長 12 個月',
+        amount: '按月計酬每人每月 11,000 元（時薪 60 元），最長 12 個月',
         highlight: '按月計酬每人每月 11,000 元（時薪 60 元），最長 12 個月',
         summary: '鼓勵事業單位、團體或私立學校僱用連續失業滿 30 日且持僱用獎助推介卡之新住民，最長補助 12 個月。',
-        desc: '【類別】招募／招募人才類（編號 2）\n【計畫重點】事業單位、團體或私立學校僱用經公立就業服務機構推介並發給僱用獎助推介卡之新住民，按月計酬每人每月 11,000 元，非按月計酬每人每小時 60 元（每月最高 11,000 元），最長發給 12 個月；自連續僱用滿 30 日之日起 90 日內向原推介轄區公立就業服務機構提出申請。'
+        desc: '鼓勵事業單位、團體或私立學校僱用連續失業滿 30 日且持僱用獎助推介卡之新住民，最長補助 12 個月。',
+        content: `<h4>計畫重點與申請規範</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：招募／招募人才類（編號 2）</li>
+            <li><strong>補助標準</strong>：按月計酬每人每月 11,000 元；非按月計酬每人每小時 60 元（每月最高 11,000 元），最長發給 12 個月。</li>
+            <li><strong>申請期限</strong>：自連續僱用滿 30 日之日起 90 日內向原推介轄區公立就業服務機構提出申請。</li>
+          </ul>`,
+        dmUrl: 'https://drive.google.com/file/d/1Vxk_97U-7U6CpRpHUQFJI0-lHFzplptb/view?usp=drive_link',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_3',
@@ -412,10 +608,22 @@
         name: '施用毒品者就業服務計畫僱用獎助津貼',
         title: '施用毒品者就業服務計畫僱用獎助津貼',
         target: '僱用經公立就業服務機構推介並領有「僱用獎助推介卡」之施用毒品者，且依法投保就業保險及職業災害保險之雇主',
-        amount: '連續滿 10 日後按月計酬每滿 10 日發給 4,000 元（每月最高 12,000 元）；非按月計酬每小時 65 元，單一勞工最高 144,000 元',
+        amount: '每滿 10 日發給 4,000 元（每月最高 12,000 元，單一勞工最高 144,000 元）',
         highlight: '每滿 10 日發給 4,000 元（每月最高 12,000 元，單一勞工最高 144,000 元）',
         summary: '鼓勵雇主僱用經公立就業服務機構推介並持僱用獎助推介卡之施用毒品者，連續僱用滿 10 日即按每 10 日 4,000 元核發，單一勞工最高 144,000 元。',
-        desc: '【類別】招募／招募人才類（編號 3）\n【計畫重點】雇主僱用經公立就業服務機構推介並領有僱用獎助推介卡之施用毒品者，連續滿 10 日後，按月計酬每滿 10 日發給 4,000 元（每月最高 12,000 元），非按月計酬每人每小時 65 元（每 10 日最高 4,000 元、月上限 12,000 元），單一勞工最高補助 144,000 元。'
+        desc: '鼓勵雇主僱用經公立就業服務機構推介並持僱用獎助推介卡之施用毒品者，連續僱用滿 10 日即按每 10 日 4,000 元核發，單一勞工最高 144,000 元。',
+        content: `<h4>計畫重點與補助計算</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：招募／招募人才類（編號 3）</li>
+            <li><strong>按月計酬</strong>：連續僱用滿 10 日後，每滿 10 日發給 4,000 元（每月最高 12,000 元）。</li>
+            <li><strong>非按月計酬</strong>：每人每小時 65 元（每 10 日最高 4,000 元、月上限 12,000 元），單一勞工最高補助 144,000 元。</li>
+          </ul>`,
+        dmUrl: 'https://drive.google.com/file/d/14ozLrR1izvgWjqxBxKu1yasrCh319PlF/view?usp=drive_link',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_4',
@@ -426,10 +634,22 @@
         name: '中高齡者及高齡者僱用獎助津貼',
         title: '中高齡者及高齡者僱用獎助津貼',
         target: '僱用連續失業達 30 日以上且經公立就業服務機構推介之中高齡者（45～65 歲）或高齡者（逾 65 歲）之民營事業單位、團體或私立學校',
-        amount: '高齡者按月計酬每月 15,000 元（時薪 80 元）；中高齡者按月計酬每月 13,000 元（時薪 70 元），最長 12 個月',
+        amount: '高齡者每月 15,000 元、中高齡者每月 13,000 元，最長 12 個月',
         highlight: '高齡者每月 15,000 元、中高齡者每月 13,000 元，最長 12 個月',
         summary: '鼓勵民營事業單位、團體或私立學校僱用連續失業 30 日以上且經公立就服機構推介之中高齡或高齡勞工，最長補助 12 個月。',
-        desc: '【類別】招募／招募人才類（編號 4）\n【計畫重點】高齡者（逾 65 歲）按月計酬每人每月 15,000 元、非按月計酬每人每小時 80 元（每月最高 15,000 元，12 個月最高 180,000 元）；中高齡者（45～65 歲）按月計酬每人每月 13,000 元、非按月計酬每人每小時 70 元（每月最高 13,000 元，12 個月最高 156,000 元）。須經公立就服機構推介錄取，自僱用滿 30 日之日起 90 日內申請。'
+        desc: '鼓勵民營事業單位、團體或私立學校僱用連續失業 30 日以上且經公立就服機構推介之中高齡或高齡勞工，最長補助 12 個月。',
+        content: `<h4>獎助標準與申請重點</h4>
+          <ul>
+            <li><strong>高齡者（逾 65 歲）</strong>：按月計酬每人每月 15,000 元；非按月計酬每人每小時 80 元（每月最高 15,000 元，12 個月最高 180,000 元）。</li>
+            <li><strong>中高齡者（45～65 歲）</strong>：按月計酬每人每月 13,000 元；非按月計酬每人每小時 70 元（每月最高 13,000 元，12 個月最高 156,000 元）。</li>
+            <li><strong>申請方式</strong>：須經公立就服機構推介錄取，自僱用滿 30 日之日起 90 日內申請。</li>
+          </ul>`,
+        dmUrl: 'https://drive.google.com/file/d/1HQP21xW1L8LWNy8SNgKlME08x45OlvNZ/view?usp=drive_link',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_5',
@@ -440,10 +660,21 @@
         name: '職場學習及再適應計畫',
         title: '職場學習及再適應計畫',
         target: '提供職場學習與再適應訓練之用人單位，及經公立就業服務機構評估有需求之失業勞工（含特定對象及弱勢求職者）',
-        amount: '補助個案津貼（比照基本工資／最低工資標準）及用人單位行政管理輔導費（個案津貼之 30%），原則最長 3 個月（特定對象最長 6 個月）',
+        amount: '補助個案津貼及單位行政管理輔導費（津貼之 30%），最長 3～6 個月',
         highlight: '補助個案津貼及單位行政管理輔導費（津貼之 30%），最長 3～6 個月',
         summary: '協助失業勞工透過職場學習與再適應訓練重返職場，原則最長 3 個月（特定對象最長 6 個月），並補助用人單位行政管理輔導費。',
-        desc: '【類別】招募／招募人才類（編號 5）\n【計畫重點】透過實際職場學習與再適應訓練協助失業勞工熟悉環境與工作技能，個案津貼比照基本工資／最低工資標準核計，用人單位行政管理輔導費為個案津貼之 30%；原則最長 3 個月，特定對象最長 6 個月。'
+        desc: '協助失業勞工透過職場學習與再適應訓練重返職場，原則最長 3 個月（特定對象最長 6 個月），並補助用人單位行政管理輔導費。',
+        content: `<h4>計畫重點與補助方式</h4>
+          <ul>
+            <li><strong>訓練期間</strong>：原則最長 3 個月，特定對象最長 6 個月。</li>
+            <li><strong>津貼與輔導費</strong>：個案津貼比照基本工資／最低工資標準核計，用人單位行政管理輔導費為個案津貼之 30%。</li>
+          </ul>`,
+        dmUrl: 'https://drive.google.com/file/d/1vkr4HkV9eAjixk8L1DQDVmWMFGkhUBK4/view?usp=drive_link',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_6',
@@ -454,10 +685,21 @@
         name: '婦女再就業計畫-職場支持輔導獎勵',
         title: '婦女再就業計畫-職場支持輔導獎勵',
         target: '提供彈性調整工時職缺並僱用因家庭因素退出勞動市場 180 日以上婦女之雇主',
-        amount: '工時調整獎勵每人每月 3,000 元，最長 12 個月（依計畫規定上限核發）',
+        amount: '工時調整獎勵每人每月 3,000 元，最長 12 個月',
         highlight: '工時調整獎勵每人每月 3,000 元，最長 12 個月',
         summary: '鼓勵雇主提供彈性調整工時職缺僱用二度就業婦女，給予雇主工時調整獎勵每人每月 3,000 元，最長 12 個月。',
-        desc: '【類別】招募／招募人才類（編號 6）\n【計畫重點】協助因家庭因素退出勞動市場連續達 180 日以上之婦女重返職場，雇主提供彈性調整工時職缺僱用符合資格婦女，可申請工時調整獎勵每人每月 3,000 元，最長 12 個月。'
+        desc: '鼓勵雇主提供彈性調整工時職缺僱用二度就業婦女，給予雇主工時調整獎勵每人每月 3,000 元，最長 12 個月。',
+        content: `<h4>計畫重點與獎勵標準</h4>
+          <ul>
+            <li><strong>適用對象</strong>：提供彈性調整工時職缺並僱用因家庭因素退出勞動市場 180 日以上婦女之雇主。</li>
+            <li><strong>獎勵額度</strong>：工時調整獎勵每人每月 3,000 元，最長 12 個月。</li>
+          </ul>`,
+        dmUrl: 'https://drive.google.com/file/d/1xUnqpcidFfToyAjCHCG_0HU_kMCO6qL_/view?usp=drive_link',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_7',
@@ -465,13 +707,24 @@
         code: '7',
         category: '招募',
         subGroup: '招募人才類',
-        name: '特定行業就業獎勵(補助勞工)、單一徵才、聯合徵才、就業博覽會',
-        title: '特定行業就業獎勵(補助勞工)、單一徵才、聯合徵才、就業博覽會',
-        target: '經公立就業服務機構推介受僱特定缺工行業之失業勞工，以及辦理徵才媒合活動之求才雇主與求職民眾',
-        amount: '特定行業就業獎勵依身分別與地區按月核發（最長 12 個月）；單一／聯合徵才與就業博覽會提供免費或專案媒合服務',
-        highlight: '特定行業就業獎勵最長 12 個月・搭配單一／聯合徵才與就業博覽會媒合',
+        name: '特定行業就業獎勵(補助勞工)',
+        title: '特定行業就業獎勵(補助勞工)',
+        target: '',
+        amount: '',
+        highlight: '',
         summary: '結合專案缺工就業獎勵（補助勞工）與單一徵才、聯合徵才、就業博覽會等徵才媒合管道，協助企業快速招募與穩定留任人力。',
-        desc: '【類別】招募／招募人才類（編號 7）\n【計畫重點】包含特定行業就業獎勵（如專案缺工就業獎勵，依一般身分、特定對象及偏遠地區標準按月核發最長 12 個月），並可透過公立就業服務機構辦理之單一徵才、聯合徵才及就業博覽會進行現場面試與招募媒合。'
+        desc: '結合專案缺工就業獎勵（補助勞工）與單一徵才、聯合徵才、就業博覽會等徵才媒合管道，協助企業快速招募與穩定留任人力。',
+        content: `<h4>計畫重點與徵才管道</h4>
+          <ul>
+            <li><strong>就業獎勵</strong>：包含特定行業就業獎勵（如專案缺工就業獎勵，依一般身分、特定對象及偏遠地區標準按月核發最長 12 個月）。</li>
+            <li><strong>媒合管道</strong>：可透過公立就業服務機構辦理之單一徵才、聯合徵才及就業博覽會進行現場面試與招募媒合。</li>
+          </ul>`,
+        dmUrl: 'https://drive.google.com/file/d/14-ZwzB_juNhSWWTGTNbFPgqbdmNn-T_M/view?usp=drive_link',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
 
       // 分署培訓人才類 8～16
@@ -487,7 +740,18 @@
         amount: '依訓練班次與身分別規定補助訓練費用，符合就業保險被保險人非自願離職或特定對象者可依規定申請職訓生活津貼',
         highlight: '勞動部勞動力發展署各分署自辦職前訓練課程',
         summary: '由勞動部勞動力發展署各分署自辦職業訓練課程，培養失業者或待業者實務技能，協助訓後就業。',
-        desc: '【類別】培訓／分署培訓人才類（編號 8）\n【計畫重點】由勞動力發展署各分署自辦職前訓練班次，針對產業需求開設實務技能課程，協助參訓學員習得專業技能並銜接就業，符合資格者得依規定申請職訓生活津貼。'
+        desc: '由勞動部勞動力發展署各分署自辦職前訓練班次，針對產業需求開設實務技能課程，協助參訓學員習得專業技能並銜接就業，符合資格者得依規定申請職訓生活津貼。',
+        content: `<h4>計畫重點</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／分署培訓人才類（編號 8）</li>
+            <li><strong>訓練內容</strong>：由勞動力發展署各分署自辦職前訓練班次，針對產業需求開設實務技能課程，協助參訓學員習得專業技能並銜接就業，符合資格者得依規定申請職訓生活津貼。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_9',
@@ -501,7 +765,18 @@
         amount: '依各分署公告班次與身分別補助訓練費用，符合資格者得依規定請領職訓生活津貼',
         highlight: '分署委託訓練單位辦理之職前訓練班次',
         summary: '由各分署委託大專校院、職業訓練機構或民間團體辦理職前訓練，擴充多元職類與地區訓練能量。',
-        desc: '【類別】培訓／分署培訓人才類（編號 9）\n【計畫重點】由勞動力發展署各分署委託合格訓練單位辦理職前訓練課程，提供多元產業與實務技能訓練，協助失業者提升就業競爭力。'
+        desc: '由勞動力發展署各分署委託合格訓練單位辦理職前訓練課程，提供多元產業與實務技能訓練，協助失業者提升就業競爭力。',
+        content: `<h4>計畫重點</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／分署培訓人才類（編號 9）</li>
+            <li><strong>訓練內容</strong>：由勞動力發展署各分署委託合格訓練單位辦理職前訓練課程，提供多元產業與實務技能訓練，協助失業者提升就業競爭力。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_10',
@@ -515,7 +790,18 @@
         amount: '依各分署及計畫核定標準辦理人才培訓與課程補助',
         highlight: '結合區域產業需求辦理人才培訓據點課程',
         summary: '結合區域產業特色與人才需求設置培訓據點，提供符合在地產業所需之實務訓練與人才媒合支援。',
-        desc: '【類別】培訓／分署培訓人才類（編號 10）\n【計畫重點】依區域產業發展與人才需求推動產業人才培訓據點，協助培育符合產業實務所需之專業人才，詳細班次與補助規定請依各分署公告為準。'
+        desc: '依區域產業發展與人才需求推動產業人才培訓據點，協助培育符合產業實務所需之專業人才，詳細班次與補助規定請依各分署公告為準。',
+        content: `<h4>計畫重點</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／分署培訓人才類（編號 10）</li>
+            <li><strong>辦理方式</strong>：依區域產業發展與人才需求推動產業人才培訓據點，協助培育符合產業實務所需之專業人才，詳細班次與補助規定請依各分署公告為準。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_11',
@@ -529,7 +815,18 @@
         amount: '依產訓合作核定計畫辦理訓練與補助',
         highlight: '產學訓與企業合作培育所需技術人才',
         summary: '結合訓練機構與產業界共同規劃訓練內容與實務場域，縮短學用落差並促進訓後就業。',
-        desc: '【類別】培訓／分署培訓人才類（編號 11）\n【計畫重點】透過產訓合作機制，結合業界實務需求與訓練資源辦理人才培育，提升參訓者職場適應力與就業媒合率，實際開班與補助條件依各分署公告為準。'
+        desc: '透過產訓合作機制，結合業界實務需求與訓練資源辦理人才培育，提升參訓者職場適應力與就業媒合率，實際開班與補助條件依各分署公告為準。',
+        content: `<h4>計畫重點</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／分署培訓人才類（編號 11）</li>
+            <li><strong>辦理方式</strong>：透過產訓合作機制，結合業界實務需求與訓練資源辦理人才培育，提升參訓者職場適應力與就業媒合率，實際開班與補助條件依各分署公告為準。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_12',
@@ -543,7 +840,18 @@
         amount: '依核定計畫補助事業單位辦理職前培訓相關費用',
         highlight: '鼓勵事業單位參與辦理職前培訓並留用／媒合人才',
         summary: '推動具實務場域與訓練能量之事業單位辦理職前培訓，讓學員在貼近企業實務環境中學習技能。',
-        desc: '【類別】培訓／分署培訓人才類（編號 12）\n【計畫重點】推動事業單位辦理職前培訓計畫，結合企業實務設備與師資進行職前訓練，詳細申請資格、補助項目與額度請依勞動部勞動力發展署最新公告為準。'
+        desc: '推動事業單位辦理職前培訓計畫，結合企業實務設備與師資進行職前訓練，詳細申請資格、補助項目與額度請依勞動部勞動力發展署最新公告為準。',
+        content: `<h4>計畫重點</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／分署培訓人才類（編號 12）</li>
+            <li><strong>辦理方式</strong>：推動事業單位辦理職前培訓計畫，結合企業實務設備與師資進行職前訓練，詳細申請資格、補助項目與額度請依勞動部勞動力發展署最新公告為準。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_13',
@@ -557,7 +865,18 @@
         amount: '依各分署職前訓練專班與青年相關訓練規定辦理補助',
         highlight: '針對青年開設之專屬職前訓練班次',
         summary: '針對青年族群需求開設專屬職前訓練專班，協助青年強化職能並順利進入職場。',
-        desc: '【類別】培訓／分署培訓人才類（編號 13）\n【計畫重點】由分署或委訓單位開設青年專班，提供符合青年職涯發展與產業趨勢之職前訓練課程，實際招生班次與補助標準依各分署公告為準。'
+        desc: '由分署或委訓單位開設青年專班，提供符合青年職涯發展與產業趨勢之職前訓練課程，實際招生班次與補助標準依各分署公告為準。',
+        content: `<h4>計畫重點</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／分署培訓人才類（編號 13）</li>
+            <li><strong>訓練內容</strong>：由分署或委訓單位開設青年專班，提供符合青年職涯發展與產業趨勢之職前訓練課程，實際招生班次與補助標準依各分署公告為準。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_14',
@@ -571,7 +890,18 @@
         amount: '依各分署職前訓練專班規定辦理補助',
         highlight: '針對高齡者開設之專屬職前訓練班次',
         summary: '考量高齡者學習節奏與職場需求開設專屬職前訓練班次，協助重返職場或延續工作參與。',
-        desc: '【類別】培訓／分署培訓人才類（編號 14）\n【計畫重點】針對高齡者開設專屬職前訓練專班，搭配適性課程與輔導協助重返職場，實際班次與補助條件依各分署公告為準。'
+        desc: '針對高齡者開設專屬職前訓練專班，搭配適性課程與輔導協助重返職場，實際班次與補助條件依各分署公告為準。',
+        content: `<h4>計畫重點</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／分署培訓人才類（編號 14）</li>
+            <li><strong>訓練內容</strong>：針對高齡者開設專屬職前訓練專班，搭配適性課程與輔導協助重返職場，實際班次與補助條件依各分署公告為準。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_15',
@@ -585,7 +915,18 @@
         amount: '依各分署職前訓練專班及原住民參訓相關規定辦理補助',
         highlight: '針對原住民開設之專屬職前訓練班次',
         summary: '針對原住民求職者開設專屬職前訓練班次，協助習得一技之長並提升就業穩定度。',
-        desc: '【類別】培訓／分署培訓人才類（編號 15）\n【計畫重點】開設原住民專班提供職前技能訓練與就業輔導，協助原住民朋友穩定就業，實際開班與補助標準依各分署公告為準。'
+        desc: '開設原住民專班提供職前技能訓練與就業輔導，協助原住民朋友穩定就業，實際開班與補助標準依各分署公告為準。',
+        content: `<h4>計畫重點</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／分署培訓人才類（編號 15）</li>
+            <li><strong>訓練內容</strong>：開設原住民專班提供職前技能訓練與就業輔導，協助原住民朋友穩定就業，實際開班與補助標準依各分署公告為準。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_16',
@@ -599,7 +940,18 @@
         amount: '依各分署職前訓練專班及新住民參訓相關規定辦理補助',
         highlight: '針對新住民開設之專屬職前訓練班次',
         summary: '針對新住民求職者開設專屬職前訓練班次，協助培養實務技能並融入在地職場。',
-        desc: '【類別】培訓／分署培訓人才類（編號 16）\n【計畫重點】開設新住民專班辦理職前訓練，協助新住民提升專業技能與就業能力，實際開班與補助標準依各分署公告為準。'
+        desc: '開設新住民專班辦理職前訓練，協助新住民提升專業技能與就業能力，實際開班與補助標準依各分署公告為準。',
+        content: `<h4>計畫重點</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／分署培訓人才類（編號 16）</li>
+            <li><strong>訓練內容</strong>：開設新住民專班辦理職前訓練，協助新住民提升專業技能與就業能力，實際開班與補助標準依各分署公告為準。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
 
       // 先僱後訓類 17～19
@@ -615,7 +967,19 @@
         amount: '起薪未達 34,000 元補助 3 個月（每人每月最高 12,000 元，最高 36,000 元）；起薪達 34,000 元（含）以上補助 6 個月（前 3 個月每月最高 12,000 元、第 4～6 個月每月最高 6,000 元，最高 54,000 元）；同年度單一單位最高 180 萬元',
         highlight: '起薪達 34,000 元最高補助 54,000 元（6 個月）；未達則最高 36,000 元（3 個月）',
         summary: '協助 15～29 歲本國籍青年採「先僱後訓」做中學，由職場導師指導，同年度單一單位最高補助 180 萬元。',
-        desc: '【類別】培訓／先僱後訓類（編號 17）\n【計畫重點】針對 15 至 29 歲本國籍青年（排除日間部在學學生）採「先僱用後訓練」做中學，薪資未達 34,000 元補助 3 個月（最高 36,000 元），薪資達 34,000 元（含）以上補助 6 個月（最高 54,000 元），同年度同一訓練單位最高補助 180 萬元。'
+        desc: '針對 15 至 29 歲本國籍青年（排除日間部在學學生）採「先僱用後訓練」做中學，薪資未達 34,000 元補助 3 個月（最高 36,000 元），薪資達 34,000 元（含）以上補助 6 個月（最高 54,000 元），同年度同一訓練單位最高補助 180 萬元。',
+        content: `<h4>計畫重點與補助標準</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／先僱後訓類（編號 17）</li>
+            <li><strong>起薪未達 34,000 元</strong>：補助 3 個月（每人每月最高 12,000 元，最高 36,000 元）。</li>
+            <li><strong>起薪達 34,000 元（含）以上</strong>：補助 6 個月（前 3 個月每月最高 12,000 元、第 4～6 個月每月最高 6,000 元，最高 54,000 元）；同年度同一訓練單位最高補助 180 萬元。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_18',
@@ -626,10 +990,22 @@
         name: '勞工就業通計畫-工作崗位訓練',
         title: '勞工就業通計畫-工作崗位訓練',
         target: '維持 90% 以上僱用規模且未實施減班休息，並僱用符合資格失業勞工進行工作崗位訓練之事業單位',
-        amount: '工作崗位訓練指導費每人每月最高 12,000 元，最長 3 個月（每人最高 36,000 元），同一雇主每年最高 180 萬元',
+        amount: '工作崗位訓練指導費每人每月最高 12,000 元，最長 3 個月（最高 36,000 元）',
         highlight: '工作崗位訓練指導費每人每月最高 12,000 元，最長 3 個月（最高 36,000 元）',
         summary: '採「先僱後訓、邊做邊學」由職場導師指導失業勞工，補助工作崗位訓練指導費每人每月最高 12,000 元、最長 3 個月。',
-        desc: '【類別】培訓／先僱後訓類（編號 18）\n【計畫重點】由事業單位指派職場導師進行工作崗位訓練，補助工作崗位訓練指導費每人每月最高 12,000 元，最長 3 個月（每人最高 36,000 元），同一雇主每年最高 180 萬元；雇主須維持 90% 以上僱用規模且未實施減班休息。'
+        desc: '採「先僱後訓、邊做邊學」由職場導師指導失業勞工，補助工作崗位訓練指導費每人每月最高 12,000 元、最長 3 個月。',
+        content: `<h4>計畫重點與補助標準</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／先僱後訓類（編號 18）</li>
+            <li><strong>補助標準</strong>：由事業單位指派職場導師進行工作崗位訓練，補助工作崗位訓練指導費每人每月最高 12,000 元，最長 3 個月（每人最高 36,000 元），同一雇主每年最高 180 萬元。</li>
+            <li><strong>單位資格</strong>：雇主須維持 90% 以上僱用規模且未實施減班休息。</li>
+          </ul>`,
+        dmUrl: 'https://drive.google.com/file/d/1anNMEDyzRMw3pgXKwZSKan04_Ab_blL7/view?usp=drive_link',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_19',
@@ -643,7 +1019,19 @@
         amount: '補助雇主訓練指導費每人每月 5,000 元，最長 2 年（最高 12 萬元）；青年儲蓄帳戶每月合計 1 萬元，最長 3 年（最高 36 萬元）',
         highlight: '補助雇主訓練指導費每人每月 5,000 元，最長 2 年（最高 12 萬元）',
         summary: '鼓勵高中職應屆畢業青年先就業再升學，雇主提供正職與專人指導，補助指導費每人每月 5,000 元、最長 2 年。',
-        desc: '【類別】培訓／先僱後訓類（編號 19）\n【計畫重點】鼓勵高中職應屆畢業青年先就業再升學，雇主提供正職職缺並指派專人進行工作崗位訓練指導，補助雇主訓練指導費每人每月 5,000 元，最長 2 年（最高 12 萬元）；實際推動期程與申請規定依最新公告為準。'
+        desc: '鼓勵高中職應屆畢業青年先就業再升學，雇主提供正職職缺並指派專人進行工作崗位訓練指導，補助雇主訓練指導費每人每月 5,000 元，最長 2 年（最高 12 萬元）；實際推動期程與申請規定依最新公告為準。',
+        content: `<h4>計畫重點與補助標準</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／先僱後訓類（編號 19）</li>
+            <li><strong>雇主補助</strong>：提供正職職缺並指派專人進行工作崗位訓練指導，補助雇主訓練指導費每人每月 5,000 元，最長 2 年（最高 12 萬元）。</li>
+            <li><strong>青年儲蓄帳戶</strong>：每月合計 1 萬元，最長 3 年（最高 36 萬元）；實際推動期程與申請規定依最新公告為準。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
 
       // 提供實習類 20～21
@@ -659,7 +1047,18 @@
         amount: '依產攜 2.0（產學訓合作訓練計畫）核定標準辦理課程、實務訓練與相關補助／獎勵',
         highlight: '產學訓專班結合學校課程與企業實務訓練',
         summary: '結合學校與企業共同辦理產學訓專班，讓學生在學期間兼顧專業學習與企業實務訓練，促進畢業後穩定留任。',
-        desc: '【類別】培訓／提供實習類（編號 20）\n【計畫重點】產攜 2.0 產學訓專班透過學校與企業合作辦理，安排專業課程與企業實務訓練，協助學生累積職場實務經驗並銜接就業，詳細規範與補助標準依教育部及勞動部最新公告為準。'
+        desc: '產攜 2.0 產學訓專班透過學校與企業合作辦理，安排專業課程與企業實務訓練，協助學生累積職場實務經驗並銜接就業，詳細規範與補助標準依教育部及勞動部最新公告為準。',
+        content: `<h4>計畫重點</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／提供實習類（編號 20）</li>
+            <li><strong>辦理方式</strong>：產攜 2.0 產學訓專班透過學校與企業合作辦理，安排專業課程與企業實務訓練，協助學生累積職場實務經驗並銜接就業，詳細規範與補助標準依教育部及勞動部最新公告為準。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_21',
@@ -673,7 +1072,19 @@
         amount: '國家重點產業每名補助企業最高 7.2 萬元、其他產業最高 3.6 萬元（總訓練時數 ≥ 320 小時）；青年畢業後全時留任滿 30 日另發留任獎勵金 1 萬元',
         highlight: '國家重點產業每名補助企業最高 7.2 萬元、其他產業最高 3.6 萬元',
         summary: '正式聘僱大專校院畢業前 1 年在校生進行工作崗位訓練（總訓練時數至少 320 小時），國家重點產業每名最高補助 7.2 萬元、其他產業最高 3.6 萬元。',
-        desc: '【類別】培訓／提供實習類（編號 21）\n【計畫重點】正式聘僱大專校院畢業前 1 年本國籍在校生（不含碩、博士生）並指派職場導師進行工作崗位訓練，總訓練時數不得低於 320 小時；國家重點產業每名最高補助企業 7.2 萬元、其他產業每名最高 3.6 萬元；青年畢業後全時留任原單位滿 30 日發給留任獎勵金 1 萬元。'
+        desc: '正式聘僱大專校院畢業前 1 年本國籍在校生（不含碩、博士生）並指派職場導師進行工作崗位訓練，總訓練時數不得低於 320 小時；國家重點產業每名最高補助企業 7.2 萬元、其他產業每名最高 3.6 萬元；青年畢業後全時留任原單位滿 30 日發給留任獎勵金 1 萬元。',
+        content: `<h4>計畫重點與補助標準</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／提供實習類（編號 21）</li>
+            <li><strong>訓練條件</strong>：正式聘僱大專校院畢業前 1 年本國籍在校生（不含碩、博士生）並指派職場導師進行工作崗位訓練，總訓練時數不得低於 320 小時。</li>
+            <li><strong>補助與留任獎勵</strong>：國家重點產業每名最高補助企業 7.2 萬元、其他產業每名最高 3.6 萬元；青年畢業後全時留任原單位滿 30 日發給留任獎勵金 1 萬元。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
 
       // 自行辦訓類 22～25
@@ -686,10 +1097,22 @@
         name: '小型企業人力提升計畫',
         title: '小型企業人力提升計畫',
         target: '僱用受僱勞工參加就業保險人數 50 人以下之民間投保單位',
-        amount: '專業輔導諮詢與訓練課程費用由政府 100% 全額負擔（第 4 年起依年資核算額度上限；AI 或淨零碳排課程可享上限放寬）',
+        amount: '50 人以下小型企業輔導與訓練課程費用 100% 全額補助',
         highlight: '50 人以下小型企業輔導與訓練課程費用 100% 全額補助',
         summary: '專為就保人數 50 人以下小型企業設計，由政府全額負擔人才培訓輔導與訓練課程費用，協助建立人才培訓制度。',
-        desc: '【類別】培訓／自行辦訓類（編號 22）\n【計畫重點】協助就保人數 50 人以下小型企業辦理人才培訓輔導與訓練課程，由政府全額負擔費用（免自籌款）；第 4 年起依年資核算額度上限，參訓達 4 年以上企業辦理「人工智慧」或「淨零碳排」課程當年度上限不受限制。'
+        desc: '專為就保人數 50 人以下小型企業設計，由政府全額負擔人才培訓輔導與訓練課程費用，協助建立人才培訓制度。',
+        content: `<h4>計畫重點與補助標準</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／自行辦訓類（編號 22）</li>
+            <li><strong>補助標準</strong>：協助就保人數 50 人以下小型企業辦理人才培訓輔導與訓練課程，由政府全額負擔費用（免自籌款）。</li>
+            <li><strong>進階規定</strong>：第 4 年起依年資核算額度上限，參訓達 4 年以上企業辦理「人工智慧」或「淨零碳排」課程當年度上限不受限制。</li>
+          </ul>`,
+        dmUrl: 'https://drive.google.com/file/d/1rlmSwjQ0NXbNiqcxHT9xaQHo8FpgAaZh/view?usp=drive_link',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_23',
@@ -703,7 +1126,19 @@
         amount: '個別型最高 95 萬元、聯合型 190 萬元、產業推升型 200 萬元（補助比率 50%～70%）',
         highlight: '個別型最高 95 萬、聯合型 190 萬、產業推升型 200 萬（補助比率 50%～70%）',
         summary: '補助事業單位辦理在職員工進修訓練，個別型最高 95 萬、聯合型 190 萬、產業推升型 200 萬，補助比率 50%～70%。',
-        desc: '【類別】培訓／自行辦訓類（編號 23）\n【計畫重點】協助就保 51 人以上（或符合資格之未滿 51 人）事業單位辦理在職員工訓練，個別型最高 95 萬元、聯合型最高 190 萬元、產業推升型最高 200 萬元；一般課程最高補助 50%，政策性課程、青年／中高齡參訓或數位轉型等符合規定者最高補助 70%。'
+        desc: '協助就保 51 人以上（或符合資格之未滿 51 人）事業單位辦理在職員工訓練，個別型最高 95 萬元、聯合型最高 190 萬元、產業推升型最高 200 萬元；一般課程最高補助 50%，政策性課程、青年／中高齡參訓或數位轉型等符合規定者最高補助 70%。',
+        content: `<h4>計畫重點與補助標準</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／自行辦訓類（編號 23）</li>
+            <li><strong>額度上限</strong>：個別型最高 95 萬元、聯合型 190 萬元、產業推升型 200 萬元。</li>
+            <li><strong>補助比率</strong>：一般課程最高補助 50%，政策性課程、青年／中高齡參訓或數位轉型等符合規定者最高補助 70%。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_24',
@@ -717,7 +1152,18 @@
         amount: '個別型最高 200 萬元、聯合型 300 萬元、加強輔導／受衝擊受損產業最高 350 萬元',
         highlight: '企業辦訓最高補助 200 萬～350 萬元（依計畫類型）',
         summary: '協助因應貿易自由化受影響產業之事業單位辦理在職訓練，個別型最高 200 萬、聯合型 300 萬、受衝擊產業最高 350 萬。',
-        desc: '【類別】培訓／自行辦訓類（編號 24）\n【計畫重點】針對因應貿易自由化受影響產業之事業單位，補助辦理在職員工訓練課程，個別型最高 200 萬元、聯合型最高 300 萬元、加強輔導／受衝擊受損產業最高 350 萬元。'
+        desc: '針對因應貿易自由化受影響產業之事業單位，補助辦理在職員工訓練課程，個別型最高 200 萬元、聯合型 300 萬元、加強輔導／受衝擊受損產業最高 350 萬元。',
+        content: `<h4>計畫重點與補助標準</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／自行辦訓類（編號 24）</li>
+            <li><strong>補助額度</strong>：個別型最高 200 萬元、聯合型 300 萬元、加強輔導／受衝擊受損產業最高 350 萬元。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_25',
@@ -731,7 +1177,18 @@
         amount: '依各分署公告之訓練包班與在職訓練補助標準辦理',
         highlight: '針對在職勞工及自營作業者辦理訓練包班',
         summary: '依各分署公告辦理針對在職勞工及自營作業者之訓練包班，協助提升實務與專業技能。',
-        desc: '【類別】培訓／自行辦訓類（編號 25）\n【計畫重點】依勞動部勞動力發展署各分署公告規定，針對在職勞工及自營作業者辦理訓練包班，詳細申請資格、開班條件與補助標準請以各分署最新公告為準。'
+        desc: '依勞動部勞動力發展署各分署公告規定，針對在職勞工及自營作業者辦理訓練包班，詳細申請資格、開班條件與補助標準請以各分署最新公告為準。',
+        content: `<h4>計畫重點</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／自行辦訓類（編號 25）</li>
+            <li><strong>辦理方式</strong>：依勞動部勞動力發展署各分署公告規定，針對在職勞工及自營作業者辦理訓練包班，詳細申請資格、開班條件與補助標準請以各分署最新公告為準。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
 
       // 委接分署辦訓類 26
@@ -747,7 +1204,18 @@
         amount: '依分署與訓練單位／企業委託辦理訓練相關規定與核定標準辦理',
         highlight: '承接分署／企業委託辦理客製化或專案訓練',
         summary: '由具備訓練量能之單位承接委託辦理訓練，協助企業依實際營運與職能需求推動員工培訓。',
-        desc: '【類別】培訓／委接分署辦訓類（編號 26）\n【計畫重點】依勞動部勞動力發展署各分署委託辦理訓練相關規範辦理，協助企業針對特定職能或產業需求進行培訓，詳細委託條件與補助規定依各分署公告為準。'
+        desc: '依勞動部勞動力發展署各分署委託辦理訓練相關規範辦理，協助企業針對特定職能或產業需求進行培訓，詳細委託條件與補助規定依各分署公告為準。',
+        content: `<h4>計畫重點</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／委接分署辦訓類（編號 26）</li>
+            <li><strong>辦理方式</strong>：依勞動部勞動力發展署各分署委託辦理訓練相關規範辦理，協助企業針對特定職能或產業需求進行培訓，詳細委託條件與補助規定依各分署公告為準。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
 
       // 勞工自行報名類 27～29
@@ -763,7 +1231,18 @@
         amount: '依各分署自辦在職進修訓練班次及身分別規定補助訓練費用',
         highlight: '分署自辦在職人員進修訓練課程，勞工可自行報名',
         summary: '由勞動力發展署各分署自辦在職人員進修訓練課程，供在職勞工依需求自行報名參訓。',
-        desc: '【類別】培訓／勞工自行報名類（編號 27）\n【計畫重點】由分署自辦在職人員進修訓練班次，協助在職勞工充實專業技能，實際招生班次、參訓資格與補助標準依各分署公告為準。'
+        desc: '由分署自辦在職人員進修訓練班次，協助在職勞工充實專業技能，實際招生班次、參訓資格與補助標準依各分署公告為準。',
+        content: `<h4>計畫重點</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／勞工自行報名類（編號 27）</li>
+            <li><strong>辦理方式</strong>：由分署自辦在職人員進修訓練班次，協助在職勞工充實專業技能，實際招生班次、參訓資格與補助標準依各分署公告為準。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_28',
@@ -774,10 +1253,21 @@
         name: '產業人才培訓據點',
         title: '產業人才培訓據點',
         target: '符合課程招生資格之在職勞工或求職參訓者',
-        amount: '依各分署及據點核定課程規定辦理補助',
+        amount: '於產業人才培訓據點開設之訓練課程',
         highlight: '於產業人才培訓據點開設之訓練課程',
         summary: '於產業人才培訓據點開設貼近產業實務之訓練課程，供符合資格之學員報名參訓。',
-        desc: '【類別】培訓／勞工自行報名類（編號 28）\n【計畫重點】透過產業人才培訓據點開設實務課程，協助勞工精進符合產業所需之專業技能，詳細課程與補助規定依各分署公告為準。'
+        desc: '於產業人才培訓據點開設貼近產業實務之訓練課程，供符合資格之學員報名參訓。',
+        content: `<h4>計畫重點</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／勞工自行報名類（編號 28）</li>
+            <li><strong>辦理方式</strong>：透過產業人才培訓據點開設實務課程，協助勞工精進符合產業所需之專業技能，詳細課程與補助規定依各分署公告為準。</li>
+          </ul>`,
+        dmUrl: 'https://drive.google.com/file/d/16egqJ-KBuLXZGRN7T2np7MVTUC8e66Dw/view?usp=drive_link',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_29',
@@ -791,7 +1281,19 @@
         amount: '一般對象補助 80% 訓練費、特定對象全額補助 100%，每名勞工 3 年內最高補助 70,000 元',
         highlight: '一般對象補助 80%、特定對象補助 100%，3 年內最高 7 萬元',
         summary: '在職勞工自行至在職訓練網報名核定課程，一般對象補助 80%、特定對象補助 100%，3 年內最高補助 7 萬元。',
-        desc: '【類別】培訓／勞工自行報名類（編號 29）\n【計畫重點】年滿 15 歲以上具就保、勞保、職災保或農保身分之在職勞工，於台灣就業通加入會員並至「在職訓練網」報名核定課程，一般對象補助 80% 訓練費、特定對象全額補助 100%，每名勞工 3 年內最高補助 70,000 元。'
+        desc: '年滿 15 歲以上具就保、勞保、職災保或農保身分之在職勞工，於台灣就業通加入會員並至「在職訓練網」報名核定課程，一般對象補助 80% 訓練費、特定對象全額補助 100%，每名勞工 3 年內最高補助 70,000 元。',
+        content: `<h4>計畫重點與補助標準</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：培訓／勞工自行報名類（編號 29）</li>
+            <li><strong>補助比率</strong>：一般對象補助 80% 訓練費、特定對象全額補助 100%，每名勞工 3 年內最高補助 70,000 元。</li>
+            <li><strong>報名方式</strong>：於台灣就業通加入會員並至「在職訓練網」報名核定課程。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
 
       // 留用人才類 30～37
@@ -807,7 +1309,18 @@
         amount: '每一雇主每年最高補助 50 萬元，每位受僱者最高補助 10 萬元',
         highlight: '每一雇主每年最高補助 50 萬元（每位受僱者最高 10 萬元）',
         summary: '鼓勵雇主聘僱已退休中高齡及高齡者擔任講師或顧問傳承專業技術與經驗，每一雇主每年最高補助 50 萬元。',
-        desc: '【類別】留用／留用人才類（編號 30）\n【計畫重點】鼓勵雇主聘僱已退休中高齡者及高齡者擔任講師或顧問，傳承專業技術與實務經驗，每一雇主每年最高補助 50 萬元，每位受僱者最高補助 10 萬元。'
+        desc: '鼓勵雇主聘僱已退休中高齡者及高齡者擔任講師或顧問，傳承專業技術與實務經驗，每一雇主每年最高補助 50 萬元，每位受僱者最高補助 10 萬元。',
+        content: `<h4>計畫重點與補助標準</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：留用／留用人才類（編號 30）</li>
+            <li><strong>補助額度</strong>：每一雇主每年最高補助 50 萬元，每位受僱者最高補助 10 萬元。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_31',
@@ -821,7 +1334,18 @@
         amount: '第 1～6 個月每人每月 13,000 元；第 7～18 個月每人每月 15,000 元，最長補助 18 個月',
         highlight: '前 6 個月每月 13,000 元、第 7～18 個月每月 15,000 元（最長 18 個月）',
         summary: '鼓勵雇主繼續留用屆滿 65 歲高齡員工達一定比率，按原薪資或以上條件續僱滿 6 個月即可請領，最長補助 18 個月。',
-        desc: '【類別】留用／留用人才類（編號 31）\n【計畫重點】鼓勵雇主留用屆滿 65 歲高齡員工達一定比率（一般行業 30% 以上）且續僱薪資不低於原有薪資，第 1～6 個月每人每月補助 13,000 元，第 7～18 個月每人每月補助 15,000 元，最長補助 18 個月。'
+        desc: '鼓勵雇主留用屆滿 65 歲高齡員工達一定比率（一般行業 30% 以上）且續僱薪資不低於原有薪資，第 1～6 個月每人每月補助 13,000 元，第 7～18 個月每人每月補助 15,000 元，最長補助 18 個月。',
+        content: `<h4>計畫重點與補助標準</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：留用／留用人才類（編號 31）</li>
+            <li><strong>補助標準</strong>：第 1～6 個月每人每月補助 13,000 元；第 7～18 個月每人每月補助 15,000 元，最長補助 18 個月。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_32',
@@ -832,10 +1356,21 @@
         name: '五五就業促進獎勵實施要點-職場支持輔導費',
         title: '五五就業促進獎勵實施要點-職場支持輔導費',
         target: '僱用符合資格壯世代勞工並提供彈性工時、教育訓練或職務調整等友善職場措施之雇主',
-        amount: '職場支持輔導費每人每月 3,000 元，同一雇主每年最高補助 300,000 元',
+        amount: '職場支持輔導費每人每月 3,000 元（同一雇主每年最高 30 萬元）',
         highlight: '職場支持輔導費每人每月 3,000 元（同一雇主每年最高 30 萬元）',
         summary: '鼓勵雇主提供彈性工時、教育訓練或職務調整等友善職場措施支持壯世代勞工留任，每人每月補助 3,000 元、年上限 30 萬元。',
-        desc: '【類別】留用／留用人才類（編號 32）\n【計畫重點】依 55Plus 壯世代就業促進相關規定，雇主僱用符合資格壯世代勞工並提供彈性工時、教育訓練或職務調整等友善職場措施者，可申請職場支持輔導費每人每月 3,000 元，同一雇主每年最高補助 300,000 元。'
+        desc: '鼓勵雇主提供彈性工時、教育訓練或職務調整等友善職場措施支持壯世代勞工留任，每人每月補助 3,000 元、年上限 30 萬元。',
+        content: `<h4>計畫重點與補助標準</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：留用／留用人才類（編號 32）</li>
+            <li><strong>補助標準</strong>：依 55Plus 壯世代就業促進相關規定，雇主僱用符合資格壯世代勞工並提供彈性工時、教育訓練或職務調整等友善職場措施者，可申請職場支持輔導費每人每月 3,000 元，同一雇主每年最高補助 300,000 元。</li>
+          </ul>`,
+        dmUrl: 'https://drive.google.com/file/d/1q-cRo4SQgbmNnF7RgdyCu7C4VLfT-GEW/view?usp=drive_link',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_33',
@@ -846,10 +1381,21 @@
         name: '企業輔導團(中高齡)',
         title: '企業輔導團(中高齡)',
         target: '有意營造中高齡及高齡友善職場、推動職務調整或留才制度之事業單位',
-        amount: '提供專業顧問輔導與諮詢服務（依勞動部及各分署中高齡及高齡者友善職場輔導措施辦理）',
+        amount: '提供企業中高齡與高齡友善職場及留才顧問輔導',
         highlight: '提供企業中高齡與高齡友善職場及留才顧問輔導',
         summary: '透過專家顧問團隊協助企業檢視與改善中高齡及高齡員工之工作環境、職務設計與留任措施。',
-        desc: '【類別】留用／留用人才類（編號 33）\n【計畫重點】結合專業顧問資源輔導事業單位推動中高齡及高齡者友善職場、職務調整與留才措施，協助企業降低資深人力流失，詳細申請方式依勞動部及各分署公告為準。'
+        desc: '透過專家顧問團隊協助企業檢視與改善中高齡及高齡員工之工作環境、職務設計與留任措施。',
+        content: `<h4>計畫重點</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：留用／留用人才類（編號 33）</li>
+            <li><strong>輔導內容</strong>：結合專業顧問資源輔導事業單位推動中高齡及高齡者友善職場、職務調整與留才措施，協助企業降低資深人力流失，詳細申請方式依勞動部及各分署公告為準。</li>
+          </ul>`,
+        dmUrl: 'https://drive.google.com/file/d/19aFV9wGi2ovbqFSBsj-XKoIPxdbJiR4q/view?usp=drive_link',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_34',
@@ -860,10 +1406,21 @@
         name: '推動職務再設計服務計畫',
         title: '推動職務再設計服務計畫',
         target: '僱用身心障礙者、中高齡者、高齡者或有職務再設計需求員工之雇主',
-        amount: '每人每年最高補助 100,000 元（依評估核定之改善工作環境、機具設備、工作條件或提供就業輔具項目核付）',
+        amount: '每人每年最高補助 10 萬元（改善環境、機具或提供輔具）',
         highlight: '每人每年最高補助 10 萬元（改善環境、機具或提供輔具）',
         summary: '協助雇主改善工作環境、機具設備或提供就業輔具，排除職場障礙並促進員工穩定留任，每人每年最高補助 10 萬元。',
-        desc: '【類別】留用／留用人才類（編號 34）\n【計畫重點】協助雇主為身心障礙者、中高齡者或高齡者改善工作環境、機具設備、調整工作方法或提供就業輔具，每人每年最高補助 100,000 元，須經專業評估核定後辦理。'
+        desc: '協助雇主改善工作環境、機具設備或提供就業輔具，排除職場障礙並促進員工穩定留任，每人每年最高補助 10 萬元。',
+        content: `<h4>計畫重點與補助標準</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：留用／留用人才類（編號 34）</li>
+            <li><strong>補助標準</strong>：協助雇主為身心障礙者、中高齡者或高齡者改善工作環境、機具設備、調整工作方法或提供就業輔具，每人每年最高補助 100,000 元，須經專業評估核定後辦理。</li>
+          </ul>`,
+        dmUrl: 'https://drive.google.com/file/d/1UFCXh6sBIqhoavdFi_JrYClZKIoNoCx2/view?usp=drive_link',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_35',
@@ -877,7 +1434,19 @@
         amount: '事業單位辦訓最高補助 190 萬元（特殊情形最高 350 萬元）；減班休息勞工免費參訓並依實際參訓時數比照每小時基本工資發給訓練津貼（每月最高 16,300 元）',
         highlight: '企業辦訓最高 190 萬（特殊情形 350 萬）；勞工參訓津貼每月最高 16,300 元',
         summary: '協助減班休息事業單位與勞工於減班期間參訓充電，穩定勞雇關係與留任，企業辦訓最高 190 萬（特殊情形 350 萬），勞工津貼每月最高 16,300 元。',
-        desc: '【類別】留用／留用人才類（編號 35）\n【計畫重點】協助經通報實施減班休息之事業單位與在職勞工於減少正常工時期間參訓，事業單位辦訓最高補助 190 萬元（符合特殊情形者提高至 350 萬元）；減班休息勞工免費參訓並依實際參訓時數比照每小時基本工資發給訓練津貼（每月最高 16,300 元）。'
+        desc: '協助經通報實施減班休息之事業單位與在職勞工於減少正常工時期間參訓，事業單位辦訓最高補助 190 萬元（符合特殊情形者提高至 350 萬元）；減班休息勞工免費參訓並依實際參訓時數比照每小時基本工資發給訓練津貼（每月最高 16,300 元）。',
+        content: `<h4>計畫重點與補助標準</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：留用／留用人才類（編號 35）</li>
+            <li><strong>事業單位補助</strong>：辦訓最高補助 190 萬元（符合特殊情形者提高至 350 萬元）。</li>
+            <li><strong>勞工訓練津貼</strong>：減班休息勞工免費參訓並依實際參訓時數比照每小時基本工資發給訓練津貼（每月最高 16,300 元）。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_36',
@@ -891,7 +1460,18 @@
         amount: '依減班休息勞工再充電訓練相關規定提供參訓與訓練津貼補助（每月最高 16,300 元為上限基準，依公告為準）',
         highlight: '協助減班休息勞工於減班期間參訓並領取訓練津貼',
         summary: '針對減班休息勞工提供訓練課程與訓練津貼支持，協助維持生計、提升技能並穩定就業。',
-        desc: '【類別】留用／留用人才類（編號 36）\n【計畫重點】針對經通報實施減班休息之在職勞工提供再充電訓練與津貼支持，協助勞工善用減班時段進修並穩定留任，實際補助額度與申請期限依勞動部最新公告為準。'
+        desc: '針對經通報實施減班休息之在職勞工提供再充電訓練與津貼支持，協助勞工善用減班時段進修並穩定留任，實際補助額度與申請期限依勞動部最新公告為準。',
+        content: `<h4>計畫重點</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：留用／留用人才類（編號 36）</li>
+            <li><strong>辦理方式</strong>：針對經通報實施減班休息之在職勞工提供再充電訓練與津貼支持，協助勞工善用減班時段進修並穩定留任，實際補助額度與申請期限依勞動部最新公告為準。</li>
+          </ul>`,
+        dmUrl: '',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       },
       {
         id: 'plan_37',
@@ -902,20 +1482,47 @@
         name: '僱用安定措施',
         title: '僱用安定措施',
         target: '經通報實施減班休息且符合公告適用行業／期間規定之受僱勞工與事業單位',
-        amount: '依勞動部公告之僱用安定薪資補貼標準與辦理期間核發（依公告規定辦理）',
+        amount: '於公告適用期間與行業協助減班休息勞工穩定僱用',
         highlight: '於公告適用期間與行業協助減班休息勞工穩定僱用',
         summary: '於景氣波動或特定產業減班休息達一定情形時啟動，協助受影響勞工與事業單位維持僱用關係。',
-        desc: '【類別】留用／留用人才類（編號 37）\n【計畫重點】僱用安定措施須由勞動部依產業與經濟情勢公告啟動之適用期間與行業辦理，協助減班休息勞工維持僱用並減輕薪資減損衝擊，實際適用期間與補貼標準以勞動部最新公告為準。'
+        desc: '僱用安定措施須由勞動部依產業與經濟情勢公告啟動之適用期間與行業辦理，協助減班休息勞工維持僱用並減輕薪資減損衝擊，實際適用期間與補貼標準以勞動部最新公告為準。',
+        content: `<h4>計畫重點</h4>
+          <ul>
+            <li><strong>類別與編號</strong>：留用／留用人才類（編號 37）</li>
+            <li><strong>辦理方式</strong>：僱用安定措施須由勞動部依產業與經濟情勢公告啟動之適用期間與行業辦理，協助減班休息勞工維持僱用並減輕薪資減損衝擊，實際適用期間與補貼標準以勞動部最新公告為準。</li>
+          </ul>`,
+        dmUrl: 'https://drive.google.com/file/d/1AWgeJ8WYtMpque39_z1mxIzbpSq-MW8W/view?usp=drive_link',
+        dmDataUrl: '',
+        dmType: '',
+        dmName: '',
+        cardBg: '#ffffff',
+        textColor: '#1e293b'
       }
     ];
 
     let plans = [];
-    let customCodes = {};
+    let customCodes = {
+      plan_1: '1',
+      plan_2: '2',
+      plan_3: '3',
+      plan_4: '4',
+      plan_5: '5',
+      plan_6: '6',
+      plan_7: '7',
+      plan_18: '18',
+      plan_22: '22',
+      plan_28: '28',
+      plan_32: '32',
+      plan_33: '33',
+      plan_34: '34',
+      plan_37: '37'
+    };
     let currentCategory = 'ALL';
     let isAdmin = false;
     let adminUsername = '';
     let activeDetailPlanId = null;
     let toastTimer = null;
+    const expandedCardIds = new Set();
     const blobUrlRegistry = new Map();
 
     function buildApiUrl(path) {
@@ -943,13 +1550,32 @@
         container.querySelectorAll('script, iframe, object, embed, link, meta, style').forEach(el => el.remove());
         container.querySelectorAll('*').forEach(el => {
           [...el.attributes].forEach(attr => {
-            const name = attr.name.toLowerCase();
-            const val = String(attr.value || '').trim().toLowerCase();
-            if (name.startsWith('on') || val.startsWith('javascript:')) {
+            if (/^on/i.test(attr.name) || /^(href|src|xlink:href)$/i.test(attr.name) && /^javascript:/i.test(attr.value.trim())) {
               el.removeAttribute(attr.name);
             }
           });
         });
+        // 確保內頁「一句話看懂」、「誰可以申請」、「申請黃金期限」標籤粗體、內容維持一般字重
+        container.querySelectorAll('.plan-quick-label').forEach(el => {
+          const text = String(el.textContent || '').trim();
+          if (/一句話看懂|誰可以申請|申請黃金期限/.test(text)) {
+            el.style.fontWeight = '700';
+            if (!el.querySelector('strong')) {
+              el.innerHTML = `<strong>${el.innerHTML}</strong>`;
+            }
+          }
+        });
+        container.querySelectorAll('.plan-quick-val').forEach(el => {
+          el.style.fontWeight = '400';
+          el.querySelectorAll('strong, b').forEach(boldEl => {
+            const parent = boldEl.parentNode;
+            while (boldEl.firstChild) {
+              parent.insertBefore(boldEl.firstChild, boldEl);
+            }
+            boldEl.remove();
+          });
+        });
+
         return container.innerHTML;
       } catch (e) {
         return escapeHtml(html);
@@ -1009,7 +1635,6 @@
       toastTimer = setTimeout(() => el.classList.add('hidden'), 3200);
     }
 
-    // 統一將分類歸入「招募」、「培訓」、「留用」三大類
     function coerceToMainCategory(rawCategory, subGroupText = '', titleText = '', descText = '') {
       const cat = String(rawCategory || '').trim();
       if (cat === '招募' || cat === '培訓' || cat === '留用') {
@@ -1025,7 +1650,6 @@
       return '招募';
     }
 
-    // 取得實際生效的編號字串；沒有編號者回傳空字串 ''
     function getRawCode(plan) {
       if (plan && Object.prototype.hasOwnProperty.call(customCodes, plan.id)) {
         return String(customCodes[plan.id] ?? '').trim();
@@ -1033,9 +1657,6 @@
       return String(plan?.code ?? plan?.num ?? '').trim();
     }
 
-    // 排序規則：
-    // 1. 有編號的方案排在前面（1～37 依數值排序；若有其他自訂編號則依數值或字典序接在後）
-    // 2. 沒有編號的方案排在最後面
     function sortPlansByNumberThenUnnumbered(list) {
       return [...list].sort((a, b) => {
         const codeA = getRawCode(a);
@@ -1101,7 +1722,7 @@
         dmType: String(raw.dmType || '').trim(),
         dmName: String(raw.dmName || '').trim(),
         cardBg: String(raw.cardBg || '#ffffff'),
-        textColor: String(raw.textColor || '#0f172a')
+        textColor: String(raw.textColor || '#1e293b')
       };
     }
 
@@ -1149,13 +1770,13 @@
 
       if (isAdmin) {
         badge.textContent = `管理者已登入：${adminUsername}${modeSuffix}`;
-        badge.className = 'px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-900/80 text-emerald-200 border border-emerald-500/60';
+        badge.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-900 text-emerald-100 border border-emerald-500';
         btnLogin.classList.add('hidden');
         btnLogout.classList.remove('hidden');
         btnAdd.classList.remove('hidden');
       } else {
         badge.textContent = `訪客檢視模式${modeSuffix}`;
-        badge.className = 'px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 border border-slate-700';
+        badge.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-200 border border-slate-700';
         btnLogin.classList.remove('hidden');
         btnLogout.classList.add('hidden');
         btnAdd.classList.add('hidden');
@@ -1220,59 +1841,108 @@
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'same-origin',
-        body: JSON.stringify({ plans: orderedPlans, customCodes: nextCodes })
+        body: JSON.stringify({
+          plans: orderedPlans,
+          customCodes: nextCodes
+        })
       });
       const data = await res.json();
       if (!res.ok || !data.ok) {
-        throw new Error(data.message || '伺服器儲存失敗');
+        throw new Error(data.message || '同步至伺服器失敗');
       }
+
       plans = orderedPlans;
       customCodes = nextCodes;
+      savePreviewCache();
       renderPlans();
-      showToast(successText || data.message || '已同步至伺服器！');
+      showToast(successText || data.message || '已同步更新至伺服器');
       return true;
     }
 
-    function toggleServiceTable() {
-      const wrap = document.getElementById('serviceTableWrapper');
-      const btn = document.getElementById('btnToggleServiceTable');
-      const isHidden = wrap.classList.toggle('hidden');
-      btn.textContent = isHidden ? '展開電話表' : '收合電話表';
+    function getPlanTitle(plan) {
+      const title = String(plan?.title || plan?.name || '未命名計畫').trim();
+      const code = getRawCode(plan);
+      if (!code) return title;
+      const prefix = `${code}.`;
+      return title.startsWith(prefix) ? title : `${code}. ${title}`;
     }
 
-    function setCategoryFilter(cat) {
-      currentCategory = cat;
+    function getPlanHighlight(plan) {
+      return String(plan?.highlight || plan?.amount || '').trim();
+    }
+
+    function getPlanBodyText(plan) {
+      const descText = String(plan?.desc || '').trim();
+      const summaryText = String(plan?.summary || '').trim();
+      const contentPlain = stripHtmlToText(plan?.content || '');
+      return descText || summaryText || contentPlain;
+    }
+
+    function setCategoryFilter(category) {
+      currentCategory = category || 'ALL';
       document.querySelectorAll('.cat-tab').forEach(btn => {
-        if (btn.dataset.cat === cat) {
-          btn.className = 'cat-tab px-3 py-1.5 rounded-xl text-xs font-bold bg-slate-900 text-white cursor-pointer';
-        } else {
-          btn.className = 'cat-tab px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer';
-        }
+        const isActive = btn.getAttribute('data-cat') === currentCategory;
+        btn.className = isActive
+          ? 'cat-tab px-3 py-1 rounded-md text-xs font-bold bg-[#0f294a] text-white cursor-pointer'
+          : 'cat-tab px-3 py-1 rounded-md text-xs font-bold bg-[#e0f2fe] text-[#075985] hover:bg-sky-200 cursor-pointer';
       });
       renderPlans();
     }
 
     function clearSearch() {
-      document.getElementById('searchInput').value = '';
+      const input = document.getElementById('searchInput');
+      if (input) {
+        input.value = '';
+      }
       renderPlans();
     }
 
-    function getPlanTitle(plan) {
-      return String(plan.title || plan.name || '未命名計畫').trim();
+    function toggleServiceTable() {
+      const wrapper = document.getElementById('serviceTableWrapper');
+      const btn = document.getElementById('btnToggleServiceTable');
+      if (!wrapper || !btn) return;
+      const isHidden = wrapper.classList.contains('hidden');
+      if (isHidden) {
+        wrapper.classList.remove('hidden');
+        btn.textContent = '收合電話表';
+      } else {
+        wrapper.classList.add('hidden');
+        btn.textContent = '展開電話表';
+      }
     }
 
-    function getPlanHighlight(plan) {
-      return String(plan.highlight || plan.amount || '').trim();
+    function toggleCardExpand(planId, event) {
+      if (event) event.stopPropagation();
+      const key = String(planId);
+      if (expandedCardIds.has(key)) {
+        expandedCardIds.delete(key);
+      } else {
+        expandedCardIds.add(key);
+      }
+      renderPlans();
     }
 
-    function getPlanBodyText(plan) {
-      if (plan.summary && String(plan.summary).trim()) {
-        return String(plan.summary).trim();
+    function buildFormattedContentBody(plan) {
+      const rich = sanitizeRichHtml(plan.content);
+      if (rich && /<(h4|ul|ol|table|div)\b/i.test(rich)) {
+        return rich;
       }
-      if (plan.desc && String(plan.desc).trim()) {
-        return String(plan.desc).trim();
+
+      const items = [];
+      if (plan.target) {
+        items.push(`<li><strong>適用對象</strong>：${escapeHtml(plan.target)}</li>`);
       }
-      return stripHtmlToText(plan.content);
+      if (plan.amount && plan.amount !== getPlanHighlight(plan)) {
+        items.push(`<li><strong>補助標準</strong>：${escapeHtml(plan.amount)}</li>`);
+      }
+      const extraText = stripHtmlToText(plan.content) || String(plan.desc || '').trim();
+      if (extraText && extraText !== String(plan.summary || '').trim()) {
+        items.push(`<li><strong>計畫說明</strong>：${escapeHtml(extraText)}</li>`);
+      }
+      if (items.length === 0) {
+        return '';
+      }
+      return `<h4>計畫重點</h4><ul>${items.join('')}</ul>`;
     }
 
     function renderPlans() {
@@ -1292,7 +1962,8 @@
           plan.subGroup,
           getPlanTitle(plan),
           plan.target,
-          getPlanHighlight(plan),
+          plan.amount,
+          plan.highlight,
           plan.summary,
           plan.desc,
           stripHtmlToText(plan.content),
@@ -1306,77 +1977,80 @@
       document.getElementById('totalCount').textContent = plans.length;
 
       if (filtered.length === 0) {
-        grid.innerHTML = `<div class="col-span-full bg-white rounded-2xl border border-slate-200 p-10 text-center text-sm text-slate-500">找不到符合條件的計畫，請嘗試清除關鍵字或切換分類。</div>`;
+        grid.innerHTML = `<section class="plan-card col-span-full text-center text-sm text-slate-500">找不到符合條件的計畫，請嘗試清除關鍵字或切換分類。</section>`;
         return;
       }
 
       grid.innerHTML = filtered.map(plan => {
         const rawCode = getRawCode(plan);
-        const codeBadge = rawCode
-          ? `<span class="px-2.5 py-0.5 rounded-lg bg-slate-900 text-white text-xs font-bold">編號 ${escapeHtml(rawCode)}</span>`
-          : `<span class="px-2.5 py-0.5 rounded-lg bg-slate-200 text-slate-600 text-xs font-semibold">無編號</span>`;
-
-        const name = escapeHtml(getPlanTitle(plan));
         const mainCat = escapeHtml(coerceToMainCategory(plan.category, plan.subGroup, getPlanTitle(plan), plan.desc));
-        const subGroup = String(plan.subGroup || '').trim()
-          ? `<span class="px-2 py-0.5 rounded-lg bg-slate-100 text-slate-700 text-[11px] font-semibold">${escapeHtml(plan.subGroup)}</span>`
+        const subGroupHtml = String(plan.subGroup || '').trim()
+          ? `<span class="badge-sub">${escapeHtml(plan.subGroup)}</span>`
           : '';
-        const target = escapeHtml(plan.target);
-        const amount = escapeHtml(getPlanHighlight(plan));
-        const desc = escapeHtml(getPlanBodyText(plan));
+        const codeHtml = rawCode
+          ? `<span class="badge-num">編號 ${escapeHtml(rawCode)}</span>`
+          : `<span class="badge-sub">無編號</span>`;
+        const headingText = escapeHtml(getPlanTitle(plan));
+        const highlightText = getPlanHighlight(plan);
+        const summaryText = String(plan.summary || plan.desc || '').trim();
+        const isExpanded = expandedCardIds.has(String(plan.id));
         const hasDm = Boolean(plan.dmUrl || plan.dmDataUrl);
         const cardBg = /^#[0-9a-fA-F]{6}$/.test(plan.cardBg || '') ? plan.cardBg : '#ffffff';
-        const textColor = /^#[0-9a-fA-F]{6}$/.test(plan.textColor || '') ? plan.textColor : '#0f172a';
+        const textColor = /^#[0-9a-fA-F]{6}$/.test(plan.textColor || '') ? plan.textColor : '#1e293b';
+        const formattedBody = buildFormattedContentBody(plan);
 
         return `
-          <article
-            style="background-color: ${cardBg}; color: ${textColor};"
-            class="plan-card rounded-2xl border border-slate-200/90 p-5 flex flex-col justify-between shadow-2xs"
-          >
+          <section class="plan-card m-0 flex flex-col justify-between" style="background-color: ${cardBg}; color: ${textColor};">
             <div>
-              <div class="flex items-center justify-between gap-2 mb-2.5">
-                <div class="flex items-center gap-1.5 flex-wrap">
-                  ${codeBadge}
-                  <span class="px-2.5 py-0.5 rounded-lg bg-teal-600/15 text-teal-900 text-xs font-bold">${mainCat}</span>
-                  ${subGroup}
+              <div class="plan-meta">
+                <div>
+                  <span class="badge">${mainCat}</span>
+                  ${codeHtml}
+                  ${subGroupHtml}
+                  ${hasDm ? `<span class="dm-note">DM：${escapeHtml(plan.dmName || '已附雲端說明')}</span>` : ''}
                 </div>
                 ${isAdmin ? `
-                  <button type="button" onclick="openEditModal('${escapeHtml(plan.id)}')" class="px-2.5 py-1 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold transition cursor-pointer shrink-0">
+                  <button type="button" onclick="openEditModal('${escapeHtml(plan.id)}')" class="px-2.5 py-0.5 rounded-md bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold cursor-pointer">
                     編輯
                   </button>
                 ` : ''}
               </div>
 
-              <h3 onclick="openDetailModal('${escapeHtml(plan.id)}')" class="text-base sm:text-lg font-bold leading-snug mb-2 cursor-pointer hover:underline">
-                ${name}
-              </h3>
+              <h2 onclick="openDetailModal('${escapeHtml(plan.id)}')" class="cursor-pointer hover:underline">${headingText}</h2>
 
-              ${amount ? `
-                <div class="rounded-xl bg-teal-600/10 border border-teal-600/20 px-3 py-2 mb-2.5">
-                  <div class="text-[11px] font-bold text-teal-800">補助重點與標準</div>
-                  <div class="text-xs sm:text-sm font-bold text-teal-900">${amount}</div>
-                </div>
+              ${highlightText ? `
+                <div class="highlight-box"><strong>補助與重點摘要：</strong>${escapeHtml(highlightText)}</div>
               ` : ''}
 
-              ${target ? `<div class="text-xs opacity-80 mb-2"><strong>適用對象：</strong>${target}</div>` : ''}
+              ${summaryText ? `
+                <p class="summary-text">${escapeHtml(summaryText)}</p>
+              ` : ''}
 
-              <p class="text-xs sm:text-sm opacity-90 line-clamp-3 whitespace-pre-line leading-relaxed">
-                ${desc}
-              </p>
+              ${isExpanded && formattedBody ? `
+                <div class="content-body pt-1 border-t border-slate-200">${formattedBody}</div>
+              ` : ''}
             </div>
 
-            <div class="pt-3 mt-4 border-t border-slate-900/10 flex items-center justify-between gap-2">
-              ${hasDm ? `
-                <button type="button" onclick="openDmPreview('${escapeHtml(plan.id)}')" class="px-3 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold transition cursor-pointer">
-                  預覽 / 下載 DM
-                </button>
-              ` : `<span class="text-xs opacity-50">尚未設定 DM</span>`}
+            <div class="pt-3 mt-3 border-t border-slate-200 flex items-center justify-between gap-2 flex-wrap">
+              <div class="flex items-center gap-2 flex-wrap">
+                ${hasDm ? `
+                  <button type="button" onclick="openDmPreview('${escapeHtml(plan.id)}')" class="px-3 py-1 rounded-md bg-[#0f766e] hover:bg-teal-800 text-white text-xs font-bold cursor-pointer">
+                    預覽 / 下載 DM
+                  </button>
+                ` : `<span class="text-xs text-slate-400">尚未設定 DM</span>`}
 
-              <button type="button" onclick="openDetailModal('${escapeHtml(plan.id)}')" class="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition cursor-pointer">
+                ${formattedBody ? `
+                  <button type="button" onclick="toggleCardExpand('${escapeHtml(plan.id)}', event)" class="px-2.5 py-1 rounded-md bg-[#f0f5fa] hover:bg-sky-100 text-[#0f294a] border border-[#cbd5e1] text-xs font-bold cursor-pointer">
+                    ${isExpanded ? '收合詳細版面' : '展開詳細版面'}
+                  </button>
+                ` : ''}
+              </div>
+
+              <button type="button" onclick="openDetailModal('${escapeHtml(plan.id)}')" class="px-3 py-1 rounded-md bg-[#0f294a] hover:bg-slate-800 text-white text-xs font-bold cursor-pointer">
                 檢視完整內容
               </button>
             </div>
-          </article>
+          </section>
         `;
       }).join('');
     }
@@ -1422,8 +2096,7 @@
       const rawCode = getRawCode(plan);
       const titleText = getPlanTitle(plan);
       const highlightText = getPlanHighlight(plan);
-      const summaryText = String(plan.summary || '').trim();
-      const richContent = sanitizeRichHtml(plan.content);
+      const summaryText = String(plan.summary || plan.desc || '').trim();
       const fallbackDesc = String(plan.desc || '').trim();
       const mainCat = coerceToMainCategory(plan.category, plan.subGroup, titleText, fallbackDesc);
 
@@ -1438,53 +2111,24 @@
       }
       document.getElementById('detailTitle').textContent = titleText;
 
-      const bodyParts = [];
+      const parts = [];
       if (highlightText) {
-        bodyParts.push(`
-          <div class="bg-teal-50 border border-teal-200 rounded-xl p-4">
-            <div class="text-xs font-bold text-teal-800 mb-1">補助標準與重點摘要</div>
-            <div class="text-base font-bold text-teal-950">${escapeHtml(highlightText)}</div>
-          </div>
-        `);
+        parts.push(`<div class="highlight-box"><strong>補助與重點摘要：</strong>${escapeHtml(highlightText)}</div>`);
       }
       if (summaryText) {
-        bodyParts.push(`
-          <div class="bg-blue-50/70 border border-blue-200 rounded-xl p-4">
-            <div class="text-xs font-bold text-blue-800 mb-1">計畫重點說明</div>
-            <div class="text-sm text-slate-900 font-medium whitespace-pre-line">${escapeHtml(summaryText)}</div>
-          </div>
-        `);
+        parts.push(`<p class="summary-text">${escapeHtml(summaryText)}</p>`);
       }
-      if (plan.target) {
-        bodyParts.push(`
-          <div class="bg-slate-50 border border-slate-200 rounded-xl p-4">
-            <div class="text-xs font-bold text-slate-600 mb-1">適用對象</div>
-            <div class="text-sm text-slate-900 font-medium">${escapeHtml(plan.target)}</div>
-          </div>
-        `);
-      }
-      if (fallbackDesc) {
-        bodyParts.push(`
-          <div>
-            <div class="text-xs font-bold text-slate-600 mb-1.5">詳細內容與申請規範</div>
-            <div class="text-sm text-slate-800 whitespace-pre-line leading-relaxed bg-white border border-slate-200 rounded-xl p-4">${escapeHtml(fallbackDesc)}</div>
-          </div>
-        `);
-      } else if (richContent) {
-        bodyParts.push(`
-          <div>
-            <div class="text-xs font-bold text-slate-600 mb-1.5">詳細內容與申請規範</div>
-            <div class="text-sm text-slate-800 leading-relaxed bg-white border border-slate-200 rounded-xl p-4 space-y-3 overflow-x-auto">${richContent}</div>
-          </div>
-        `);
+      const formattedBody = buildFormattedContentBody(plan);
+      if (formattedBody) {
+        parts.push(`<div class="content-body">${formattedBody}</div>`);
       }
 
-      document.getElementById('detailBody').innerHTML = bodyParts.join('') || '<div class="text-sm text-slate-500">尚無詳細內容</div>';
+      document.getElementById('detailBody').innerHTML = parts.join('') || '<p class="summary-text">尚無詳細內容</p>';
 
       const dmArea = document.getElementById('detailDmArea');
       if (plan.dmUrl || plan.dmDataUrl) {
         dmArea.innerHTML = `
-          <button type="button" onclick="openDmPreview('${escapeHtml(plan.id)}')" class="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white text-xs sm:text-sm font-bold cursor-pointer">
+          <button type="button" onclick="openDmPreview('${escapeHtml(plan.id)}')" class="px-4 py-2 rounded-lg bg-[#0f766e] hover:bg-teal-800 text-white text-xs sm:text-sm font-bold cursor-pointer">
             預覽 / 下載 DM（${escapeHtml(plan.dmName || '附件檔案')}）
           </button>
         `;
@@ -1601,7 +2245,7 @@
         document.getElementById('editPlanDmUrl').value = '';
         document.getElementById('editPlanDmName').value = '';
         document.getElementById('editCardBg').value = '#ffffff';
-        document.getElementById('editTextColor').value = '#0f172a';
+        document.getElementById('editTextColor').value = '#1e293b';
         btnDelete.classList.add('hidden');
       } else {
         const plan = plans.find(p => String(p.id) === String(planId));
@@ -1611,14 +2255,14 @@
         document.getElementById('editPlanNum').value = getRawCode(plan);
         document.getElementById('editPlanCategory').value = coerceToMainCategory(plan.category, plan.subGroup, getPlanTitle(plan), plan.desc);
         document.getElementById('editSubGroup').value = plan.subGroup || '';
-        document.getElementById('editPlanName').value = getPlanTitle(plan);
+        document.getElementById('editPlanName').value = String(plan.title || plan.name || '').trim();
         document.getElementById('editPlanTarget').value = plan.target || '';
         document.getElementById('editPlanAmount').value = getPlanHighlight(plan);
         document.getElementById('editPlanDesc').value = getPlanBodyText(plan);
         document.getElementById('editPlanDmUrl').value = plan.dmUrl || '';
         document.getElementById('editPlanDmName').value = plan.dmName || '';
         document.getElementById('editCardBg').value = /^#[0-9a-fA-F]{6}$/.test(plan.cardBg || '') ? plan.cardBg : '#ffffff';
-        document.getElementById('editTextColor').value = /^#[0-9a-fA-F]{6}$/.test(plan.textColor || '') ? plan.textColor : '#0f172a';
+        document.getElementById('editTextColor').value = /^#[0-9a-fA-F]{6}$/.test(plan.textColor || '') ? plan.textColor : '#1e293b';
         btnDelete.classList.remove('hidden');
       }
 
