@@ -13,15 +13,14 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_FILE = BASE_DIR / "plans_data.json"
-DEFAULT_SEED_FILE = BASE_DIR / "hr_plans_backup_2026-11-23.json"
 
 app = Flask(__name__, static_folder=str(BASE_DIR), static_url_path="")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY") or secrets.token_hex(32)
 
-# 若 FORCE_SYNC_FROM_SEED 設為 true（預設為 true），每次重啟／部署會以最新種子檔／更新基準同步，避免卡在舊快取資料；
-# 若需完全鎖定後台手動修改、不受種子檔覆蓋，可在 Render 環境變數設定 FORCE_SYNC_FROM_SEED=false
-FORCE_SYNC_FROM_SEED = os.environ.get("FORCE_SYNC_FROM_SEED", "true").strip().lower() != "false"
+# 設為 true 時，每次部署重啟會清空舊的 plans_data.json，讓前端 index.html 內建的最新 1~37 筆資料直接生效；
+# 若之後要在線上後台手動新增/修改並永久保留，可在 Render 環境變數設 USE_INDEX_DEFAULT_ON_BOOT=false
+USE_INDEX_DEFAULT_ON_BOOT = os.environ.get("USE_INDEX_DEFAULT_ON_BOOT", "true").strip().lower() != "false"
 
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
@@ -30,10 +29,6 @@ if os.environ.get("FORCE_SECURE_COOKIE", "").lower() == "true":
 
 
 def load_admin_credentials() -> dict[str, str]:
-    """
-    載入管理者帳密（支援環境變數 ADMIN_ACCOUNTS_JSON 或預設帳號）。
-    格式範例：{"admin": "your-password", "hr_lead": "another-password"}
-    """
     raw_json = os.environ.get("ADMIN_ACCOUNTS_JSON", "").strip()
     accounts: dict[str, str] = {}
 
@@ -58,25 +53,7 @@ def load_admin_credentials() -> dict[str, str]:
 ADMIN_HASHES = load_admin_credentials()
 
 
-def seed_initial_data() -> dict[str, Any]:
-    """從預設備份檔建立初始資料（若無備份檔則回傳空結構，由前端內建 1~37 號預設資料接手）。"""
-    if DEFAULT_SEED_FILE.exists():
-        try:
-            with DEFAULT_SEED_FILE.open("r", encoding="utf-8") as f:
-                content = json.load(f)
-            if isinstance(content, dict) and isinstance(content.get("plans"), list):
-                custom_codes = content.get("customCodes") if isinstance(content.get("customCodes"), dict) else {}
-                return {"plans": content["plans"], "customCodes": custom_codes}
-            if isinstance(content, list):
-                return {"plans": content, "customCodes": {}}
-        except Exception as exc:
-            app.logger.warning("讀取預設備份檔失敗: %s", exc)
-
-    return {"plans": [], "customCodes": {}}
-
-
 def write_store(payload: dict[str, Any]) -> None:
-    """以原子寫入方式更新伺服器端 JSON 檔案，避免同時寫入造成毀損。"""
     DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
     tmp_file = DATA_FILE.with_suffix(".json.tmp")
     with tmp_file.open("w", encoding="utf-8") as f:
@@ -86,17 +63,16 @@ def write_store(payload: dict[str, Any]) -> None:
 
 def sync_store_on_startup() -> dict[str, Any]:
     """
-    啟動時同步資料：
-    - 若 FORCE_SYNC_FROM_SEED 為 true：以最新種子檔更新/建立 plans_data.json，確保部署後不會殘留舊快取資料。
-    - 若 FORCE_SYNC_FROM_SEED 為 false：僅在 plans_data.json 不存在時建立。
+    啟動時若 USE_INDEX_DEFAULT_ON_BOOT=true，回傳空陣列並重置 plans_data.json，
+    讓前端 index.html 直接載入內建的最新 1～37 號資料，不再被舊的 hr_plans_backup_2026-11-23.json 覆蓋！
     """
-    if FORCE_SYNC_FROM_SEED or not DATA_FILE.exists():
-        seeded = seed_initial_data()
+    if USE_INDEX_DEFAULT_ON_BOOT or not DATA_FILE.exists():
+        empty_payload = {"plans": [], "customCodes": {}}
         try:
-            write_store(seeded)
+            write_store(empty_payload)
         except Exception as exc:
-            app.logger.warning("啟動寫入 plans_data.json 失敗: %s", exc)
-        return seeded
+            app.logger.warning("重置 plans_data.json 失敗: %s", exc)
+        return empty_payload
 
     try:
         with DATA_FILE.open("r", encoding="utf-8") as f:
@@ -112,11 +88,10 @@ def sync_store_on_startup() -> dict[str, Any]:
     except Exception as exc:
         app.logger.error("讀取 plans_data.json 失敗: %s", exc)
 
-    return seed_initial_data()
+    return {"plans": [], "customCodes": {}}
 
 
 def read_store() -> dict[str, Any]:
-    """安全讀取伺服器端儲存的計畫資料。"""
     if not DATA_FILE.exists():
         return sync_store_on_startup()
 
@@ -134,15 +109,13 @@ def read_store() -> dict[str, Any]:
     except Exception as exc:
         app.logger.error("讀取 plans_data.json 失敗: %s", exc)
 
-    return seed_initial_data()
+    return {"plans": [], "customCodes": {}}
 
 
-# 模組載入（包含 Gunicorn 啟動）時立即執行同步，避免舊資料殘留
 sync_store_on_startup()
 
 
 def login_required(fn):
-    """驗證目前 Session 是否為已登入管理者。"""
     @wraps(fn)
     def wrapper(*args, **kwargs):
         admin_user = session.get("admin_user")
@@ -154,13 +127,11 @@ def login_required(fn):
 
 @app.get("/")
 def serve_index():
-    """提供主前端頁面。"""
     return send_from_directory(BASE_DIR, "index.html")
 
 
 @app.get("/api/auth/status")
 def auth_status():
-    """查詢目前登入狀態。"""
     admin_user = session.get("admin_user")
     return jsonify({
         "ok": True,
@@ -171,7 +142,6 @@ def auth_status():
 
 @app.post("/api/auth/login")
 def auth_login():
-    """管理者帳密登入。"""
     body = request.get_json(silent=True) or {}
     username = str(body.get("username", "")).strip()
     password = str(body.get("password", ""))
@@ -190,14 +160,12 @@ def auth_login():
 
 @app.post("/api/auth/logout")
 def auth_logout():
-    """管理者登出。"""
     session.pop("admin_user", None)
     return jsonify({"ok": True, "message": "已登出管理者帳號。"})
 
 
 @app.get("/api/plans")
 def get_plans():
-    """取得最新計畫資料（任何裝置均可讀取）。"""
     store = read_store()
     return jsonify({
         "ok": True,
@@ -206,29 +174,9 @@ def get_plans():
     })
 
 
-@app.post("/api/plans/reset-from-seed")
-@login_required
-def reset_plans_from_seed():
-    """（需管理者登入）強制以預設備份檔重設伺服器端資料。"""
-    seeded = seed_initial_data()
-    try:
-        write_store(seeded)
-    except Exception as exc:
-        app.logger.error("重設 plans_data.json 失敗: %s", exc)
-        return jsonify({"ok": False, "message": "重設伺服器資料失敗。"}), 500
-
-    return jsonify({
-        "ok": True,
-        "message": f"已重設 {len(seeded.get('plans', []))} 筆初始計畫資料。",
-        "plans": seeded.get("plans", []),
-        "customCodes": seeded.get("customCodes", {})
-    })
-
-
 @app.put("/api/plans")
 @login_required
 def update_plans():
-    """儲存所有計畫與自訂編號（需管理者登入）。"""
     body = request.get_json(silent=True) or {}
     plans = body.get("plans")
     custom_codes = body.get("customCodes", {})
@@ -257,7 +205,6 @@ def update_plans():
 @app.put("/api/plans/<plan_id>")
 @login_required
 def update_single_plan(plan_id: str):
-    """更新單筆計畫內容（需管理者登入）。"""
     body = request.get_json(silent=True) or {}
     updated_plan = body.get("plan")
     if not isinstance(updated_plan, dict):
