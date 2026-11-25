@@ -13,14 +13,14 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 BASE_DIR = Path(__file__).resolve().parent
 DATA_FILE = BASE_DIR / "plans_data.json"
+SEED_FILE = BASE_DIR / "hr_plans_backup_2026-11-23.json"
 
 app = Flask(__name__, static_folder=str(BASE_DIR), static_url_path="")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY") or secrets.token_hex(32)
 
-# 設為 true 時，每次部署重啟會清空舊的 plans_data.json，讓前端 index.html 內建的最新 1~37 筆資料直接生效；
-# 若之後要在線上後台手動新增/修改並永久保留，可在 Render 環境變數設 USE_INDEX_DEFAULT_ON_BOOT=false
-USE_INDEX_DEFAULT_ON_BOOT = os.environ.get("USE_INDEX_DEFAULT_ON_BOOT", "true").strip().lower() != "false"
+# 預設啟動時直接同步最新的 SEED_FILE（含最新 37 筆與 Google Drive DM 連結）
+FORCE_SYNC_FROM_SEED = os.environ.get("FORCE_SYNC_FROM_SEED", "true").strip().lower() != "false"
 
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
@@ -61,18 +61,34 @@ def write_store(payload: dict[str, Any]) -> None:
     tmp_file.replace(DATA_FILE)
 
 
-def sync_store_on_startup() -> dict[str, Any]:
-    """
-    啟動時若 USE_INDEX_DEFAULT_ON_BOOT=true，回傳空陣列並重置 plans_data.json，
-    讓前端 index.html 直接載入內建的最新 1～37 號資料，不再被舊的 hr_plans_backup_2026-11-23.json 覆蓋！
-    """
-    if USE_INDEX_DEFAULT_ON_BOOT or not DATA_FILE.exists():
-        empty_payload = {"plans": [], "customCodes": {}}
+def load_seed_payload() -> dict[str, Any]:
+    if SEED_FILE.exists():
         try:
-            write_store(empty_payload)
+            with SEED_FILE.open("r", encoding="utf-8") as f:
+                seed = json.load(f)
+            if isinstance(seed, list):
+                return {"plans": seed, "customCodes": {}}
+            if isinstance(seed, dict):
+                plans = seed.get("plans", [])
+                custom_codes = seed.get("customCodes", {})
+                if isinstance(plans, list):
+                    return {
+                        "plans": plans,
+                        "customCodes": custom_codes if isinstance(custom_codes, dict) else {}
+                    }
         except Exception as exc:
-            app.logger.warning("重置 plans_data.json 失敗: %s", exc)
-        return empty_payload
+            app.logger.error("讀取初始種子資料檔失敗: %s", exc)
+    return {"plans": [], "customCodes": {}}
+
+
+def sync_store_on_startup() -> dict[str, Any]:
+    if FORCE_SYNC_FROM_SEED or not DATA_FILE.exists():
+        seed_payload = load_seed_payload()
+        try:
+            write_store(seed_payload)
+        except Exception as exc:
+            app.logger.warning("寫入 plans_data.json 失敗: %s", exc)
+        return seed_payload
 
     try:
         with DATA_FILE.open("r", encoding="utf-8") as f:
@@ -88,7 +104,7 @@ def sync_store_on_startup() -> dict[str, Any]:
     except Exception as exc:
         app.logger.error("讀取 plans_data.json 失敗: %s", exc)
 
-    return {"plans": [], "customCodes": {}}
+    return load_seed_payload()
 
 
 def read_store() -> dict[str, Any]:
@@ -109,7 +125,7 @@ def read_store() -> dict[str, Any]:
     except Exception as exc:
         app.logger.error("讀取 plans_data.json 失敗: %s", exc)
 
-    return {"plans": [], "customCodes": {}}
+    return load_seed_payload()
 
 
 sync_store_on_startup()
