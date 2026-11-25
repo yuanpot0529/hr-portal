@@ -19,7 +19,6 @@ app = Flask(__name__, static_folder=str(BASE_DIR), static_url_path="")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY") or secrets.token_hex(32)
 
-# 預設啟動時直接同步最新的 SEED_FILE（含最新 37 筆與 Google Drive DM 連結）
 FORCE_SYNC_FROM_SEED = os.environ.get("FORCE_SYNC_FROM_SEED", "true").strip().lower() != "false"
 
 app.config["SESSION_COOKIE_HTTPONLY"] = True
