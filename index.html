@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<html lang="zh-Hant"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>企業人資補助與就業資源檢索平台</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -151,6 +150,55 @@
       color: #334155;
       line-height: 1.55;
     }
+    .editor-box-callout {
+      background: #f0f5fa;
+      border-left: 4px solid #1e4e8c;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin: 10px 0;
+      color: #0f294a;
+    }
+    .editor-box-card {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin: 10px 0;
+    }
+    .rich-editor-area:focus {
+      outline: none;
+    }
+    .rich-editor-area table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0 14px;
+      font-size: 13px;
+    }
+    .rich-editor-area th,
+    .rich-editor-area td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .rich-editor-area th {
+      background: #f0f5fa;
+      color: #0f294a;
+      font-weight: 700;
+    }
+    .rich-editor-area h4 {
+      margin: 14px 0 6px;
+      font-size: 15px;
+      color: #0f294a;
+      border-left: 3px solid #0d9488;
+      padding-left: 8px;
+      font-weight: 700;
+    }
+    .rich-editor-area ul {
+      margin: 6px 0 12px;
+      padding-left: 20px;
+      list-style-type: disc;
+    }
     @media (max-width: 640px) {
       .plan-card {
         padding: 14px;
@@ -161,7 +209,7 @@
       }
     }
   </style>
-</head>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.bottom-5{bottom:1.25rem}.right-2\.5{right:0.625rem}.right-5{right:1.25rem}.top-0{top:0px}.top-1\/2{top:50%}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}.col-span-full{grid-column:1 / -1}.m-0{margin:0px}.mx-auto{margin-left:auto;margin-right:auto}.mx-0\.5{margin-left:0.125rem;margin-right:0.125rem}.mb-1\.5{margin-bottom:0.375rem}.mb-5{margin-bottom:1.25rem}.mt-1{margin-top:0.25rem}.mt-3{margin-top:0.75rem}.mb-1{margin-bottom:0.25rem}.ml-auto{margin-left:auto}.mt-0\.5{margin-top:0.125rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-\[85vh\]{height:85vh}.h-10{height:2.5rem}.h-4{height:1rem}.max-h-\[90vh\]{max-height:90vh}.max-h-\[380px\]{max-height:380px}.max-h-\[92vh\]{max-height:92vh}.min-h-screen{min-height:100vh}.min-h-\[260px\]{min-height:260px}.w-full{width:100%}.w-4{width:1rem}.w-px{width:1px}.max-w-4xl{max-width:56rem}.max-w-\[1280px\]{max-width:1280px}.max-w-\[960px\]{max-width:960px}.max-w-sm{max-width:24rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.items-stretch{align-items:stretch}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-1{gap:0.25rem}.space-y-3\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.875rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.875rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.rounded{border-radius:0.25rem}.rounded-b-lg{border-bottom-right-radius:0.5rem;border-bottom-left-radius:0.5rem}.rounded-t-lg{border-top-left-radius:0.5rem;border-top-right-radius:0.5rem}.border{border-width:1px}.border-0{border-width:0px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-b-0{border-bottom-width:0px}.border-\[\#cbd5e1\]{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-700{--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.border-sky-300{--tw-border-opacity:1;border-color:rgb(125 211 252 / var(--tw-border-opacity, 1))}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.border-emerald-500{--tw-border-opacity:1;border-color:rgb(16 185 129 / var(--tw-border-opacity, 1))}.bg-\[\#0f294a\]{--tw-bg-opacity:1;background-color:rgb(15 41 74 / var(--tw-bg-opacity, 1))}.bg-\[\#0f766e\]{--tw-bg-opacity:1;background-color:rgb(15 118 110 / var(--tw-bg-opacity, 1))}.bg-\[\#e0f2fe\]{--tw-bg-opacity:1;background-color:rgb(224 242 254 / var(--tw-bg-opacity, 1))}.bg-\[\#f0f5fa\]{--tw-bg-opacity:1;background-color:rgb(240 245 250 / var(--tw-bg-opacity, 1))}.bg-\[\#f8fafc\]{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.bg-amber-400{--tw-bg-opacity:1;background-color:rgb(251 191 36 / var(--tw-bg-opacity, 1))}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.bg-slate-200{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.bg-slate-700{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.bg-slate-950\/60{background-color:rgb(2 6 23 / 0.6)}.bg-slate-950\/70{background-color:rgb(2 6 23 / 0.7)}.bg-teal-500{--tw-bg-opacity:1;background-color:rgb(20 184 166 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-rose-600{--tw-bg-opacity:1;background-color:rgb(225 29 72 / var(--tw-bg-opacity, 1))}.bg-sky-50{--tw-bg-opacity:1;background-color:rgb(240 249 255 / var(--tw-bg-opacity, 1))}.bg-slate-300{--tw-bg-opacity:1;background-color:rgb(203 213 225 / var(--tw-bg-opacity, 1))}.bg-transparent{background-color:transparent}.bg-emerald-900{--tw-bg-opacity:1;background-color:rgb(6 78 59 / var(--tw-bg-opacity, 1))}.p-4{padding:1rem}.p-6{padding:1.5rem}.p-0{padding:0px}.p-2{padding:0.5rem}.p-5{padding:1.25rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.pl-3\.5{padding-left:0.875rem}.pr-12{padding-right:3rem}.pt-3{padding-top:0.75rem}.pt-2{padding-top:0.5rem}.text-center{text-align:center}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-semibold{font-weight:600}.italic{font-style:italic}.leading-relaxed{line-height:1.625}.text-\[\#075985\]{--tw-text-opacity:1;color:rgb(7 89 133 / var(--tw-text-opacity, 1))}.text-\[\#0f294a\]{--tw-text-opacity:1;color:rgb(15 41 74 / var(--tw-text-opacity, 1))}.text-\[\#0f766e\]{--tw-text-opacity:1;color:rgb(15 118 110 / var(--tw-text-opacity, 1))}.text-\[\#1e293b\]{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-\[\#cbd5e1\]{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-200{--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-slate-950{--tw-text-opacity:1;color:rgb(2 6 23 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-teal-800{--tw-text-opacity:1;color:rgb(17 94 89 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-emerald-100{--tw-text-opacity:1;color:rgb(209 250 229 / var(--tw-text-opacity, 1))}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-amber-300:hover{--tw-bg-opacity:1;background-color:rgb(252 211 77 / var(--tw-bg-opacity, 1))}.hover\:bg-sky-100:hover{--tw-bg-opacity:1;background-color:rgb(224 242 254 / var(--tw-bg-opacity, 1))}.hover\:bg-sky-200:hover{--tw-bg-opacity:1;background-color:rgb(186 230 253 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-300:hover{--tw-bg-opacity:1;background-color:rgb(203 213 225 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-600:hover{--tw-bg-opacity:1;background-color:rgb(71 85 105 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-800:hover{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.hover\:bg-teal-400:hover{--tw-bg-opacity:1;background-color:rgb(45 212 191 / var(--tw-bg-opacity, 1))}.hover\:bg-teal-800:hover{--tw-bg-opacity:1;background-color:rgb(17 94 89 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-700:hover{--tw-bg-opacity:1;background-color:rgb(190 18 60 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-100:hover{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-200:hover{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.hover\:text-slate-900:hover{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.focus\:ring-\[\#1e4e8c\]:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(30 78 140 / var(--tw-ring-opacity, 1))}@media (min-width: 640px){.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:p-5{padding:1.25rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:text-\[13px\]{font-size:13px}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}.sm\:text-xl{font-size:1.25rem;line-height:1.75rem}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:items-center{align-items:center}}@media (min-width: 1024px){.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}}</style></head>
 <body class="bg-[#f8fafc] text-[#1e293b] min-h-screen flex flex-col">
 
   <!-- 頂部導覽列 -->
@@ -177,19 +225,17 @@
       </div>
 
       <div class="flex items-center gap-2 flex-wrap">
-        <span id="authStatusBadge" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-200 border border-slate-700">
-          訪客檢視模式
-        </span>
+        <span id="authStatusBadge" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-900 text-emerald-100 border border-emerald-500">管理者已登入：admin（預覽模式）</span>
 
-        <button type="button" id="btnAddPlan" onclick="openEditModal('')" class="hidden px-3 py-1.5 rounded-lg bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold transition cursor-pointer">
+        <button type="button" id="btnAddPlan" onclick="openEditModal('')" class="px-3 py-1.5 rounded-lg bg-teal-500 hover:bg-teal-400 text-slate-950 text-xs font-bold transition cursor-pointer">
           + 新增計畫
         </button>
 
-        <button type="button" id="btnAdminLogin" onclick="openLoginModal()" class="px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold transition cursor-pointer">
+        <button type="button" id="btnAdminLogin" onclick="openLoginModal()" class="px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold transition cursor-pointer hidden">
           管理者登入
         </button>
 
-        <button type="button" id="btnAdminLogout" onclick="logoutAdmin()" class="hidden px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-xs font-semibold transition cursor-pointer">
+        <button type="button" id="btnAdminLogout" onclick="logoutAdmin()" class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-xs font-semibold transition cursor-pointer">
           登出
         </button>
       </div>
@@ -203,19 +249,8 @@
     <section class="bg-white border border-[#cbd5e1] rounded-xl p-4 sm:p-5 mb-5 space-y-3.5">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div class="relative flex-1">
-          <input
-            type="text"
-            id="searchInput"
-            oninput="renderPlans()"
-            placeholder="搜尋計畫編號、子類別（如：招募人才類、分署培訓人才類、先僱後訓類、提供實習類、自行辦訓類、委接分署辦訓類、勞工自行報名類、留用人才類）、名稱或關鍵字..."
-            class="w-full pl-3.5 pr-12 py-2 rounded-lg border border-[#cbd5e1] text-sm focus:outline-none focus:ring-2 focus:ring-[#1e4e8c]"
-          />
-          <button
-            type="button"
-            onclick="clearSearch()"
-            title="清除搜尋"
-            class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-900 text-xs font-bold px-1.5 py-0.5 cursor-pointer"
-          >
+          <input type="text" id="searchInput" oninput="renderPlans()" placeholder="搜尋計畫編號、子類別（如：招募人才類、分署培訓人才類、先僱後訓類、提供實習類、自行辦訓類、委接分署辦訓類、勞工自行報名類、留用人才類）、名稱或關鍵字..." class="w-full pl-3.5 pr-12 py-2 rounded-lg border border-[#cbd5e1] text-sm focus:outline-none focus:ring-2 focus:ring-[#1e4e8c]">
+          <button type="button" onclick="clearSearch()" title="清除搜尋" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-900 text-xs font-bold px-1.5 py-0.5 cursor-pointer">
             清除
           </button>
         </div>
@@ -230,14 +265,14 @@
           <button type="button" onclick="exportJsonBackup()" class="px-3 py-1.5 rounded-lg bg-[#0f294a] hover:bg-slate-800 text-white text-xs font-bold transition cursor-pointer">
             匯出備份 JSON
           </button>
-          <input type="file" id="jsonFileInput" accept=".json,application/json" class="hidden" onchange="handleJsonFileImport(event)" />
+          <input type="file" id="jsonFileInput" accept=".json,application/json" class="hidden" onchange="handleJsonFileImport(event)">
         </div>
       </div>
 
       <!-- 分類標籤：招募、培訓、留用三大類 -->
       <div class="flex items-center justify-between gap-3 flex-wrap pt-3 border-t border-slate-200">
         <div class="flex items-center gap-1.5 flex-wrap" id="categoryTabs">
-          <button type="button" data-cat="ALL" onclick="setCategoryFilter('ALL')" class="cat-tab px-3 py-1 rounded-md text-xs font-bold bg-[#0f294a] text-white cursor-pointer">
+          <button type="button" data-cat="ALL" onclick="setCategoryFilter('ALL')" class="cat-tab px-3 py-1 rounded-md text-xs font-bold bg-[#e0f2fe] text-[#075985] hover:bg-sky-200 cursor-pointer">
             全部計畫
           </button>
           <button type="button" data-cat="招募" onclick="setCategoryFilter('招募')" class="cat-tab px-3 py-1 rounded-md text-xs font-bold bg-[#e0f2fe] text-[#075985] hover:bg-sky-200 cursor-pointer">
@@ -246,13 +281,13 @@
           <button type="button" data-cat="培訓" onclick="setCategoryFilter('培訓')" class="cat-tab px-3 py-1 rounded-md text-xs font-bold bg-[#e0f2fe] text-[#075985] hover:bg-sky-200 cursor-pointer">
             培訓
           </button>
-          <button type="button" data-cat="留用" onclick="setCategoryFilter('留用')" class="cat-tab px-3 py-1 rounded-md text-xs font-bold bg-[#e0f2fe] text-[#075985] hover:bg-sky-200 cursor-pointer">
+          <button type="button" data-cat="留用" onclick="setCategoryFilter('留用')" class="cat-tab px-3 py-1 rounded-md text-xs font-bold bg-[#0f294a] text-white cursor-pointer">
             留用
           </button>
         </div>
 
         <div class="text-xs text-slate-600 font-bold">
-          顯示 <span id="visibleCount" class="text-[#0f766e]">0</span> / <span id="totalCount">37</span> 筆計畫
+          顯示 <span id="visibleCount" class="text-[#0f766e]">8</span> / <span id="totalCount">37</span> 筆計畫
         </div>
       </div>
     </section>
@@ -314,8 +349,390 @@
 
     <!-- 計畫卡片清單（首頁每列 3 筆專案排列） -->
     <section id="plansGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch">
-      <!-- 由 JavaScript 動態渲染 -->
-    </section>
+          <section class="plan-card m-0 flex flex-col justify-between" style="background-color: #ffffff; color: #1e293b;">
+            <div>
+              <div class="plan-meta">
+                <div>
+                  <span class="badge">留用</span>
+                  <span class="badge-num">編號 30</span>
+                  <span class="badge-sub">留用人才類</span>
+                  
+                </div>
+                
+                  <button type="button" onclick="openEditModal('plan_30')" class="px-2.5 py-0.5 rounded-md bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold cursor-pointer">
+                    編輯
+                  </button>
+                
+              </div>
+
+              <h2 onclick="openDetailModal('plan_30')" class="cursor-pointer hover:underline">30. 僱用退休中高齡者及高齡者傳承專業技術及經驗補助計畫</h2>
+
+              
+                <div class="highlight-box"><strong>補助與重點摘要：</strong>每一雇主每年最高補助 50 萬元（每位受僱者最高 10 萬元）</div>
+              
+
+              
+                <p class="summary-text">鼓勵雇主聘僱已退休中高齡及高齡者擔任講師或顧問傳承專業技術與經驗，每一雇主每年最高補助 50 萬元。</p>
+              
+
+              
+            </div>
+
+            <div class="pt-3 mt-3 border-t border-slate-200 flex items-center justify-between gap-2 flex-wrap">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-xs text-slate-400">尚未設定 DM</span>
+
+                
+                  <button type="button" onclick="toggleCardExpand('plan_30', event)" class="px-2.5 py-1 rounded-md bg-[#f0f5fa] hover:bg-sky-100 text-[#0f294a] border border-[#cbd5e1] text-xs font-bold cursor-pointer">
+                    展開詳細版面
+                  </button>
+                
+              </div>
+
+              <button type="button" onclick="openDetailModal('plan_30')" class="px-3 py-1 rounded-md bg-[#0f294a] hover:bg-slate-800 text-white text-xs font-bold cursor-pointer">
+                檢視完整內容
+              </button>
+            </div>
+          </section>
+        
+          <section class="plan-card m-0 flex flex-col justify-between" style="background-color: #ffffff; color: #1e293b;">
+            <div>
+              <div class="plan-meta">
+                <div>
+                  <span class="badge">留用</span>
+                  <span class="badge-num">編號 31</span>
+                  <span class="badge-sub">留用人才類</span>
+                  
+                </div>
+                
+                  <button type="button" onclick="openEditModal('plan_31')" class="px-2.5 py-0.5 rounded-md bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold cursor-pointer">
+                    編輯
+                  </button>
+                
+              </div>
+
+              <h2 onclick="openDetailModal('plan_31')" class="cursor-pointer hover:underline">31. 繼續僱用高齡者補助計畫</h2>
+
+              
+                <div class="highlight-box"><strong>補助與重點摘要：</strong>前 6 個月每月 13,000 元、第 7～18 個月每月 15,000 元（最長 18 個月）</div>
+              
+
+              
+                <p class="summary-text">鼓勵雇主繼續留用屆滿 65 歲高齡員工達一定比率，按原薪資或以上條件續僱滿 6 個月即可請領，最長補助 18 個月。</p>
+              
+
+              
+            </div>
+
+            <div class="pt-3 mt-3 border-t border-slate-200 flex items-center justify-between gap-2 flex-wrap">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-xs text-slate-400">尚未設定 DM</span>
+
+                
+                  <button type="button" onclick="toggleCardExpand('plan_31', event)" class="px-2.5 py-1 rounded-md bg-[#f0f5fa] hover:bg-sky-100 text-[#0f294a] border border-[#cbd5e1] text-xs font-bold cursor-pointer">
+                    展開詳細版面
+                  </button>
+                
+              </div>
+
+              <button type="button" onclick="openDetailModal('plan_31')" class="px-3 py-1 rounded-md bg-[#0f294a] hover:bg-slate-800 text-white text-xs font-bold cursor-pointer">
+                檢視完整內容
+              </button>
+            </div>
+          </section>
+        
+          <section class="plan-card m-0 flex flex-col justify-between" style="background-color: #ffffff; color: #1e293b;">
+            <div>
+              <div class="plan-meta">
+                <div>
+                  <span class="badge">留用</span>
+                  <span class="badge-num">編號 32</span>
+                  <span class="badge-sub">留用人才類</span>
+                  <span class="dm-note">DM：已附雲端說明</span>
+                </div>
+                
+                  <button type="button" onclick="openEditModal('plan_32')" class="px-2.5 py-0.5 rounded-md bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold cursor-pointer">
+                    編輯
+                  </button>
+                
+              </div>
+
+              <h2 onclick="openDetailModal('plan_32')" class="cursor-pointer hover:underline">32. 五五就業促進獎勵實施要點-職場支持輔導費</h2>
+
+              
+                <div class="highlight-box"><strong>補助與重點摘要：</strong>職場支持輔導費每人每月 3,000 元（同一雇主每年最高 30 萬元）</div>
+              
+
+              
+                <p class="summary-text">鼓勵雇主提供彈性工時、教育訓練或職務調整等友善職場措施支持壯世代勞工留任，每人每月補助 3,000 元、年上限 30 萬元。</p>
+              
+
+              
+            </div>
+
+            <div class="pt-3 mt-3 border-t border-slate-200 flex items-center justify-between gap-2 flex-wrap">
+              <div class="flex items-center gap-2 flex-wrap">
+                
+                  <button type="button" onclick="openDmPreview('plan_32')" class="px-3 py-1 rounded-md bg-[#0f766e] hover:bg-teal-800 text-white text-xs font-bold cursor-pointer">
+                    預覽 / 下載 DM
+                  </button>
+                
+
+                
+                  <button type="button" onclick="toggleCardExpand('plan_32', event)" class="px-2.5 py-1 rounded-md bg-[#f0f5fa] hover:bg-sky-100 text-[#0f294a] border border-[#cbd5e1] text-xs font-bold cursor-pointer">
+                    展開詳細版面
+                  </button>
+                
+              </div>
+
+              <button type="button" onclick="openDetailModal('plan_32')" class="px-3 py-1 rounded-md bg-[#0f294a] hover:bg-slate-800 text-white text-xs font-bold cursor-pointer">
+                檢視完整內容
+              </button>
+            </div>
+          </section>
+        
+          <section class="plan-card m-0 flex flex-col justify-between" style="background-color: #ffffff; color: #1e293b;">
+            <div>
+              <div class="plan-meta">
+                <div>
+                  <span class="badge">留用</span>
+                  <span class="badge-num">編號 33</span>
+                  <span class="badge-sub">留用人才類</span>
+                  <span class="dm-note">DM：已附雲端說明</span>
+                </div>
+                
+                  <button type="button" onclick="openEditModal('plan_33')" class="px-2.5 py-0.5 rounded-md bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold cursor-pointer">
+                    編輯
+                  </button>
+                
+              </div>
+
+              <h2 onclick="openDetailModal('plan_33')" class="cursor-pointer hover:underline">33. 企業輔導團(中高齡)</h2>
+
+              
+                <div class="highlight-box"><strong>補助與重點摘要：</strong>提供企業中高齡與高齡友善職場及留才顧問輔導</div>
+              
+
+              
+                <p class="summary-text">透過專家顧問團隊協助企業檢視與改善中高齡及高齡員工之工作環境、職務設計與留任措施。</p>
+              
+
+              
+            </div>
+
+            <div class="pt-3 mt-3 border-t border-slate-200 flex items-center justify-between gap-2 flex-wrap">
+              <div class="flex items-center gap-2 flex-wrap">
+                
+                  <button type="button" onclick="openDmPreview('plan_33')" class="px-3 py-1 rounded-md bg-[#0f766e] hover:bg-teal-800 text-white text-xs font-bold cursor-pointer">
+                    預覽 / 下載 DM
+                  </button>
+                
+
+                
+                  <button type="button" onclick="toggleCardExpand('plan_33', event)" class="px-2.5 py-1 rounded-md bg-[#f0f5fa] hover:bg-sky-100 text-[#0f294a] border border-[#cbd5e1] text-xs font-bold cursor-pointer">
+                    展開詳細版面
+                  </button>
+                
+              </div>
+
+              <button type="button" onclick="openDetailModal('plan_33')" class="px-3 py-1 rounded-md bg-[#0f294a] hover:bg-slate-800 text-white text-xs font-bold cursor-pointer">
+                檢視完整內容
+              </button>
+            </div>
+          </section>
+        
+          <section class="plan-card m-0 flex flex-col justify-between" style="background-color: #ffffff; color: #1e293b;">
+            <div>
+              <div class="plan-meta">
+                <div>
+                  <span class="badge">留用</span>
+                  <span class="badge-num">編號 34</span>
+                  <span class="badge-sub">留用人才類</span>
+                  <span class="dm-note">DM：已附雲端說明</span>
+                </div>
+                
+                  <button type="button" onclick="openEditModal('plan_34')" class="px-2.5 py-0.5 rounded-md bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold cursor-pointer">
+                    編輯
+                  </button>
+                
+              </div>
+
+              <h2 onclick="openDetailModal('plan_34')" class="cursor-pointer hover:underline">34. 推動職務再設計服務計畫</h2>
+
+              
+                <div class="highlight-box"><strong>補助與重點摘要：</strong>每人每年最高補助 10 萬元（改善環境、機具或提供輔具）</div>
+              
+
+              
+                <p class="summary-text">協助雇主改善工作環境、機具設備或提供就業輔具，排除職場障礙並促進員工穩定留任，每人每年最高補助 10 萬元。</p>
+              
+
+              
+            </div>
+
+            <div class="pt-3 mt-3 border-t border-slate-200 flex items-center justify-between gap-2 flex-wrap">
+              <div class="flex items-center gap-2 flex-wrap">
+                
+                  <button type="button" onclick="openDmPreview('plan_34')" class="px-3 py-1 rounded-md bg-[#0f766e] hover:bg-teal-800 text-white text-xs font-bold cursor-pointer">
+                    預覽 / 下載 DM
+                  </button>
+                
+
+                
+                  <button type="button" onclick="toggleCardExpand('plan_34', event)" class="px-2.5 py-1 rounded-md bg-[#f0f5fa] hover:bg-sky-100 text-[#0f294a] border border-[#cbd5e1] text-xs font-bold cursor-pointer">
+                    展開詳細版面
+                  </button>
+                
+              </div>
+
+              <button type="button" onclick="openDetailModal('plan_34')" class="px-3 py-1 rounded-md bg-[#0f294a] hover:bg-slate-800 text-white text-xs font-bold cursor-pointer">
+                檢視完整內容
+              </button>
+            </div>
+          </section>
+        
+          <section class="plan-card m-0 flex flex-col justify-between" style="background-color: #ffffff; color: #1e293b;">
+            <div>
+              <div class="plan-meta">
+                <div>
+                  <span class="badge">留用</span>
+                  <span class="badge-num">編號 35</span>
+                  <span class="badge-sub">留用人才類</span>
+                  
+                </div>
+                
+                  <button type="button" onclick="openEditModal('plan_35')" class="px-2.5 py-0.5 rounded-md bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold cursor-pointer">
+                    編輯
+                  </button>
+                
+              </div>
+
+              <h2 onclick="openDetailModal('plan_35')" class="cursor-pointer hover:underline">35. 充電再出發訓練計畫</h2>
+
+              
+                <div class="highlight-box"><strong>補助與重點摘要：</strong>企業辦訓最高 190 萬（特殊情形 350 萬）；勞工參訓津貼每月最高 16,300 元</div>
+              
+
+              
+                <p class="summary-text">協助減班休息事業單位與勞工於減班期間參訓充電，穩定勞雇關係與留任，企業辦訓最高 190 萬（特殊情形 350 萬），勞工津貼每月最高 16,300 元。</p>
+              
+
+              
+            </div>
+
+            <div class="pt-3 mt-3 border-t border-slate-200 flex items-center justify-between gap-2 flex-wrap">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-xs text-slate-400">尚未設定 DM</span>
+
+                
+                  <button type="button" onclick="toggleCardExpand('plan_35', event)" class="px-2.5 py-1 rounded-md bg-[#f0f5fa] hover:bg-sky-100 text-[#0f294a] border border-[#cbd5e1] text-xs font-bold cursor-pointer">
+                    展開詳細版面
+                  </button>
+                
+              </div>
+
+              <button type="button" onclick="openDetailModal('plan_35')" class="px-3 py-1 rounded-md bg-[#0f294a] hover:bg-slate-800 text-white text-xs font-bold cursor-pointer">
+                檢視完整內容
+              </button>
+            </div>
+          </section>
+        
+          <section class="plan-card m-0 flex flex-col justify-between" style="background-color: #ffffff; color: #1e293b;">
+            <div>
+              <div class="plan-meta">
+                <div>
+                  <span class="badge">留用</span>
+                  <span class="badge-num">編號 36</span>
+                  <span class="badge-sub">留用人才類</span>
+                  
+                </div>
+                
+                  <button type="button" onclick="openEditModal('plan_36')" class="px-2.5 py-0.5 rounded-md bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold cursor-pointer">
+                    編輯
+                  </button>
+                
+              </div>
+
+              <h2 onclick="openDetailModal('plan_36')" class="cursor-pointer hover:underline">36. 減班休息勞工再充電計畫</h2>
+
+              
+                <div class="highlight-box"><strong>補助與重點摘要：</strong>協助減班休息勞工於減班期間參訓並領取訓練津貼</div>
+              
+
+              
+                <p class="summary-text">針對減班休息勞工提供訓練課程與訓練津貼支持，協助維持生計、提升技能並穩定就業。</p>
+              
+
+              
+            </div>
+
+            <div class="pt-3 mt-3 border-t border-slate-200 flex items-center justify-between gap-2 flex-wrap">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-xs text-slate-400">尚未設定 DM</span>
+
+                
+                  <button type="button" onclick="toggleCardExpand('plan_36', event)" class="px-2.5 py-1 rounded-md bg-[#f0f5fa] hover:bg-sky-100 text-[#0f294a] border border-[#cbd5e1] text-xs font-bold cursor-pointer">
+                    展開詳細版面
+                  </button>
+                
+              </div>
+
+              <button type="button" onclick="openDetailModal('plan_36')" class="px-3 py-1 rounded-md bg-[#0f294a] hover:bg-slate-800 text-white text-xs font-bold cursor-pointer">
+                檢視完整內容
+              </button>
+            </div>
+          </section>
+        
+          <section class="plan-card m-0 flex flex-col justify-between" style="background-color: #ffffff; color: #1e293b;">
+            <div>
+              <div class="plan-meta">
+                <div>
+                  <span class="badge">留用</span>
+                  <span class="badge-num">編號 37</span>
+                  <span class="badge-sub">留用人才類</span>
+                  <span class="dm-note">DM：已附雲端說明</span>
+                </div>
+                
+                  <button type="button" onclick="openEditModal('plan_37')" class="px-2.5 py-0.5 rounded-md bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold cursor-pointer">
+                    編輯
+                  </button>
+                
+              </div>
+
+              <h2 onclick="openDetailModal('plan_37')" class="cursor-pointer hover:underline">37. 僱用安定措施</h2>
+
+              
+                <div class="highlight-box"><strong>補助與重點摘要：</strong>於公告適用期間與行業協助減班休息勞工穩定僱用</div>
+              
+
+              
+                <p class="summary-text">於景氣波動或特定產業減班休息達一定情形時啟動，協助受影響勞工與事業單位維持僱用關係。</p>
+              
+
+              
+            </div>
+
+            <div class="pt-3 mt-3 border-t border-slate-200 flex items-center justify-between gap-2 flex-wrap">
+              <div class="flex items-center gap-2 flex-wrap">
+                
+                  <button type="button" onclick="openDmPreview('plan_37')" class="px-3 py-1 rounded-md bg-[#0f766e] hover:bg-teal-800 text-white text-xs font-bold cursor-pointer">
+                    預覽 / 下載 DM
+                  </button>
+                
+
+                
+                  <button type="button" onclick="toggleCardExpand('plan_37', event)" class="px-2.5 py-1 rounded-md bg-[#f0f5fa] hover:bg-sky-100 text-[#0f294a] border border-[#cbd5e1] text-xs font-bold cursor-pointer">
+                    展開詳細版面
+                  </button>
+                
+              </div>
+
+              <button type="button" onclick="openDetailModal('plan_37')" class="px-3 py-1 rounded-md bg-[#0f294a] hover:bg-slate-800 text-white text-xs font-bold cursor-pointer">
+                檢視完整內容
+              </button>
+            </div>
+          </section>
+        </section>
   </main>
 
   <!-- 頁尾 -->
@@ -324,31 +741,114 @@
   </footer>
 
   <!-- Toast 提示訊息 -->
-  <div id="toast" class="hidden fixed bottom-5 right-5 z-50 max-w-sm px-4 py-3 rounded-xl bg-[#0f294a] text-white text-xs sm:text-sm font-semibold shadow-xl border border-slate-700"></div>
+  <div id="toast" class="fixed bottom-5 right-5 z-50 max-w-sm px-4 py-3 rounded-xl bg-[#0f294a] text-white text-xs sm:text-sm font-semibold shadow-xl border border-slate-700 hidden">已進入預覽模式管理者檢視：admin</div>
 
   <!-- 計畫詳細內容彈窗 -->
-  <div id="detailModal" onclick="closeDetailModal(event)" class="hidden fixed inset-0 z-40 bg-slate-950/60 flex items-center justify-center p-4">
+  <div id="detailModal" onclick="closeDetailModal(event)" class="fixed inset-0 z-40 bg-slate-950/60 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-xl border border-[#cbd5e1] max-w-[960px] w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
       <div class="px-6 py-4 border-b border-[#cbd5e1] flex items-start justify-between gap-3 bg-[#f8fafc]">
         <div>
           <div class="mb-1.5 text-xs">
-            <span id="detailCode" class="badge-num">編號 1</span>
-            <span id="detailCategory" class="badge">分類</span>
-            <span id="detailSubGroup" class="badge-sub">子類別</span>
+            <span id="detailCode" class="badge-num">編號 6</span>
+            <span id="detailCategory" class="badge">招募</span>
+            <span id="detailSubGroup" class="badge-sub">招募人才類</span>
           </div>
-          <h2 id="detailTitle" class="m-0 text-lg font-bold text-[#0f294a]">計畫名稱</h2>
+          <h2 id="detailTitle" class="m-0 text-lg font-bold text-[#0f294a]">6. 婦女再就業計畫-職場支持輔導獎勵</h2>
         </div>
         <button type="button" onclick="hideDetailModal()" class="px-3 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold cursor-pointer">
           關閉
         </button>
       </div>
 
-      <div id="detailBody" class="p-6 overflow-y-auto flex-1"></div>
+      <div id="detailBody" class="p-6 overflow-y-auto flex-1">
+        <div class="highlight-box"><strong>補助與重點摘要：</strong>工時調整獎勵每人每月 3,000 元，最長 12 個月</div>
+        <p class="summary-text">鼓勵雇主提供彈性調整工時職缺僱用二度就業婦女，給予雇主工時調整獎勵每人每月 3,000 元，最長 12 個月。</p>
+        <div class="editor-box-card text-sm"><strong>適用對象：</strong>提供彈性調整工時職缺並僱用因家庭因素退出勞動市場 180 日以上婦女之雇主</div>
+        <div class="content-body"><div class="plan-quick-grid">
+            <div class="plan-quick-item">
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>一句話看懂</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">提供彈性工時僱用離開職場 180 日以上婦女，每月補助 3,000 元，最長 12 個月。</div>
+            </div>
+            <div class="plan-quick-item">
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>誰可以申請</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">提供彈性調整工時職缺並僱用因家庭因素退出勞動市場 180 日以上婦女之雇主。</div>
+            </div>
+            <div class="plan-quick-item">
+              <div class="plan-quick-label">補助上限</div>
+              <div class="plan-quick-val" style="font-weight: 400;">工時調整獎勵每人每月 3,000 元，最長 12 個月。</div>
+            </div>
+          </div>
+          <h4>計畫重點與獎勵標準</h4>
+          <ul>
+            <li><strong>適用對象</strong>：提供彈性調整工時職缺並僱用因家庭因素退出勞動市場 180 日以上婦女之雇主。</li>
+            <li><strong>獎勵額度</strong>：工時調整獎勵每人每月 3,000 元，最長 12 個月。</li>
+          </ul>
+          
+      <h4>員林就業中心及所屬就業服務台洽詢電話</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>服務據點</th>
+            <th>聯絡電話</th>
+            <th>服務據點</th>
+            <th>聯絡電話</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>員林就業中心</strong></td>
+            <td>04-834-5369</td>
+            <td><strong>北斗就業服務台</strong></td>
+            <td>04-878-1676</td>
+          </tr>
+          <tr>
+            <td><strong>大村就業服務台</strong></td>
+            <td>04-852-4005</td>
+            <td><strong>埤頭就業服務台</strong></td>
+            <td>04-892-5246</td>
+          </tr>
+          <tr>
+            <td><strong>埔心就業服務台</strong></td>
+            <td>04-828-0886</td>
+            <td><strong>埔鹽就業服務台</strong></td>
+            <td>04-865-1414</td>
+          </tr>
+          <tr>
+            <td><strong>永靖就業服務台</strong></td>
+            <td>04-824-0409</td>
+            <td><strong>竹塘就業服務台</strong></td>
+            <td>04-897-6153</td>
+          </tr>
+          <tr>
+            <td><strong>社頭就業服務台</strong></td>
+            <td>04-871-1265</td>
+            <td><strong>芳苑就業服務台</strong></td>
+            <td>04-898-1033</td>
+          </tr>
+          <tr>
+            <td><strong>二水就業服務台</strong></td>
+            <td>04-879-8013</td>
+            <td><strong>大城就業服務台</strong></td>
+            <td>04-894-1532</td>
+          </tr>
+          <tr>
+            <td><strong>溪州就業服務台</strong></td>
+            <td>04-889-1203</td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table></div>
+      </div>
 
       <div class="px-6 py-3.5 border-t border-[#cbd5e1] bg-[#f8fafc] flex items-center justify-between gap-2 flex-wrap">
-        <div id="detailDmArea"></div>
+        <div id="detailDmArea">
+          <button type="button" onclick="openDmPreview('plan_6')" class="px-3.5 py-1.5 rounded-lg bg-[#0f766e] hover:bg-teal-800 text-white text-xs font-bold cursor-pointer">
+            預覽 / 下載 DM
+          </button>
+        </div>
         <div class="flex items-center gap-2">
-          <button type="button" id="btnDetailEdit" class="hidden px-4 py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs sm:text-sm font-bold cursor-pointer">
+          <button type="button" id="btnDetailEdit" class="px-4 py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs sm:text-sm font-bold cursor-pointer">
             編輯此計畫
           </button>
           <button type="button" onclick="hideDetailModal()" class="px-4 py-2 rounded-lg bg-[#0f294a] hover:bg-slate-800 text-white text-xs sm:text-sm font-semibold cursor-pointer">
@@ -378,7 +878,7 @@
   </div>
 
   <!-- 管理者登入彈窗 -->
-  <div id="loginModal" onclick="closeLoginModal(event)" class="hidden fixed inset-0 z-50 bg-slate-950/60 flex items-center justify-center p-4">
+  <div id="loginModal" onclick="closeLoginModal(event)" class="fixed inset-0 z-50 bg-slate-950/60 flex items-center justify-center p-4 hidden">
     <form onsubmit="submitLogin(event)" class="bg-white rounded-xl border border-[#cbd5e1] max-w-sm w-full p-6 shadow-2xl space-y-4">
       <div>
         <h2 class="text-lg font-bold text-[#0f294a]">管理者登入</h2>
@@ -387,12 +887,12 @@
 
       <div>
         <label class="block text-xs font-bold text-slate-700 mb-1">管理者帳號</label>
-        <input type="text" id="loginUsername" required autocomplete="username" class="w-full px-3.5 py-2 rounded-lg border border-[#cbd5e1] text-sm focus:outline-none focus:ring-2 focus:ring-[#1e4e8c]" />
+        <input type="text" id="loginUsername" required="" autocomplete="username" class="w-full px-3.5 py-2 rounded-lg border border-[#cbd5e1] text-sm focus:outline-none focus:ring-2 focus:ring-[#1e4e8c]">
       </div>
 
       <div>
         <label class="block text-xs font-bold text-slate-700 mb-1">管理者密碼</label>
-        <input type="password" id="loginPassword" required autocomplete="current-password" class="w-full px-3.5 py-2 rounded-lg border border-[#cbd5e1] text-sm focus:outline-none focus:ring-2 focus:ring-[#1e4e8c]" />
+        <input type="password" id="loginPassword" required="" autocomplete="current-password" class="w-full px-3.5 py-2 rounded-lg border border-[#cbd5e1] text-sm focus:outline-none focus:ring-2 focus:ring-[#1e4e8c]">
       </div>
 
       <div class="flex items-center justify-end gap-2 pt-2">
@@ -407,22 +907,22 @@
   </div>
 
   <!-- 編輯 / 新增計畫彈窗 -->
-  <div id="editModal" onclick="closeEditModal(event)" class="hidden fixed inset-0 z-50 bg-slate-950/60 flex items-center justify-center p-4">
-    <form onsubmit="submitPlanEdit(event)" class="bg-white rounded-xl border border-[#cbd5e1] max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+  <div id="editModal" onclick="closeEditModal(event)" class="fixed inset-0 z-50 bg-slate-950/60 flex items-center justify-center p-4">
+    <form onsubmit="submitPlanEdit(event)" class="bg-white rounded-xl border border-[#cbd5e1] max-w-4xl w-full max-h-[92vh] flex flex-col shadow-2xl overflow-hidden">
       <div class="px-5 py-4 border-b border-[#cbd5e1] flex items-center justify-between bg-[#f8fafc]">
-        <h2 id="editModalHeading" class="text-lg font-bold text-[#0f294a]">編輯計畫</h2>
+        <h2 id="editModalHeading" class="text-lg font-bold text-[#0f294a]">編輯計畫｜33. 企業輔導團(中高齡)</h2>
         <button type="button" onclick="hideEditModal()" class="px-3 py-1 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold cursor-pointer">
           關閉
         </button>
       </div>
 
       <div class="p-5 overflow-y-auto space-y-4 flex-1">
-        <input type="hidden" id="editPlanId" />
+        <input type="hidden" id="editPlanId" value="plan_33">
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">計畫編號（留白則維持無編號並排在最後）</label>
-            <input type="text" id="editPlanNum" placeholder="例如：1. 或留白" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm" />
+            <input type="text" id="editPlanNum" placeholder="例如：1. 或留白" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">計畫分類（招募、培訓、留用）</label>
@@ -436,17 +936,17 @@
 
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">細分類別（選填）</label>
-          <input type="text" id="editSubGroup" placeholder="例如：招募人才類、分署培訓人才類、先僱後訓類、提供實習類、自行辦訓類、委接分署辦訓類、勞工自行報名類、留用人才類" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm" />
+          <input type="text" id="editSubGroup" placeholder="例如：招募人才類、分署培訓人才類、先僱後訓類、提供實習類、自行辦訓類、委接分署辦訓類、勞工自行報名類、留用人才類" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm">
         </div>
 
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">計畫名稱</label>
-          <input type="text" id="editPlanName" required class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm" />
+          <input type="text" id="editPlanName" required="" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm">
         </div>
 
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">補助與重點摘要（highlight-box 藍色重點框）</label>
-          <input type="text" id="editPlanAmount" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm" />
+          <input type="text" id="editPlanAmount" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm">
         </div>
 
         <div>
@@ -456,39 +956,172 @@
 
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">適用對象（選填）</label>
-          <input type="text" id="editPlanTarget" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm" />
+          <input type="text" id="editPlanTarget" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm">
         </div>
 
+        <!-- 視覺化富文本編輯器 -->
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">內頁詳細版面內容（支援 HTML 結構：一句話看懂三欄卡片、&lt;h4&gt; 分節標題、條列清單與標準表格）</label>
-          <textarea id="editPlanContent" rows="10" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-xs font-mono leading-relaxed"></textarea>
+          <div class="flex items-center justify-between gap-2 flex-wrap mb-1.5">
+            <label class="block text-xs font-bold text-slate-700">
+              內頁詳細版面內容（可直接所見即所得排版，或切換原始碼微調）
+            </label>
+            <div class="flex items-center gap-1.5">
+              <button type="button" id="btnEditorVisualMode" onclick="setEditorMode('visual')" class="px-2.5 py-1 rounded-md text-xs font-bold bg-[#0f294a] text-white cursor-pointer">
+                視覺化排版
+              </button>
+              <button type="button" id="btnEditorHtmlMode" onclick="setEditorMode('html')" class="px-2.5 py-1 rounded-md text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer">
+                HTML 原始碼
+              </button>
+            </div>
+          </div>
+
+          <!-- 格式工具列 -->
+          <div id="richEditorToolbar" class="bg-[#f0f5fa] border border-[#cbd5e1] border-b-0 rounded-t-lg p-2 flex items-center gap-1.5 flex-wrap">
+            <select id="editorFontSizeSelect" onchange="applyEditorFontSize(this.value)" title="字體大小" class="px-2 py-1 rounded border border-[#cbd5e1] bg-white text-xs font-semibold text-slate-800 cursor-pointer">
+              <option value="">字體大小</option>
+              <option value="12px">小字 (12px)</option>
+              <option value="14px">標準 (14px)</option>
+              <option value="16px">中大 (16px)</option>
+              <option value="18px">標題 (18px)</option>
+              <option value="20px">大標 (20px)</option>
+            </select>
+
+            <span class="h-4 w-px bg-slate-300 mx-0.5"></span>
+
+            <button type="button" onmousedown="event.preventDefault(); execEditorCmd('bold')" title="粗體" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 border border-[#cbd5e1] text-xs font-bold text-slate-900 cursor-pointer">
+              B 粗體
+            </button>
+            <button type="button" onmousedown="event.preventDefault(); execEditorCmd('italic')" title="斜體" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 border border-[#cbd5e1] text-xs italic font-semibold text-slate-900 cursor-pointer">
+              I 斜體
+            </button>
+            <button type="button" onmousedown="event.preventDefault(); execEditorCmd('underline')" title="底線" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 border border-[#cbd5e1] text-xs underline font-semibold text-slate-900 cursor-pointer">
+              U 底線
+            </button>
+
+            <span class="h-4 w-px bg-slate-300 mx-0.5"></span>
+
+            <label title="文字色彩" class="inline-flex items-center gap-1 px-2 py-1 rounded bg-white hover:bg-slate-100 border border-[#cbd5e1] text-xs font-semibold text-slate-800 cursor-pointer">
+              <span>文字色</span>
+              <input type="color" id="editorForeColor" value="#0f294a" onchange="applyEditorForeColor(this.value)" class="w-4 h-4 p-0 border-0 bg-transparent cursor-pointer">
+            </label>
+
+            <label title="字體背景色彩（螢光標記）" class="inline-flex items-center gap-1 px-2 py-1 rounded bg-white hover:bg-slate-100 border border-[#cbd5e1] text-xs font-semibold text-slate-800 cursor-pointer">
+              <span>字底色</span>
+              <input type="color" id="editorBackColor" value="#fef08a" onchange="applyEditorBackColor(this.value)" class="w-4 h-4 p-0 border-0 bg-transparent cursor-pointer">
+            </label>
+
+            <span class="h-4 w-px bg-slate-300 mx-0.5"></span>
+
+            <button type="button" onmousedown="event.preventDefault(); insertEditorSnippet('callout')" title="插入藍色重點框格" class="px-2.5 py-1 rounded bg-sky-50 hover:bg-sky-100 border border-sky-300 text-xs font-bold text-[#0f294a] cursor-pointer">
+              + 重點框格
+            </button>
+            <button type="button" onmousedown="event.preventDefault(); insertEditorSnippet('box')" title="插入白底邊框格" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 border border-[#cbd5e1] text-xs font-bold text-slate-800 cursor-pointer">
+              + 一般框格
+            </button>
+            <button type="button" onmousedown="event.preventDefault(); insertEditorSnippet('quickGrid')" title="插入一句話看懂／誰可以申請／申請黃金期限三欄框格" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 border border-[#cbd5e1] text-xs font-bold text-slate-800 cursor-pointer">
+              + 三欄速覽卡
+            </button>
+            <button type="button" onmousedown="event.preventDefault(); insertEditorSnippet('heading')" title="插入計畫分節小標題" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 border border-[#cbd5e1] text-xs font-bold text-teal-800 cursor-pointer">
+              + 分節標題
+            </button>
+            <button type="button" onmousedown="event.preventDefault(); insertEditorSnippet('list')" title="插入項目條列清單" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 border border-[#cbd5e1] text-xs font-bold text-slate-800 cursor-pointer">
+              + 條列清單
+            </button>
+            <button type="button" onmousedown="event.preventDefault(); insertEditorSnippet('table')" title="插入標準補助表格" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 border border-[#cbd5e1] text-xs font-bold text-slate-800 cursor-pointer">
+              + 表格框格
+            </button>
+            <button type="button" onmousedown="event.preventDefault(); execEditorCmd('removeFormat')" title="清除選取文字格式" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 border border-slate-300 text-xs font-semibold text-slate-600 cursor-pointer">
+              清除格式
+            </button>
+          </div>
+
+          <div id="editPlanVisualEditor" contenteditable="true" oninput="syncVisualToTextarea()" class="rich-editor-area content-body w-full min-h-[260px] max-h-[380px] overflow-y-auto px-4 py-3 rounded-b-lg border border-[#cbd5e1] bg-white text-sm leading-relaxed"><h4>計畫重點</h4><ul style="--tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ;"><li style="--tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ;"><span style="--tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; font-weight: bolder;">類別與編號</span>：留用／留用人才類（編號 33）</li><li style="--tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ;"><span style="--tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; font-weight: bolder;">輔導內容</span>：結合專業顧問資源輔導事業單位推動中高齡及高齡者友善職場、職務調整與留才措施，協助企業降低資深人力流失，詳細申請方式依勞動部及各分署公告為準。</li></ul><div><h4>計畫重點與申請說明</h4><h4>計畫重點與申請說明</h4><h4>計畫重點與申請說明</h4><p><br></p></div>
+          
+          
+      <h4>員林就業中心及所屬就業服務台洽詢電話</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>服務據點</th>
+            <th>聯絡電話</th>
+            <th>服務據點</th>
+            <th>聯絡電話</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>員林就業中心</strong></td>
+            <td>04-834-5369</td>
+            <td><strong>北斗就業服務台</strong></td>
+            <td>04-878-1676</td>
+          </tr>
+          <tr>
+            <td><strong>大村就業服務台</strong></td>
+            <td>04-852-4005</td>
+            <td><strong>埤頭就業服務台</strong></td>
+            <td>04-892-5246</td>
+          </tr>
+          <tr>
+            <td><strong>埔心就業服務台</strong></td>
+            <td>04-828-0886</td>
+            <td><strong>埔鹽就業服務台</strong></td>
+            <td>04-865-1414</td>
+          </tr>
+          <tr>
+            <td><strong>永靖就業服務台</strong></td>
+            <td>04-824-0409</td>
+            <td><strong>竹塘就業服務台</strong></td>
+            <td>04-897-6153</td>
+          </tr>
+          <tr>
+            <td><strong>社頭就業服務台</strong></td>
+            <td>04-871-1265</td>
+            <td><strong>芳苑就業服務台</strong></td>
+            <td>04-898-1033</td>
+          </tr>
+          <tr>
+            <td><strong>二水就業服務台</strong></td>
+            <td>04-879-8013</td>
+            <td><strong>大城就業服務台</strong></td>
+            <td>04-894-1532</td>
+          </tr>
+          <tr>
+            <td><strong>溪州就業服務台</strong></td>
+            <td>04-889-1203</td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table></div>
+
+          <textarea id="editPlanContent" rows="11" oninput="syncTextareaToVisual()" class="hidden w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-xs font-mono leading-relaxed"></textarea>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">DM 雲端連結</label>
-            <input type="url" id="editPlanDmUrl" placeholder="https://..." class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm" />
+            <input type="url" id="editPlanDmUrl" placeholder="https://..." class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">DM 顯示名稱</label>
-            <input type="text" id="editPlanDmName" placeholder="例如：計畫簡章.pdf" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm" />
+            <input type="text" id="editPlanDmName" placeholder="例如：計畫簡章.pdf" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm">
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">卡片背景色</label>
-            <input type="color" id="editCardBg" value="#ffffff" class="h-10 w-full rounded-lg border border-[#cbd5e1] cursor-pointer" />
+            <input type="color" id="editCardBg" value="#ffffff" class="h-10 w-full rounded-lg border border-[#cbd5e1] cursor-pointer">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">卡片文字色</label>
-            <input type="color" id="editTextColor" value="#1e293b" class="h-10 w-full rounded-lg border border-[#cbd5e1] cursor-pointer" />
+            <input type="color" id="editTextColor" value="#1e293b" class="h-10 w-full rounded-lg border border-[#cbd5e1] cursor-pointer">
           </div>
         </div>
       </div>
 
       <div class="px-5 py-3.5 border-t border-[#cbd5e1] bg-[#f8fafc] flex items-center justify-between gap-2">
-        <button type="button" id="btnDeletePlan" onclick="deleteCurrentPlan()" class="hidden px-3.5 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-bold cursor-pointer">
+        <button type="button" id="btnDeletePlan" onclick="deleteCurrentPlan()" class="px-3.5 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-bold cursor-pointer">
           刪除計畫
         </button>
         <div class="flex items-center gap-2 ml-auto">
@@ -1771,6 +2404,7 @@
     let adminUsername = '';
     let activeDetailPlanId = null;
     let toastTimer = null;
+    let currentEditorMode = 'visual';
     const expandedCardIds = new Set();
     const blobUrlRegistry = new Map();
 
@@ -2065,6 +2699,79 @@
       syncAuthUI();
     }
 
+    function openLoginModal() {
+      document.getElementById('loginUsername').value = '';
+      document.getElementById('loginPassword').value = '';
+      document.getElementById('loginModal').classList.remove('hidden');
+      setTimeout(() => document.getElementById('loginUsername').focus(), 40);
+    }
+
+    function hideLoginModal() {
+      document.getElementById('loginModal').classList.add('hidden');
+    }
+
+    function closeLoginModal(e) {
+      if (e.target.id === 'loginModal') hideLoginModal();
+    }
+
+    async function submitLogin(e) {
+      e.preventDefault();
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+
+      if (!CAN_USE_SERVER_API) {
+        if (!username || !password) {
+          showToast('請輸入帳號與密碼');
+          return;
+        }
+        isAdmin = true;
+        adminUsername = username;
+        hideLoginModal();
+        syncAuthUI();
+        showToast(`已進入預覽模式管理者檢視：${username}`);
+        return;
+      }
+
+      try {
+        const res = await fetch(buildApiUrl('/api/auth/login'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) {
+          showToast(data.message || '登入失敗');
+          return;
+        }
+        isAdmin = true;
+        adminUsername = data.username || username;
+        hideLoginModal();
+        syncAuthUI();
+        await fetchPlansFromServer(false);
+        showToast(data.message || '管理者登入成功');
+      } catch (err) {
+        showToast('登入時發生網路錯誤');
+      }
+    }
+
+    async function logoutAdmin() {
+      if (CAN_USE_SERVER_API) {
+        try {
+          await fetch(buildApiUrl('/api/auth/logout'), {
+            method: 'POST',
+            credentials: 'same-origin'
+          });
+        } catch (err) {
+          console.error(err);
+        }
+      }
+      isAdmin = false;
+      adminUsername = '';
+      syncAuthUI();
+      showToast('已登出管理者帳號');
+    }
+
     async function fetchPlansFromServer(notify = false) {
       if (!CAN_USE_SERVER_API) {
         loadPreviewCache();
@@ -2137,13 +2844,6 @@
       return String(plan?.highlight || plan?.amount || '').trim();
     }
 
-    function getPlanBodyText(plan) {
-      const descText = String(plan?.desc || '').trim();
-      const summaryText = String(plan?.summary || '').trim();
-      const contentPlain = stripHtmlToText(plan?.content || '');
-      return descText || summaryText || contentPlain;
-    }
-
     function setCategoryFilter(category) {
       currentCategory = category || 'ALL';
       document.querySelectorAll('.cat-tab').forEach(btn => {
@@ -2190,7 +2890,7 @@
 
     function buildFormattedContentBody(plan) {
       const rich = sanitizeRichHtml(plan.content);
-      if (rich && /<(h4|ul|ol|table|div)\b/i.test(rich)) {
+      if (rich && /<(h4|ul|ol|table|div|p|span|strong|b|em|i|u)\b/i.test(rich)) {
         return rich;
       }
 
@@ -2322,97 +3022,52 @@
       }).join('');
     }
 
-    function getGoogleDrivePreviewUrl(rawUrl) {
-      const url = String(rawUrl || '').trim();
-      const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-      if (match && match[1]) {
-        return `https://drive.google.com/file/d/${match[1]}/preview`;
-      }
-      return url;
-    }
-
-    function openDmPreview(planId) {
-      const plan = plans.find(p => String(p.id) === String(planId));
-      if (!plan) return;
-      const targetUrl = resolveDmTargetUrl(plan);
-      if (!targetUrl) {
-        showToast('此計畫尚未設定 DM 連結');
-        return;
-      }
-      const previewUrl = targetUrl.startsWith('blob:') ? targetUrl : getGoogleDrivePreviewUrl(targetUrl);
-      document.getElementById('dmPreviewTitle').textContent = `${getPlanTitle(plan)}｜${plan.dmName || 'DM 檔案預覽'}`;
-      document.getElementById('dmPreviewNewTab').href = targetUrl;
-      document.getElementById('dmPreviewFrame').src = previewUrl;
-      document.getElementById('dmPreviewModal').classList.remove('hidden');
-    }
-
-    function hideDmPreviewModal() {
-      document.getElementById('dmPreviewModal').classList.add('hidden');
-      document.getElementById('dmPreviewFrame').src = 'about:blank';
-    }
-
-    function closeDmPreviewModal(e) {
-      if (e.target.id === 'dmPreviewModal') hideDmPreviewModal();
-    }
-
     function openDetailModal(planId) {
       const plan = plans.find(p => String(p.id) === String(planId));
       if (!plan) return;
-      activeDetailPlanId = plan.id;
 
+      activeDetailPlanId = plan.id;
       const rawCode = getRawCode(plan);
       const cleanNum = rawCode.replace(/\.+$/, '');
-      const titleText = getPlanTitle(plan);
-      const highlightText = getPlanHighlight(plan);
-      const summaryText = String(plan.summary || plan.desc || '').trim();
-      const fallbackDesc = String(plan.desc || '').trim();
-      const mainCat = coerceToMainCategory(plan.category, plan.subGroup, titleText, fallbackDesc);
+      const mainCat = coerceToMainCategory(plan.category, plan.subGroup, getPlanTitle(plan), plan.desc);
 
       document.getElementById('detailCode').textContent = cleanNum ? `編號 ${cleanNum}` : '無編號';
       document.getElementById('detailCategory').textContent = mainCat;
-      const subEl = document.getElementById('detailSubGroup');
-      if (String(plan.subGroup || '').trim()) {
-        subEl.textContent = plan.subGroup;
-        subEl.classList.remove('hidden');
-      } else {
-        subEl.classList.add('hidden');
-      }
-      document.getElementById('detailTitle').textContent = titleText;
+      document.getElementById('detailSubGroup').textContent = plan.subGroup || '一般方案';
+      document.getElementById('detailTitle').textContent = getPlanTitle(plan);
 
-      const parts = [];
-      if (highlightText) {
-        parts.push(`<div class="highlight-box"><strong>補助與重點摘要：</strong>${escapeHtml(highlightText)}</div>`);
-      }
-      if (summaryText) {
-        parts.push(`<p class="summary-text">${escapeHtml(summaryText)}</p>`);
-      }
+      const highlightText = getPlanHighlight(plan);
+      const summaryText = String(plan.summary || plan.desc || '').trim();
+      const targetText = String(plan.target || '').trim();
       const formattedBody = buildFormattedContentBody(plan);
-      if (formattedBody) {
-        parts.push(`<div class="content-body">${formattedBody}</div>`);
-      }
 
-      document.getElementById('detailBody').innerHTML = parts.join('') || '<p class="summary-text">尚無詳細內容</p>';
+      document.getElementById('detailBody').innerHTML = `
+        ${highlightText ? `<div class="highlight-box"><strong>補助與重點摘要：</strong>${escapeHtml(highlightText)}</div>` : ''}
+        ${summaryText ? `<p class="summary-text">${escapeHtml(summaryText)}</p>` : ''}
+        ${targetText ? `<div class="editor-box-card text-sm"><strong>適用對象：</strong>${escapeHtml(targetText)}</div>` : ''}
+        <div class="content-body">${formattedBody || '<p class="text-sm text-slate-500">目前尚無補充說明內容。</p>'}</div>
+      `;
 
       const dmArea = document.getElementById('detailDmArea');
       if (plan.dmUrl || plan.dmDataUrl) {
         dmArea.innerHTML = `
-          <button type="button" onclick="openDmPreview('${escapeHtml(plan.id)}')" class="px-4 py-2 rounded-lg bg-[#0f766e] hover:bg-teal-800 text-white text-xs sm:text-sm font-bold cursor-pointer">
-            預覽 / 下載 DM（${escapeHtml(plan.dmName || '附件檔案')}）
+          <button type="button" onclick="openDmPreview('${escapeHtml(plan.id)}')" class="px-3.5 py-1.5 rounded-lg bg-[#0f766e] hover:bg-teal-800 text-white text-xs font-bold cursor-pointer">
+            預覽 / 下載 DM
           </button>
         `;
       } else {
-        dmArea.innerHTML = `<span class="text-xs text-slate-400">尚未連結 DM 檔案</span>`;
+        dmArea.innerHTML = `<span class="text-xs text-slate-400">尚未設定 DM</span>`;
       }
 
-      const btnEdit = document.getElementById('btnDetailEdit');
+      const btnDetailEdit = document.getElementById('btnDetailEdit');
       if (isAdmin) {
-        btnEdit.classList.remove('hidden');
-        btnEdit.onclick = () => {
+        btnDetailEdit.classList.remove('hidden');
+        btnDetailEdit.onclick = () => {
           hideDetailModal();
           openEditModal(plan.id);
         };
       } else {
-        btnEdit.classList.add('hidden');
+        btnDetailEdit.classList.add('hidden');
       }
 
       document.getElementById('detailModal').classList.remove('hidden');
@@ -2427,70 +3082,197 @@
       if (e.target.id === 'detailModal') hideDetailModal();
     }
 
-    function openLoginModal() {
-      document.getElementById('loginModal').classList.remove('hidden');
-      document.getElementById('loginUsername').focus();
+    function getGoogleDrivePreviewUrl(rawUrl) {
+      const url = String(rawUrl || '').trim();
+      const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) {
+        return `https://drive.google.com/file/d/${match[1]}/preview`;
+      }
+      return url;
     }
 
-    function hideLoginModal() {
-      document.getElementById('loginModal').classList.add('hidden');
-      document.getElementById('loginPassword').value = '';
-    }
-
-    function closeLoginModal(e) {
-      if (e.target.id === 'loginModal') hideLoginModal();
-    }
-
-    async function submitLogin(e) {
-      e.preventDefault();
-      const username = document.getElementById('loginUsername').value.trim();
-      const password = document.getElementById('loginPassword').value;
-
-      if (!CAN_USE_SERVER_API) {
-        if (username === 'admin' && password === 'hr2026admin') {
-          isAdmin = true;
-          adminUsername = username;
-          hideLoginModal();
-          syncAuthUI();
-          showToast('預覽模式登入成功');
-        } else {
-          showToast('預覽模式預設帳密：admin / hr2026admin');
-        }
+    function openDmPreview(planId) {
+      const plan = plans.find(p => String(p.id) === String(planId));
+      if (!plan) return;
+      const resolvedUrl = resolveDmTargetUrl(plan);
+      if (!resolvedUrl) {
+        showToast('此計畫尚未設定可預覽的 DM 檔案或連結');
         return;
       }
 
-      try {
-        const res = await fetch(buildApiUrl('/api/auth/login'), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'same-origin',
-          body: JSON.stringify({ username, password })
-        });
-        const data = await res.json();
-        if (!res.ok || !data.ok) throw new Error(data.message || '帳號或密碼錯誤');
+      const previewSrc = resolvedUrl.startsWith('blob:')
+        ? resolvedUrl
+        : getGoogleDrivePreviewUrl(resolvedUrl);
 
-        isAdmin = true;
-        adminUsername = data.username || username;
-        hideLoginModal();
-        syncAuthUI();
-        showToast(`歡迎回來，${adminUsername}！現在可直接修改計畫並同步至所有裝置`);
-      } catch (err) {
-        showToast(err.message || '登入失敗');
+      document.getElementById('dmPreviewTitle').textContent = plan.dmName || `${getPlanTitle(plan)} — DM 說明`;
+      const newTabLink = document.getElementById('dmPreviewNewTab');
+      newTabLink.href = resolvedUrl;
+      document.getElementById('dmPreviewFrame').src = previewSrc;
+      document.getElementById('dmPreviewModal').classList.remove('hidden');
+    }
+
+    function hideDmPreviewModal() {
+      document.getElementById('dmPreviewModal').classList.add('hidden');
+      document.getElementById('dmPreviewFrame').src = 'about:blank';
+    }
+
+    function closeDmPreviewModal(e) {
+      if (e.target.id === 'dmPreviewModal') hideDmPreviewModal();
+    }
+
+    function setEditorMode(mode) {
+      currentEditorMode = mode === 'html' ? 'html' : 'visual';
+      const toolbar = document.getElementById('richEditorToolbar');
+      const visualEl = document.getElementById('editPlanVisualEditor');
+      const htmlEl = document.getElementById('editPlanContent');
+      const btnVisual = document.getElementById('btnEditorVisualMode');
+      const btnHtml = document.getElementById('btnEditorHtmlMode');
+
+      if (currentEditorMode === 'visual') {
+        visualEl.innerHTML = sanitizeRichHtml(htmlEl.value);
+        toolbar.classList.remove('hidden');
+        visualEl.classList.remove('hidden');
+        htmlEl.classList.add('hidden');
+        btnVisual.className = 'px-2.5 py-1 rounded-md text-xs font-bold bg-[#0f294a] text-white cursor-pointer';
+        btnHtml.className = 'px-2.5 py-1 rounded-md text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer';
+      } else {
+        htmlEl.value = visualEl.innerHTML.trim();
+        toolbar.classList.add('hidden');
+        visualEl.classList.add('hidden');
+        htmlEl.classList.remove('hidden');
+        btnHtml.className = 'px-2.5 py-1 rounded-md text-xs font-bold bg-[#0f294a] text-white cursor-pointer';
+        btnVisual.className = 'px-2.5 py-1 rounded-md text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 cursor-pointer';
       }
     }
 
-    async function logoutAdmin() {
-      if (CAN_USE_SERVER_API) {
-        try {
-          await fetch(buildApiUrl('/api/auth/logout'), { method: 'POST', credentials: 'same-origin' });
-        } catch (err) {
-          console.error(err);
-        }
+    function syncVisualToTextarea() {
+      const visualEl = document.getElementById('editPlanVisualEditor');
+      const htmlEl = document.getElementById('editPlanContent');
+      if (visualEl && htmlEl) {
+        htmlEl.value = visualEl.innerHTML.trim();
       }
-      isAdmin = false;
-      adminUsername = '';
-      syncAuthUI();
-      showToast('已登出管理者帳號');
+    }
+
+    function syncTextareaToVisual() {
+      const visualEl = document.getElementById('editPlanVisualEditor');
+      const htmlEl = document.getElementById('editPlanContent');
+      if (visualEl && htmlEl) {
+        visualEl.innerHTML = sanitizeRichHtml(htmlEl.value);
+      }
+    }
+
+    function focusVisualEditor() {
+      if (currentEditorMode !== 'visual') {
+        setEditorMode('visual');
+      }
+      const visualEl = document.getElementById('editPlanVisualEditor');
+      if (visualEl) visualEl.focus();
+    }
+
+    function execEditorCmd(command, value = null) {
+      focusVisualEditor();
+      try {
+        document.execCommand('styleWithCSS', false, true);
+      } catch (e) {}
+      document.execCommand(command, false, value);
+      syncVisualToTextarea();
+    }
+
+    function applyEditorFontSize(pxValue) {
+      const selectEl = document.getElementById('editorFontSizeSelect');
+      if (!pxValue) return;
+      focusVisualEditor();
+      const sel = window.getSelection();
+      if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+        const range = sel.getRangeAt(0);
+        const span = document.createElement('span');
+        span.style.fontSize = pxValue;
+        try {
+          range.surroundContents(span);
+        } catch (err) {
+          const frag = range.extractContents();
+          span.appendChild(frag);
+          range.insertNode(span);
+        }
+        sel.removeAllRanges();
+        const newRange = document.createRange();
+        newRange.selectNodeContents(span);
+        sel.addRange(newRange);
+      } else {
+        document.execCommand('insertHTML', false, `<span style="font-size:${pxValue};">請輸入文字</span>`);
+      }
+      if (selectEl) selectEl.value = '';
+      syncVisualToTextarea();
+    }
+
+    function applyEditorForeColor(colorHex) {
+      execEditorCmd('foreColor', colorHex);
+    }
+
+    function applyEditorBackColor(colorHex) {
+      focusVisualEditor();
+      try {
+        document.execCommand('styleWithCSS', false, true);
+      } catch (e) {}
+      if (!document.execCommand('hiliteColor', false, colorHex)) {
+        document.execCommand('backColor', false, colorHex);
+      }
+      syncVisualToTextarea();
+    }
+
+    function insertEditorSnippet(type) {
+      focusVisualEditor();
+      let snippet = '';
+      if (type === 'callout') {
+        snippet = `<div class="editor-box-callout"><strong>重點提醒框：</strong>請在此輸入要讓閱讀者一眼看懂的補助重點或注意事項。</div><p><br></p>`;
+      } else if (type === 'box') {
+        snippet = `<div class="editor-box-card"><strong>補充說明框格：</strong>請在此輸入框格內說明文字。</div><p><br></p>`;
+      } else if (type === 'quickGrid') {
+        snippet = `<div class="plan-quick-grid">
+          <div class="plan-quick-item">
+            <div class="plan-quick-label"><strong>一句話看懂</strong></div>
+            <div class="plan-quick-val">請輸入一句話白話說明。</div>
+          </div>
+          <div class="plan-quick-item">
+            <div class="plan-quick-label"><strong>誰可以申請</strong></div>
+            <div class="plan-quick-val">請輸入符合資格之單位或對象。</div>
+          </div>
+          <div class="plan-quick-item">
+            <div class="plan-quick-label"><strong>申請黃金期限</strong></div>
+            <div class="plan-quick-val">請輸入申請時效或受理期間。</div>
+          </div>
+        </div><p><br></p>`;
+      } else if (type === 'heading') {
+        snippet = `<h4>計畫重點與申請說明</h4><p><br></p>`;
+      } else if (type === 'list') {
+        snippet = `<ul><li><strong>項目一</strong>：請輸入說明內容。</li><li><strong>項目二</strong>：請輸入說明內容。</li></ul><p><br></p>`;
+      } else if (type === 'table') {
+        snippet = `<table>
+          <thead>
+            <tr>
+              <th>項目／身分別</th>
+              <th>補助標準</th>
+              <th>補助期間／上限</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>一般對象</td>
+              <td>請輸入金額</td>
+              <td>請輸入期間</td>
+            </tr>
+            <tr>
+              <td>特定對象</td>
+              <td>請輸入金額</td>
+              <td>請輸入期間</td>
+            </tr>
+          </tbody>
+        </table><p><br></p>`;
+      }
+      if (snippet) {
+        document.execCommand('insertHTML', false, snippet);
+        syncVisualToTextarea();
+      }
     }
 
     function openEditModal(planId) {
@@ -2511,6 +3293,7 @@
         document.getElementById('editPlanSummary').value = '';
         document.getElementById('editPlanTarget').value = '';
         document.getElementById('editPlanContent').value = '';
+        document.getElementById('editPlanVisualEditor').innerHTML = '';
         document.getElementById('editPlanDmUrl').value = '';
         document.getElementById('editPlanDmName').value = '';
         document.getElementById('editCardBg').value = '#ffffff';
@@ -2519,6 +3302,7 @@
       } else {
         const plan = plans.find(p => String(p.id) === String(planId));
         if (!plan) return;
+        const initialContentHtml = buildFormattedContentBody(plan) || String(plan.content || plan.desc || '').trim();
         document.getElementById('editModalHeading').textContent = `編輯計畫｜${getPlanTitle(plan)}`;
         document.getElementById('editPlanId').value = plan.id;
         document.getElementById('editPlanNum').value = getRawCode(plan);
@@ -2528,7 +3312,8 @@
         document.getElementById('editPlanAmount').value = getPlanHighlight(plan);
         document.getElementById('editPlanSummary').value = String(plan.summary || plan.desc || '').trim();
         document.getElementById('editPlanTarget').value = plan.target || '';
-        document.getElementById('editPlanContent').value = String(plan.content || plan.desc || '').trim();
+        document.getElementById('editPlanContent').value = initialContentHtml;
+        document.getElementById('editPlanVisualEditor').innerHTML = sanitizeRichHtml(initialContentHtml);
         document.getElementById('editPlanDmUrl').value = plan.dmUrl || '';
         document.getElementById('editPlanDmName').value = plan.dmName || '';
         document.getElementById('editCardBg').value = /^#[0-9a-fA-F]{6}$/.test(plan.cardBg || '') ? plan.cardBg : '#ffffff';
@@ -2536,6 +3321,7 @@
         btnDelete.classList.remove('hidden');
       }
 
+      setEditorMode('visual');
       document.getElementById('editModal').classList.remove('hidden');
     }
 
@@ -2550,6 +3336,10 @@
     async function submitPlanEdit(e) {
       e.preventDefault();
       if (!isAdmin) return;
+
+      if (currentEditorMode === 'visual') {
+        syncVisualToTextarea();
+      }
 
       const rawId = document.getElementById('editPlanId').value.trim();
       const isNew = !rawId;
@@ -2676,5 +3466,5 @@
       await fetchPlansFromServer(false);
     });
   </script>
-</body>
-</html>
+
+</body></html>
