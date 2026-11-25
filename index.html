@@ -15,7 +15,6 @@
       line-height: 1.65;
     }
 
-    /* 依提供版型精準還原之計畫卡片與內容樣式 */
     .plan-card {
       background: #fff;
       border: 1px solid #cbd5e1;
@@ -127,6 +126,30 @@
       background: #f0f5fa;
       color: #0f294a;
       font-weight: 700;
+    }
+    .plan-quick-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .plan-quick-item {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+    .plan-quick-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #0f294a;
+      margin-bottom: 4px;
+    }
+    .plan-quick-val {
+      font-size: 13px;
+      font-weight: 400;
+      color: #334155;
+      line-height: 1.55;
     }
     @media (max-width: 640px) {
       .plan-card {
@@ -289,7 +312,7 @@
       </div>
     </section>
 
-    <!-- 計畫卡片清單（首頁改為每列 3 筆專案排列） -->
+    <!-- 計畫卡片清單（首頁每列 3 筆專案排列） -->
     <section id="plansGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch">
       <!-- 由 JavaScript 動態渲染 -->
     </section>
@@ -477,44 +500,91 @@
 
   <script>
     const CAN_USE_SERVER_API = window.location.protocol === 'http:' || window.location.protocol === 'https:';
-    const PREVIEW_STORAGE_KEY = 'hr_portal_ordered_1_37_v1';
+    const PREVIEW_STORAGE_KEY = 'hr_portal_ordered_1_37_v2';
 
-    // 嚴格依指定 1～37 號排序：
-    // 招募人才類：1～7
-    // 分署培訓人才類：8～16
-    // 先僱後訓類：17～19
-    // 提供實習類：20～21
-    // 自行辦訓類：22～25
-    // 委接分署辦訓類：26
-    // 勞工自行報名類：27～29
-    // 留用人才類：30～37
-    // 沒有編號的方案：num / code 留空，維持無編號並自動排在最後面
+    const YUANLIN_PHONE_TABLE_HTML = `
+      <h4>員林就業中心及所屬就業服務台洽詢電話</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>服務據點</th>
+            <th>聯絡電話</th>
+            <th>服務據點</th>
+            <th>聯絡電話</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>員林就業中心</strong></td>
+            <td>04-834-5369</td>
+            <td><strong>北斗就業服務台</strong></td>
+            <td>04-878-1676</td>
+          </tr>
+          <tr>
+            <td><strong>大村就業服務台</strong></td>
+            <td>04-852-4005</td>
+            <td><strong>埤頭就業服務台</strong></td>
+            <td>04-892-5246</td>
+          </tr>
+          <tr>
+            <td><strong>埔心就業服務台</strong></td>
+            <td>04-828-0886</td>
+            <td><strong>埔鹽就業服務台</strong></td>
+            <td>04-865-1414</td>
+          </tr>
+          <tr>
+            <td><strong>永靖就業服務台</strong></td>
+            <td>04-824-0409</td>
+            <td><strong>竹塘就業服務台</strong></td>
+            <td>04-897-6153</td>
+          </tr>
+          <tr>
+            <td><strong>社頭就業服務台</strong></td>
+            <td>04-871-1265</td>
+            <td><strong>芳苑就業服務台</strong></td>
+            <td>04-898-1033</td>
+          </tr>
+          <tr>
+            <td><strong>二水就業服務台</strong></td>
+            <td>04-879-8013</td>
+            <td><strong>大城就業服務台</strong></td>
+            <td>04-894-1532</td>
+          </tr>
+          <tr>
+            <td><strong>溪州就業服務台</strong></td>
+            <td>04-889-1203</td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    `;
+
     const DEFAULT_PLANS = [
-      // 招募人才類 1～7
       {
-        id: 'plan_1',
-        num: '1',
-        code: '1',
+        id: 'plan-01',
+        num: '1.',
+        code: '1.',
         category: '招募',
         subGroup: '招募人才類',
         name: '僱用獎助措施',
         title: '僱用獎助措施',
-        target: '僱用經公立就業服務機構推介並核發「僱用獎助推介卡」之失業勞工（特定對象失業滿 30 日或一般失業勞工連續失業滿 3 個月）之雇主',
+        target: '就保投保單位之民營事業單位、團體或私立學校（不含政黨及政治團體），僱用經公立就業服務機構推介並核發「僱用獎助推介卡」之失業勞工',
         amount: '高齡 15,000 元/月｜中高齡/身障/長期失業 13,000 元/月｜特定對象 11,000 元/月（最長 12 個月）',
         highlight: '高齡 15,000 元/月｜中高齡/身障/長期失業 13,000 元/月｜特定對象 11,000 元/月（最長 12 個月）',
         summary: '雇主經公立就服機構推介僱用失業者，依身分與計酬方式按月或按時核發僱用獎助，最長 12 個月。',
         desc: '雇主經公立就服機構推介僱用失業者，依身分與計酬方式按月或按時核發僱用獎助，最長 12 個月。',
         content: `<div class="plan-quick-grid">
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>一句話看懂</strong></div>
+              <div class="plan-quick-label">一句話看懂</div>
               <div class="plan-quick-val">公家推介僱用失業勞工，連續滿 30 日起按月或按時補助雇主，最長 12 個月。</div>
             </div>
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>誰可以申請</strong></div>
+              <div class="plan-quick-label">誰可以申請</div>
               <div class="plan-quick-val">就保投保單位之民營事業單位、團體或私立學校（不含政黨及政治團體）。</div>
             </div>
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>申請黃金期限</strong></div>
+              <div class="plan-quick-label">申請黃金期限</div>
               <div class="plan-quick-val">連續僱用滿 30 日起 90 日內向原推介轄區就服機構提出。</div>
             </div>
           </div>
@@ -565,33 +635,78 @@
             <li><strong>步驟 1 求才登記</strong>：雇主先向公立就業服務機構辦理求才登記，求職者辦理求職登記並取得推介卡。</li>
             <li><strong>步驟 2 錄用與投保</strong>：面試錄用後依法投保，連續僱用滿 30 日起 90 日內提出申請（最長補助 12 個月）。</li>
             <li><strong>關鍵限制</strong>：不得僱用雇主或負責人之配偶、直系血親或三親等內旁系血親，亦不得再僱用離職未滿 1 年之勞工；自行應徵或透過人力銀行投遞錄取不符資格。</li>
-          </ul>`,
+          </ul>
+          ${YUANLIN_PHONE_TABLE_HTML}`,
         dmUrl: 'https://drive.google.com/file/d/1HQP21xW1L8LWNy8SNgKlME08x45OlvNZ/view?usp=drive_link',
         dmDataUrl: '',
         dmType: '',
-        dmName: '僱用獎助措施',
+        dmName: '',
         cardBg: '#ffffff',
         textColor: '#1e293b'
       },
       {
-        id: 'plan_2',
-        num: '2',
-        code: '2',
+        id: 'plan-02',
+        num: '2.',
+        code: '2.',
         category: '招募',
         subGroup: '招募人才類',
         name: '新住民僱用獎助津貼',
         title: '新住民僱用獎助津貼',
-        target: '僱用連續失業達 30 日以上且經公立就業服務機構推介並發給「僱用獎助推介卡」之新住民之事業單位、團體或私立學校',
-        amount: '按月計酬每人每月 11,000 元（時薪 60 元），最長 12 個月',
-        highlight: '按月計酬每人每月 11,000 元（時薪 60 元），最長 12 個月',
-        summary: '鼓勵事業單位、團體或私立學校僱用連續失業滿 30 日且持僱用獎助推介卡之新住民，最長補助 12 個月。',
-        desc: '鼓勵事業單位、團體或私立學校僱用連續失業滿 30 日且持僱用獎助推介卡之新住民，最長補助 12 個月。',
-        content: `<h4>計畫重點與申請規範</h4>
+        target: '事業單位、團體（不含政黨及政治團體）或私立學校，僱用連續失業達 30 日以上且持「僱用獎助推介卡」之新住民滿 30 日',
+        amount: '按月計酬每月 11,000 元｜非按月計酬每小時 60 元（最長 12 個月）',
+        highlight: '按月計酬每月 11,000 元｜非按月計酬每小時 60 元（最長 12 個月）',
+        summary: '僱用失業連續滿 30 日且持推介卡之新住民，按月補助 11,000 元、按時補助 60 元/時，最長 12 個月。',
+        desc: '僱用失業連續滿 30 日且持推介卡之新住民，按月補助 11,000 元、按時補助 60 元/時，最長 12 個月。',
+        content: `<div class="plan-quick-grid">
+            <div class="plan-quick-item">
+              <div class="plan-quick-label">一句話看懂</div>
+              <div class="plan-quick-val">公家推介僱用失業滿 30 日新住民，每月補助 11,000 元（或 60 元/時），最長 12 個月。</div>
+            </div>
+            <div class="plan-quick-item">
+              <div class="plan-quick-label">誰可以申請</div>
+              <div class="plan-quick-val">事業單位、團體（不含政黨及政治團體）或私立學校，僱用持推介卡新住民滿 30 日。</div>
+            </div>
+            <div class="plan-quick-item">
+              <div class="plan-quick-label">申請期限</div>
+              <div class="plan-quick-val">連續僱用滿 30 日起 90 日內提出首次申請；後續每滿 3 個月起 90 日內申請。</div>
+            </div>
+          </div>
+          <h4>計畫目的與資格條件</h4>
           <ul>
-            <li><strong>類別與編號</strong>：招募／招募人才類（編號 2）</li>
-            <li><strong>補助標準</strong>：按月計酬每人每月 11,000 元；非按月計酬每人每小時 60 元（每月最高 11,000 元），最長發給 12 個月。</li>
-            <li><strong>申請期限</strong>：自連續僱用滿 30 日之日起 90 日內向原推介轄區公立就業服務機構提出申請。</li>
-          </ul>`,
+            <li><strong>雇主資格</strong>：事業單位、團體（不含政治團體及政黨）或私立學校，僱用持有「僱用獎助推介卡」之失業新住民並連續僱用滿 30 日。</li>
+            <li><strong>勞工資格</strong>：符合新住民身分（婚姻居留、離婚/喪偶仍可居留工作或已定居/歸化者），連續失業達 30 日以上，經公立就業服務機構推介並開立推介卡。</li>
+          </ul>
+          <h4>獎助標準表</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>計酬方式</th>
+                <th>補助金額</th>
+                <th>補助期間</th>
+                <th>計算說明</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>按月計酬</td>
+                <td>每人每月 11,000 元</td>
+                <td>最長 12 個月</td>
+                <td>1 個月以 30 日計；末月僱用逾 20 日未滿 30 日者以 1 個月計。</td>
+              </tr>
+              <tr>
+                <td>非按月計酬</td>
+                <td>每人每小時 60 元（每月最高 11,000 元）</td>
+                <td>最長 12 個月</td>
+                <td>若同時受僱於 2 家以上雇主，每月合計不得逾 11,000 元。</td>
+              </tr>
+            </tbody>
+          </table>
+          <h4>申請方式與限制</h4>
+          <ul>
+            <li>自連續僱用滿 30 日之日起 90 日內向原推介轄區公立就業服務機構提出申請，備妥申請書、僱用名冊、薪資與出勤紀錄、居留證明及投保資料。</li>
+            <li>須依規定足額進用身心障礙者及原住民、依法投保就保，且不得僱用三親等內親屬或重複請領同性質補助。</li>
+          </ul>
+          ${YUANLIN_PHONE_TABLE_HTML}`,
         dmUrl: 'https://drive.google.com/file/d/1Vxk_97U-7U6CpRpHUQFJI0-lHFzplptb/view?usp=drive_link',
         dmDataUrl: '',
         dmType: '',
@@ -600,24 +715,88 @@
         textColor: '#1e293b'
       },
       {
-        id: 'plan_3',
-        num: '3',
-        code: '3',
+        id: 'plan-03',
+        num: '3.',
+        code: '3.',
         category: '招募',
         subGroup: '招募人才類',
         name: '施用毒品者就業服務計畫僱用獎助津貼',
         title: '施用毒品者就業服務計畫僱用獎助津貼',
-        target: '僱用經公立就業服務機構推介並領有「僱用獎助推介卡」之施用毒品者，且依法投保就業保險及職業災害保險之雇主',
-        amount: '每滿 10 日發給 4,000 元（每月最高 12,000 元，單一勞工最高 144,000 元）',
-        highlight: '每滿 10 日發給 4,000 元（每月最高 12,000 元，單一勞工最高 144,000 元）',
-        summary: '鼓勵雇主僱用經公立就業服務機構推介並持僱用獎助推介卡之施用毒品者，連續僱用滿 10 日即按每 10 日 4,000 元核發，單一勞工最高 144,000 元。',
-        desc: '鼓勵雇主僱用經公立就業服務機構推介並持僱用獎助推介卡之施用毒品者，連續僱用滿 10 日即按每 10 日 4,000 元核發，單一勞工最高 144,000 元。',
-        content: `<h4>計畫重點與補助計算</h4>
+        target: '就保投保單位（不含大量解僱或減班休息單位）僱用持推介卡之施用毒品者，及符合資格之受僱勞工',
+        amount: '雇主僱用獎助最高 144,000 元｜勞工就業獎勵最高 66,000 元',
+        highlight: '雇主僱用獎助最高 144,000 元｜勞工就業獎勵最高 66,000 元',
+        summary: '僱用持推介卡之施用毒品者滿 10 日起按每 10 日 4,000 元核發雇主獎助（最高 14.4 萬），受僱勞工亦享就業獎勵（最高 6.6 萬）。',
+        desc: '僱用持推介卡之施用毒品者滿 10 日起按每 10 日 4,000 元核發雇主獎助（最高 14.4 萬），受僱勞工亦享就業獎勵（最高 6.6 萬）。',
+        content: `<div class="plan-quick-grid">
+            <div class="plan-quick-item">
+              <div class="plan-quick-label">一句話看懂</div>
+              <div class="plan-quick-val">雇主與勞工雙向補助：雇主最高領 144,000 元，勞工穩定就業最高領 66,000 元。</div>
+            </div>
+            <div class="plan-quick-item">
+              <div class="plan-quick-label">誰可以申請</div>
+              <div class="plan-quick-val">就保投保單位（不含大量解僱或減班休息單位）僱用持推介卡之施用毒品者。</div>
+            </div>
+            <div class="plan-quick-item">
+              <div class="plan-quick-label">申請期限</div>
+              <div class="plan-quick-val">雇主：僱用滿 30 日或離職退保次日起 90 日內；勞工：受僱滿 30 日起 90 日內。</div>
+            </div>
+          </div>
+          <h4>雇主與勞工資格</h4>
           <ul>
-            <li><strong>類別與編號</strong>：招募／招募人才類（編號 3）</li>
-            <li><strong>按月計酬</strong>：連續僱用滿 10 日後，每滿 10 日發給 4,000 元（每月最高 12,000 元）。</li>
-            <li><strong>非按月計酬</strong>：每人每小時 65 元（每 10 日最高 4,000 元、月上限 12,000 元），單一勞工最高補助 144,000 元。</li>
-          </ul>`,
+            <li><strong>雇主資格</strong>：就業保險投保單位僱用持有公立就業服務機構所開立「施用毒品者就業服務計畫推介卡」之失業勞工（不包含大量解僱或減班休息之單位）。</li>
+            <li><strong>勞工資格</strong>：於公立就業服務機構開立推介卡之日時未參加就業保險、勞工保險、職業災害保險且具施用毒品者身分者。</li>
+          </ul>
+          <h4>雇主僱用獎助與勞工就業獎勵標準表</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>獎助／獎勵類別</th>
+                <th>期程／標準</th>
+                <th>全時工作</th>
+                <th>部分工時</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td rowspan="3"><strong>雇主僱用獎助</strong></td>
+                <td>僱用滿 10 日</td>
+                <td>4,000 元</td>
+                <td>4,000 元</td>
+              </tr>
+              <tr>
+                <td>每月最高</td>
+                <td>12,000 元</td>
+                <td>12,000 元</td>
+              </tr>
+              <tr>
+                <td>最高金額</td>
+                <td>144,000 元</td>
+                <td>144,000 元</td>
+              </tr>
+              <tr>
+                <td rowspan="3"><strong>勞工就業獎勵</strong></td>
+                <td>第 1～6 月</td>
+                <td>5,000 元/月</td>
+                <td>2,500 元/月</td>
+              </tr>
+              <tr>
+                <td>第 7～12 月</td>
+                <td>6,000 元/月</td>
+                <td>3,000 元/月</td>
+              </tr>
+              <tr>
+                <td>最高金額</td>
+                <td>66,000 元</td>
+                <td>33,000 元</td>
+              </tr>
+            </tbody>
+          </table>
+          <h4>申請方式</h4>
+          <ul>
+            <li>雇主/勞工至公立就業服務機構辦理求才/求職登記並媒合推介（開立獎勵推介卡）。</li>
+            <li>雇主：僱用滿 30 日或於勞工離職退保之次日起 90 日內提出申請；勞工：受僱滿 30 日起至 90 日內提出申請，審核通過後匯入帳戶。</li>
+          </ul>
+          ${YUANLIN_PHONE_TABLE_HTML}`,
         dmUrl: 'https://drive.google.com/file/d/14ozLrR1izvgWjqxBxKu1yasrCh319PlF/view?usp=drive_link',
         dmDataUrl: '',
         dmType: '',
@@ -626,24 +805,63 @@
         textColor: '#1e293b'
       },
       {
-        id: 'plan_4',
-        num: '4',
-        code: '4',
+        id: 'plan-04',
+        num: '4.',
+        code: '4.',
         category: '招募',
         subGroup: '招募人才類',
         name: '中高齡者及高齡者僱用獎助津貼',
         title: '中高齡者及高齡者僱用獎助津貼',
-        target: '僱用連續失業達 30 日以上且經公立就業服務機構推介之中高齡者（45～65 歲）或高齡者（逾 65 歲）之民營事業單位、團體或私立學校',
-        amount: '高齡者每月 15,000 元、中高齡者每月 13,000 元，最長 12 個月',
-        highlight: '高齡者每月 15,000 元、中高齡者每月 13,000 元，最長 12 個月',
-        summary: '鼓勵民營事業單位、團體或私立學校僱用連續失業 30 日以上且經公立就服機構推介之中高齡或高齡勞工，最長補助 12 個月。',
-        desc: '鼓勵民營事業單位、團體或私立學校僱用連續失業 30 日以上且經公立就服機構推介之中高齡或高齡勞工，最長補助 12 個月。',
-        content: `<h4>獎助標準與申請重點</h4>
+        target: '民營事業單位、合法團體（不含政黨及政治團體）或私立學校，僱用連續失業達 30 日以上之中高齡者（45～65 歲）或高齡者（逾 65 歲）',
+        amount: '高齡者每月 15,000 元｜中高齡者每月 13,000 元（最長 12 個月）',
+        highlight: '高齡者每月 15,000 元｜中高齡者每月 13,000 元（最長 12 個月）',
+        summary: '經公立就服機構推介僱用失業滿 30 日之中高齡（45～65 歲）或高齡（逾 65 歲）勞工，最長補助 12 個月。',
+        desc: '經公立就服機構推介僱用失業滿 30 日之中高齡（45～65 歲）或高齡（逾 65 歲）勞工，最長補助 12 個月。',
+        content: `<div class="plan-quick-grid">
+            <div class="plan-quick-item">
+              <div class="plan-quick-label">一句話看懂</div>
+              <div class="plan-quick-val">公家推介僱用失業 30 日以上 45 歲以上勞工，每月最高補助 13,000～15,000 元。</div>
+            </div>
+            <div class="plan-quick-item">
+              <div class="plan-quick-label">誰可以申請</div>
+              <div class="plan-quick-val">民營事業單位、合法團體（不含政黨及政治團體）或私立學校。</div>
+            </div>
+            <div class="plan-quick-item">
+              <div class="plan-quick-label">申請期限</div>
+              <div class="plan-quick-val">自連續僱用滿 30 日之日起 90 日內向原推介就服機構提出（逾期不受理）。</div>
+            </div>
+          </div>
+          <h4>適用對象與補助標準表</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>對象類別</th>
+                <th>按月計酬（全時）</th>
+                <th>非按月計酬</th>
+                <th>最長期間／上限</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>高齡者（逾 65 歲）</td>
+                <td>15,000 元/月</td>
+                <td>80 元/時（最高 15,000 元/月）</td>
+                <td>最長 12 個月（最高 180,000 元）</td>
+              </tr>
+              <tr>
+                <td>中高齡者（45～65 歲）</td>
+                <td>13,000 元/月</td>
+                <td>70 元/時（最高 13,000 元/月）</td>
+                <td>最長 12 個月（最高 156,000 元）</td>
+              </tr>
+            </tbody>
+          </table>
+          <h4>申請方式與提醒</h4>
           <ul>
-            <li><strong>高齡者（逾 65 歲）</strong>：按月計酬每人每月 15,000 元；非按月計酬每人每小時 80 元（每月最高 15,000 元，12 個月最高 180,000 元）。</li>
-            <li><strong>中高齡者（45～65 歲）</strong>：按月計酬每人每月 13,000 元；非按月計酬每人每小時 70 元（每月最高 13,000 元，12 個月最高 156,000 元）。</li>
-            <li><strong>申請方式</strong>：須經公立就服機構推介錄取，自僱用滿 30 日之日起 90 日內申請。</li>
-          </ul>`,
+            <li>須先經公立就業服務機構推介錄取，並於連續僱用滿 30 日之日起 90 日內提出申請；若勞工請法定假別致實領薪資低於補助標準，依實際薪資核發。</li>
+            <li>求職者自行應徵或透過民間人力銀行投遞履歷錄取者，不符請領資格。</li>
+          </ul>
+          ${YUANLIN_PHONE_TABLE_HTML}`,
         dmUrl: 'https://drive.google.com/file/d/1HQP21xW1L8LWNy8SNgKlME08x45OlvNZ/view?usp=drive_link',
         dmDataUrl: '',
         dmType: '',
@@ -652,23 +870,40 @@
         textColor: '#1e293b'
       },
       {
-        id: 'plan_5',
-        num: '5',
-        code: '5',
+        id: 'plan-05',
+        num: '5.',
+        code: '5.',
         category: '招募',
         subGroup: '招募人才類',
         name: '職場學習及再適應計畫',
         title: '職場學習及再適應計畫',
-        target: '提供職場學習與再適應訓練之用人單位，及經公立就業服務機構評估有需求之失業勞工（含特定對象及弱勢求職者）',
-        amount: '補助個案津貼及單位行政管理輔導費（津貼之 30%），最長 3～6 個月',
-        highlight: '補助個案津貼及單位行政管理輔導費（津貼之 30%），最長 3～6 個月',
-        summary: '協助失業勞工透過職場學習與再適應訓練重返職場，原則最長 3 個月（特定對象最長 6 個月），並補助用人單位行政管理輔導費。',
-        desc: '協助失業勞工透過職場學習與再適應訓練重返職場，原則最長 3 個月（特定對象最長 6 個月），並補助用人單位行政管理輔導費。',
-        content: `<h4>計畫重點與補助方式</h4>
+        target: '提供職場學習與再適應訓練之用人單位，及經公立就業服務機構評估有需求之失業勞工（含中高齡、高齡、身心障礙、原住民、二度就業婦女、新住民等 16 類身分）',
+        amount: '提供職場學習與再適應津貼｜專人指導協助重返職場並穩定就業',
+        highlight: '提供職場學習與再適應津貼｜專人指導協助重返職場並穩定就業',
+        summary: '企業指派專人帶求職者做中學、適應職場，政府提供職場學習及再適應津貼，協助重返職場並穩定就業。',
+        desc: '企業指派專人帶求職者做中學、適應職場，政府提供職場學習及再適應津貼，協助重返職場並穩定就業。',
+        content: `<div class="plan-quick-grid">
+            <div class="plan-quick-item">
+              <div class="plan-quick-label">一句話看懂</div>
+              <div class="plan-quick-val">企業指派專人帶求職者做中學、適應職場，政府提供職場學習及再適應津貼。</div>
+            </div>
+            <div class="plan-quick-item">
+              <div class="plan-quick-label">核心機制</div>
+              <div class="plan-quick-val">由公立就業服務機構評估推介，安排職場學習與再適應期間並指派指導人員。</div>
+            </div>
+            <div class="plan-quick-item">
+              <div class="plan-quick-label">適用對象</div>
+              <div class="plan-quick-val">涵蓋中高齡、高齡、身心障礙、原住民、二度就業婦女、新住民等 16 類身分。</div>
+            </div>
+          </div>
+          <h4>適用求職者身分（共 16 類）</h4>
           <ul>
-            <li><strong>訓練期間</strong>：原則最長 3 個月，特定對象最長 6 個月。</li>
-            <li><strong>津貼與輔導費</strong>：個案津貼比照基本工資／最低工資標準核計，用人單位行政管理輔導費為個案津貼之 30%。</li>
-          </ul>`,
+            <li>(一) 獨力負擔家計者、(二) 中高齡者、(三) 高齡者、(四) 身心障礙者、(五) 原住民、(六) 低收入戶或中低收入戶中有工作能力者、(七) 長期失業者、(八) 二度就業婦女。</li>
+            <li>(九) 家庭暴力及性侵害被害人、(十) 更生受保護人、(十一) 新住民、(十二) 犯罪被害人、(十三) 人口販運被害人、(十四) 施用毒品者。</li>
+            <li>(十五) 依就業服務法第二十四條第一項第十款公告認定之下列人員：1. 十五歲以上未滿十八歲之未就學未就業少年；2. 職業災害失能勞工；3. 直轄市、縣（市）政府依社會救助法列冊輔導之街友。</li>
+            <li>(十六) 其他經公立就業服務機構評估認定需要協助者。</li>
+          </ul>
+          ${YUANLIN_PHONE_TABLE_HTML}`,
         dmUrl: 'https://drive.google.com/file/d/1vkr4HkV9eAjixk8L1DQDVmWMFGkhUBK4/view?usp=drive_link',
         dmDataUrl: '',
         dmType: '',
@@ -689,11 +924,26 @@
         highlight: '工時調整獎勵每人每月 3,000 元，最長 12 個月',
         summary: '鼓勵雇主提供彈性調整工時職缺僱用二度就業婦女，給予雇主工時調整獎勵每人每月 3,000 元，最長 12 個月。',
         desc: '鼓勵雇主提供彈性調整工時職缺僱用二度就業婦女，給予雇主工時調整獎勵每人每月 3,000 元，最長 12 個月。',
-        content: `<h4>計畫重點與獎勵標準</h4>
+        content: `<div class="plan-quick-grid">
+            <div class="plan-quick-item">
+              <div class="plan-quick-label">一句話看懂</div>
+              <div class="plan-quick-val">提供彈性工時僱用離開職場 180 日以上婦女，每月補助 3,000 元，最長 12 個月。</div>
+            </div>
+            <div class="plan-quick-item">
+              <div class="plan-quick-label">誰可以申請</div>
+              <div class="plan-quick-val">提供彈性調整工時職缺並僱用因家庭因素退出勞動市場 180 日以上婦女之雇主。</div>
+            </div>
+            <div class="plan-quick-item">
+              <div class="plan-quick-label">補助上限</div>
+              <div class="plan-quick-val">工時調整獎勵每人每月 3,000 元，最長 12 個月。</div>
+            </div>
+          </div>
+          <h4>計畫重點與獎勵標準</h4>
           <ul>
             <li><strong>適用對象</strong>：提供彈性調整工時職缺並僱用因家庭因素退出勞動市場 180 日以上婦女之雇主。</li>
             <li><strong>獎勵額度</strong>：工時調整獎勵每人每月 3,000 元，最長 12 個月。</li>
-          </ul>`,
+          </ul>
+          ${YUANLIN_PHONE_TABLE_HTML}`,
         dmUrl: 'https://drive.google.com/file/d/1xUnqpcidFfToyAjCHCG_0HU_kMCO6qL_/view?usp=drive_link',
         dmDataUrl: '',
         dmType: '',
@@ -709,16 +959,17 @@
         subGroup: '招募人才類',
         name: '特定行業就業獎勵(補助勞工)',
         title: '特定行業就業獎勵(補助勞工)',
-        target: '',
-        amount: '',
-        highlight: '',
+        target: '符合特定行業／專案缺工條件之求職勞工及辦理徵才媒合之企業',
+        amount: '依特定行業／專案缺工就業獎勵標準按月核發（最長 12 個月）',
+        highlight: '結合特定行業就業獎勵與多元徵才媒合管道，協助企業快速招募人力',
         summary: '結合專案缺工就業獎勵（補助勞工）與單一徵才、聯合徵才、就業博覽會等徵才媒合管道，協助企業快速招募與穩定留任人力。',
         desc: '結合專案缺工就業獎勵（補助勞工）與單一徵才、聯合徵才、就業博覽會等徵才媒合管道，協助企業快速招募與穩定留任人力。',
         content: `<h4>計畫重點與徵才管道</h4>
           <ul>
             <li><strong>就業獎勵</strong>：包含特定行業就業獎勵（如專案缺工就業獎勵，依一般身分、特定對象及偏遠地區標準按月核發最長 12 個月）。</li>
             <li><strong>媒合管道</strong>：可透過公立就業服務機構辦理之單一徵才、聯合徵才及就業博覽會進行現場面試與招募媒合。</li>
-          </ul>`,
+          </ul>
+          ${YUANLIN_PHONE_TABLE_HTML}`,
         dmUrl: 'https://drive.google.com/file/d/14-ZwzB_juNhSWWTGTNbFPgqbdmNn-T_M/view?usp=drive_link',
         dmDataUrl: '',
         dmType: '',
@@ -726,8 +977,6 @@
         cardBg: '#ffffff',
         textColor: '#1e293b'
       },
-
-      // 分署培訓人才類 8～16
       {
         id: 'plan_8',
         num: '8',
@@ -737,7 +986,7 @@
         name: '自辦職前訓練',
         title: '自辦職前訓練',
         target: '年滿 15 歲以上有就業意願之失業者或待業者（依各班次招生簡章規定）',
-        amount: '依訓練班次與身分別規定補助訓練費用，符合就業保險被保險人非自願離職或特定對象者可依規定申請職訓生活津貼',
+        amount: '依訓練班次與身分別規定補助訓練費用，符合資格者可依規定申請職訓生活津貼',
         highlight: '勞動部勞動力發展署各分署自辦職前訓練課程',
         summary: '由勞動部勞動力發展署各分署自辦職業訓練課程，培養失業者或待業者實務技能，協助訓後就業。',
         desc: '由勞動部勞動力發展署各分署自辦職前訓練班次，針對產業需求開設實務技能課程，協助參訓學員習得專業技能並銜接就業，符合資格者得依規定申請職訓生活津貼。',
@@ -953,8 +1202,6 @@
         cardBg: '#ffffff',
         textColor: '#1e293b'
       },
-
-      // 先僱後訓類 17～19
       {
         id: 'plan_17',
         num: '17',
@@ -964,7 +1211,7 @@
         name: '青年就業旗艦計畫',
         title: '青年就業旗艦計畫',
         target: '僱用 15～29 歲本國籍青年並指派職場導師進行工作崗位訓練之事業單位／團體／學校',
-        amount: '起薪未達 34,000 元補助 3 個月（每人每月最高 12,000 元，最高 36,000 元）；起薪達 34,000 元（含）以上補助 6 個月（前 3 個月每月最高 12,000 元、第 4～6 個月每月最高 6,000 元，最高 54,000 元）；同年度單一單位最高 180 萬元',
+        amount: '起薪未達 34,000 元補助 3 個月（最高 36,000 元）；起薪達 34,000 元（含）以上補助 6 個月（最高 54,000 元）；同年度單一單位最高 180 萬元',
         highlight: '起薪達 34,000 元最高補助 54,000 元（6 個月）；未達則最高 36,000 元（3 個月）',
         summary: '協助 15～29 歲本國籍青年採「先僱後訓」做中學，由職場導師指導，同年度單一單位最高補助 180 萬元。',
         desc: '針對 15 至 29 歲本國籍青年（排除日間部在學學生）採「先僱用後訓練」做中學，薪資未達 34,000 元補助 3 個月（最高 36,000 元），薪資達 34,000 元（含）以上補助 6 個月（最高 54,000 元），同年度同一訓練單位最高補助 180 萬元。',
@@ -999,7 +1246,8 @@
             <li><strong>類別與編號</strong>：培訓／先僱後訓類（編號 18）</li>
             <li><strong>補助標準</strong>：由事業單位指派職場導師進行工作崗位訓練，補助工作崗位訓練指導費每人每月最高 12,000 元，最長 3 個月（每人最高 36,000 元），同一雇主每年最高 180 萬元。</li>
             <li><strong>單位資格</strong>：雇主須維持 90% 以上僱用規模且未實施減班休息。</li>
-          </ul>`,
+          </ul>
+          ${YUANLIN_PHONE_TABLE_HTML}`,
         dmUrl: 'https://drive.google.com/file/d/1anNMEDyzRMw3pgXKwZSKan04_Ab_blL7/view?usp=drive_link',
         dmDataUrl: '',
         dmType: '',
@@ -1033,8 +1281,6 @@
         cardBg: '#ffffff',
         textColor: '#1e293b'
       },
-
-      // 提供實習類 20～21
       {
         id: 'plan_20',
         num: '20',
@@ -1086,8 +1332,6 @@
         cardBg: '#ffffff',
         textColor: '#1e293b'
       },
-
-      // 自行辦訓類 22～25
       {
         id: 'plan_22',
         num: '22',
@@ -1106,7 +1350,8 @@
             <li><strong>類別與編號</strong>：培訓／自行辦訓類（編號 22）</li>
             <li><strong>補助標準</strong>：協助就保人數 50 人以下小型企業辦理人才培訓輔導與訓練課程，由政府全額負擔費用（免自籌款）。</li>
             <li><strong>進階規定</strong>：第 4 年起依年資核算額度上限，參訓達 4 年以上企業辦理「人工智慧」或「淨零碳排」課程當年度上限不受限制。</li>
-          </ul>`,
+          </ul>
+          ${YUANLIN_PHONE_TABLE_HTML}`,
         dmUrl: 'https://drive.google.com/file/d/1rlmSwjQ0NXbNiqcxHT9xaQHo8FpgAaZh/view?usp=drive_link',
         dmDataUrl: '',
         dmType: '',
@@ -1190,8 +1435,6 @@
         cardBg: '#ffffff',
         textColor: '#1e293b'
       },
-
-      // 委接分署辦訓類 26
       {
         id: 'plan_26',
         num: '26',
@@ -1217,8 +1460,6 @@
         cardBg: '#ffffff',
         textColor: '#1e293b'
       },
-
-      // 勞工自行報名類 27～29
       {
         id: 'plan_27',
         num: '27',
@@ -1261,7 +1502,8 @@
           <ul>
             <li><strong>類別與編號</strong>：培訓／勞工自行報名類（編號 28）</li>
             <li><strong>辦理方式</strong>：透過產業人才培訓據點開設實務課程，協助勞工精進符合產業所需之專業技能，詳細課程與補助規定依各分署公告為準。</li>
-          </ul>`,
+          </ul>
+          ${YUANLIN_PHONE_TABLE_HTML}`,
         dmUrl: 'https://drive.google.com/file/d/16egqJ-KBuLXZGRN7T2np7MVTUC8e66Dw/view?usp=drive_link',
         dmDataUrl: '',
         dmType: '',
@@ -1295,8 +1537,6 @@
         cardBg: '#ffffff',
         textColor: '#1e293b'
       },
-
-      // 留用人才類 30～37
       {
         id: 'plan_30',
         num: '30',
@@ -1364,7 +1604,8 @@
           <ul>
             <li><strong>類別與編號</strong>：留用／留用人才類（編號 32）</li>
             <li><strong>補助標準</strong>：依 55Plus 壯世代就業促進相關規定，雇主僱用符合資格壯世代勞工並提供彈性工時、教育訓練或職務調整等友善職場措施者，可申請職場支持輔導費每人每月 3,000 元，同一雇主每年最高補助 300,000 元。</li>
-          </ul>`,
+          </ul>
+          ${YUANLIN_PHONE_TABLE_HTML}`,
         dmUrl: 'https://drive.google.com/file/d/1q-cRo4SQgbmNnF7RgdyCu7C4VLfT-GEW/view?usp=drive_link',
         dmDataUrl: '',
         dmType: '',
@@ -1389,7 +1630,8 @@
           <ul>
             <li><strong>類別與編號</strong>：留用／留用人才類（編號 33）</li>
             <li><strong>輔導內容</strong>：結合專業顧問資源輔導事業單位推動中高齡及高齡者友善職場、職務調整與留才措施，協助企業降低資深人力流失，詳細申請方式依勞動部及各分署公告為準。</li>
-          </ul>`,
+          </ul>
+          ${YUANLIN_PHONE_TABLE_HTML}`,
         dmUrl: 'https://drive.google.com/file/d/19aFV9wGi2ovbqFSBsj-XKoIPxdbJiR4q/view?usp=drive_link',
         dmDataUrl: '',
         dmType: '',
@@ -1414,7 +1656,8 @@
           <ul>
             <li><strong>類別與編號</strong>：留用／留用人才類（編號 34）</li>
             <li><strong>補助標準</strong>：協助雇主為身心障礙者、中高齡者或高齡者改善工作環境、機具設備、調整工作方法或提供就業輔具，每人每年最高補助 100,000 元，須經專業評估核定後辦理。</li>
-          </ul>`,
+          </ul>
+          ${YUANLIN_PHONE_TABLE_HTML}`,
         dmUrl: 'https://drive.google.com/file/d/1UFCXh6sBIqhoavdFi_JrYClZKIoNoCx2/view?usp=drive_link',
         dmDataUrl: '',
         dmType: '',
@@ -1490,7 +1733,8 @@
           <ul>
             <li><strong>類別與編號</strong>：留用／留用人才類（編號 37）</li>
             <li><strong>辦理方式</strong>：僱用安定措施須由勞動部依產業與經濟情勢公告啟動之適用期間與行業辦理，協助減班休息勞工維持僱用並減輕薪資減損衝擊，實際適用期間與補貼標準以勞動部最新公告為準。</li>
-          </ul>`,
+          </ul>
+          ${YUANLIN_PHONE_TABLE_HTML}`,
         dmUrl: 'https://drive.google.com/file/d/1AWgeJ8WYtMpque39_z1mxIzbpSq-MW8W/view?usp=drive_link',
         dmDataUrl: '',
         dmType: '',
@@ -1502,11 +1746,11 @@
 
     let plans = [];
     let customCodes = {
-      plan_1: '1',
-      plan_2: '2',
-      plan_3: '3',
-      plan_4: '4',
-      plan_5: '5',
+      'plan-01': '1.',
+      'plan-02': '2.',
+      'plan-03': '3.',
+      'plan-04': '4.',
+      'plan-05': '5.',
       plan_6: '6',
       plan_7: '7',
       plan_18: '18',
@@ -1555,10 +1799,9 @@
             }
           });
         });
-        // 確保內頁「一句話看懂」、「誰可以申請」、「申請黃金期限」標籤粗體、內容維持一般字重
         container.querySelectorAll('.plan-quick-label').forEach(el => {
           const text = String(el.textContent || '').trim();
-          if (/一句話看懂|誰可以申請|申請黃金期限/.test(text)) {
+          if (/一句話看懂|誰可以申請|申請黃金期限|申請期限/.test(text)) {
             el.style.fontWeight = '700';
             if (!el.querySelector('strong')) {
               el.innerHTML = `<strong>${el.innerHTML}</strong>`;
@@ -1657,6 +1900,13 @@
       return String(plan?.code ?? plan?.num ?? '').trim();
     }
 
+    function parseSortNumber(codeStr) {
+      const cleaned = String(codeStr || '').trim().replace(/\.+$/, '');
+      if (!cleaned) return null;
+      const num = Number(cleaned);
+      return Number.isFinite(num) && /^\d+(\.\d+)?$/.test(cleaned) ? num : null;
+    }
+
     function sortPlansByNumberThenUnnumbered(list) {
       return [...list].sort((a, b) => {
         const codeA = getRawCode(a);
@@ -1668,16 +1918,14 @@
         if (!hasA && hasB) return 1;
         if (!hasA && !hasB) return 0;
 
-        const numA = Number(codeA);
-        const numB = Number(codeB);
-        const isNumA = Number.isFinite(numA) && /^\d+(\.\d+)?$/.test(codeA);
-        const isNumB = Number.isFinite(numB) && /^\d+(\.\d+)?$/.test(codeB);
+        const numA = parseSortNumber(codeA);
+        const numB = parseSortNumber(codeB);
 
-        if (isNumA && isNumB) {
+        if (numA !== null && numB !== null) {
           if (numA !== numB) return numA - numB;
-        } else if (isNumA && !isNumB) {
+        } else if (numA !== null && numB === null) {
           return -1;
-        } else if (!isNumA && isNumB) {
+        } else if (numA === null && numB !== null) {
           return 1;
         } else {
           const cmp = codeA.localeCompare(codeB, 'zh-Hant', { numeric: true });
@@ -1693,14 +1941,22 @@
       });
     }
 
+    function isCleanPlainDesc(descVal) {
+      const d = String(descVal || '').trim();
+      if (!d) return false;
+      if (d.length > 260) return false;
+      return true;
+    }
+
     function normalizePlan(raw, idx = 0) {
       if (!raw || typeof raw !== 'object') return null;
-      const contentHtml = String(raw.content || raw.desc || '');
-      const plainContent = stripHtmlToText(contentHtml);
-      const titleVal = String(raw.title || raw.name || '未命名計畫').trim();
-      const descVal = String(raw.desc || plainContent || '');
-      const rawCode = String(raw.code ?? raw.num ?? '').trim();
-      const subGroupVal = String(raw.subGroup || '').trim();
+      const fallbackDefault = DEFAULT_PLANS[idx] || DEFAULT_PLANS.find(p => String(p.id) === String(raw.id));
+      const contentHtml = String(raw.content || fallbackDefault?.content || raw.desc || '');
+      const titleVal = String(raw.title || raw.name || fallbackDefault?.title || '未命名計畫').trim();
+      const rawCode = String(raw.code ?? raw.num ?? fallbackDefault?.code ?? '').trim();
+      const subGroupVal = String(raw.subGroup || fallbackDefault?.subGroup || '').trim();
+      const summaryVal = String(raw.summary || '').trim() || String(fallbackDefault?.summary || '').trim();
+      const descVal = isCleanPlainDesc(raw.desc) ? String(raw.desc).trim() : (summaryVal || String(fallbackDefault?.desc || '').trim());
 
       return {
         ...raw,
@@ -1711,16 +1967,16 @@
         category: coerceToMainCategory(raw.category, subGroupVal, titleVal, descVal),
         name: titleVal,
         title: titleVal,
-        target: String(raw.target || ''),
-        amount: String(raw.amount || raw.highlight || raw.subsidy || ''),
-        highlight: String(raw.highlight || raw.amount || ''),
-        summary: String(raw.summary || '').trim(),
+        target: String(raw.target || fallbackDefault?.target || ''),
+        amount: String(raw.amount || raw.highlight || fallbackDefault?.amount || ''),
+        highlight: String(raw.highlight || raw.amount || fallbackDefault?.highlight || ''),
+        summary: summaryVal,
         desc: descVal,
         content: contentHtml,
-        dmUrl: String(raw.dmUrl || '').trim(),
+        dmUrl: String(raw.dmUrl || fallbackDefault?.dmUrl || '').trim(),
         dmDataUrl: String(raw.dmDataUrl || '').trim(),
         dmType: String(raw.dmType || '').trim(),
-        dmName: String(raw.dmName || '').trim(),
+        dmName: String(raw.dmName || fallbackDefault?.dmName || '').trim(),
         cardBg: String(raw.cardBg || '#ffffff'),
         textColor: String(raw.textColor || '#1e293b')
       };
@@ -1863,8 +2119,11 @@
       const title = String(plan?.title || plan?.name || '未命名計畫').trim();
       const code = getRawCode(plan);
       if (!code) return title;
-      const prefix = `${code}.`;
-      return title.startsWith(prefix) ? title : `${code}. ${title}`;
+      const cleanNum = code.replace(/\.+$/, '');
+      if (title.startsWith(`${code} `) || title.startsWith(`${cleanNum}. `)) {
+        return title;
+      }
+      return `${cleanNum}. ${title}`;
     }
 
     function getPlanHighlight(plan) {
@@ -1983,12 +2242,13 @@
 
       grid.innerHTML = filtered.map(plan => {
         const rawCode = getRawCode(plan);
+        const cleanNum = rawCode.replace(/\.+$/, '');
         const mainCat = escapeHtml(coerceToMainCategory(plan.category, plan.subGroup, getPlanTitle(plan), plan.desc));
         const subGroupHtml = String(plan.subGroup || '').trim()
           ? `<span class="badge-sub">${escapeHtml(plan.subGroup)}</span>`
           : '';
-        const codeHtml = rawCode
-          ? `<span class="badge-num">編號 ${escapeHtml(rawCode)}</span>`
+        const codeHtml = cleanNum
+          ? `<span class="badge-num">編號 ${escapeHtml(cleanNum)}</span>`
           : `<span class="badge-sub">無編號</span>`;
         const headingText = escapeHtml(getPlanTitle(plan));
         const highlightText = getPlanHighlight(plan);
@@ -2094,13 +2354,14 @@
       activeDetailPlanId = plan.id;
 
       const rawCode = getRawCode(plan);
+      const cleanNum = rawCode.replace(/\.+$/, '');
       const titleText = getPlanTitle(plan);
       const highlightText = getPlanHighlight(plan);
       const summaryText = String(plan.summary || plan.desc || '').trim();
       const fallbackDesc = String(plan.desc || '').trim();
       const mainCat = coerceToMainCategory(plan.category, plan.subGroup, titleText, fallbackDesc);
 
-      document.getElementById('detailCode').textContent = rawCode ? `編號 ${rawCode}` : '無編號';
+      document.getElementById('detailCode').textContent = cleanNum ? `編號 ${cleanNum}` : '無編號';
       document.getElementById('detailCategory').textContent = mainCat;
       const subEl = document.getElementById('detailSubGroup');
       if (String(plan.subGroup || '').trim()) {
