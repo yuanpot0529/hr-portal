@@ -19,7 +19,10 @@ app = Flask(__name__, static_folder=str(BASE_DIR), static_url_path="")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY") or secrets.token_hex(32)
 
-# 跨裝置／行動裝置常見情境下，若使用 HTTPS 建議開啟 Secure Cookie；本機或 HTTP 測試時自動相容
+# 若 FORCE_SYNC_FROM_SEED 設為 true（預設為 true），每次重啟／部署會以最新種子檔／更新基準同步，避免卡在舊快取資料；
+# 若需完全鎖定後台手動修改、不受種子檔覆蓋，可在 Render 環境變數設定 FORCE_SYNC_FROM_SEED=false
+FORCE_SYNC_FROM_SEED = os.environ.get("FORCE_SYNC_FROM_SEED", "true").strip().lower() != "false"
+
 app.config["SESSION_COOKIE_HTTPONLY"] = True
 app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 if os.environ.get("FORCE_SECURE_COOKIE", "").lower() == "true":
@@ -56,13 +59,14 @@ ADMIN_HASHES = load_admin_credentials()
 
 
 def seed_initial_data() -> dict[str, Any]:
-    """若尚無 plans_data.json，嘗試從預設備份檔建立初始資料。"""
+    """從預設備份檔建立初始資料（若無備份檔則回傳空結構，由前端內建 1~37 號預設資料接手）。"""
     if DEFAULT_SEED_FILE.exists():
         try:
             with DEFAULT_SEED_FILE.open("r", encoding="utf-8") as f:
                 content = json.load(f)
             if isinstance(content, dict) and isinstance(content.get("plans"), list):
-                return content
+                custom_codes = content.get("customCodes") if isinstance(content.get("customCodes"), dict) else {}
+                return {"plans": content["plans"], "customCodes": custom_codes}
             if isinstance(content, list):
                 return {"plans": content, "customCodes": {}}
         except Exception as exc:
@@ -71,12 +75,28 @@ def seed_initial_data() -> dict[str, Any]:
     return {"plans": [], "customCodes": {}}
 
 
-def read_store() -> dict[str, Any]:
-    """安全讀取伺服器端儲存的計畫資料。"""
-    if not DATA_FILE.exists():
-        initial = seed_initial_data()
-        write_store(initial)
-        return initial
+def write_store(payload: dict[str, Any]) -> None:
+    """以原子寫入方式更新伺服器端 JSON 檔案，避免同時寫入造成毀損。"""
+    DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
+    tmp_file = DATA_FILE.with_suffix(".json.tmp")
+    with tmp_file.open("w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False, indent=2)
+    tmp_file.replace(DATA_FILE)
+
+
+def sync_store_on_startup() -> dict[str, Any]:
+    """
+    啟動時同步資料：
+    - 若 FORCE_SYNC_FROM_SEED 為 true：以最新種子檔更新/建立 plans_data.json，確保部署後不會殘留舊快取資料。
+    - 若 FORCE_SYNC_FROM_SEED 為 false：僅在 plans_data.json 不存在時建立。
+    """
+    if FORCE_SYNC_FROM_SEED or not DATA_FILE.exists():
+        seeded = seed_initial_data()
+        try:
+            write_store(seeded)
+        except Exception as exc:
+            app.logger.warning("啟動寫入 plans_data.json 失敗: %s", exc)
+        return seeded
 
     try:
         with DATA_FILE.open("r", encoding="utf-8") as f:
@@ -95,13 +115,30 @@ def read_store() -> dict[str, Any]:
     return seed_initial_data()
 
 
-def write_store(payload: dict[str, Any]) -> None:
-    """以原子寫入方式更新伺服器端 JSON 檔案，避免同時寫入造成毀損。"""
-    DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
-    tmp_file = DATA_FILE.with_suffix(".json.tmp")
-    with tmp_file.open("w", encoding="utf-8") as f:
-        json.dump(payload, f, ensure_ascii=False, indent=2)
-    tmp_file.replace(DATA_FILE)
+def read_store() -> dict[str, Any]:
+    """安全讀取伺服器端儲存的計畫資料。"""
+    if not DATA_FILE.exists():
+        return sync_store_on_startup()
+
+    try:
+        with DATA_FILE.open("r", encoding="utf-8") as f:
+            data = json.load(f)
+        if isinstance(data, list):
+            return {"plans": data, "customCodes": {}}
+        if isinstance(data, dict):
+            if not isinstance(data.get("plans"), list):
+                data["plans"] = []
+            if not isinstance(data.get("customCodes"), dict):
+                data["customCodes"] = {}
+            return data
+    except Exception as exc:
+        app.logger.error("讀取 plans_data.json 失敗: %s", exc)
+
+    return seed_initial_data()
+
+
+# 模組載入（包含 Gunicorn 啟動）時立即執行同步，避免舊資料殘留
+sync_store_on_startup()
 
 
 def login_required(fn):
@@ -166,6 +203,25 @@ def get_plans():
         "ok": True,
         "plans": store.get("plans", []),
         "customCodes": store.get("customCodes", {})
+    })
+
+
+@app.post("/api/plans/reset-from-seed")
+@login_required
+def reset_plans_from_seed():
+    """（需管理者登入）強制以預設備份檔重設伺服器端資料。"""
+    seeded = seed_initial_data()
+    try:
+        write_store(seeded)
+    except Exception as exc:
+        app.logger.error("重設 plans_data.json 失敗: %s", exc)
+        return jsonify({"ok": False, "message": "重設伺服器資料失敗。"}), 500
+
+    return jsonify({
+        "ok": True,
+        "message": f"已重設 {len(seeded.get('plans', []))} 筆初始計畫資料。",
+        "plans": seeded.get("plans", []),
+        "customCodes": seeded.get("customCodes", {})
     })
 
 
