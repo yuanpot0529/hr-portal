@@ -28,6 +28,7 @@ if os.environ.get("FORCE_SECURE_COOKIE", "").lower() == "true":
 
 
 def load_admin_credentials() -> dict[str, str]:
+    """載入管理者帳號與密碼雜湊，支援環境變數設定或預設帳號。"""
     raw_json = os.environ.get("ADMIN_ACCOUNTS_JSON", "").strip()
     accounts: dict[str, str] = {}
 
@@ -53,6 +54,7 @@ ADMIN_HASHES = load_admin_credentials()
 
 
 def write_store(payload: dict[str, Any]) -> None:
+    """以暫存檔原子替換方式寫入 plans_data.json，避免寫入中斷造成檔案損毀。"""
     DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
     tmp_file = DATA_FILE.with_suffix(".json.tmp")
     with tmp_file.open("w", encoding="utf-8") as f:
@@ -61,6 +63,7 @@ def write_store(payload: dict[str, Any]) -> None:
 
 
 def load_seed_payload() -> dict[str, Any]:
+    """讀取種子備份檔，若檔案不存在或格式異常則回傳空結構。"""
     if SEED_FILE.exists():
         try:
             with SEED_FILE.open("r", encoding="utf-8") as f:
@@ -81,6 +84,7 @@ def load_seed_payload() -> dict[str, Any]:
 
 
 def sync_store_on_startup() -> dict[str, Any]:
+    """啟動時依 FORCE_SYNC_FROM_SEED 決定是否以種子檔同步 plans_data.json。"""
     if FORCE_SYNC_FROM_SEED or not DATA_FILE.exists():
         seed_payload = load_seed_payload()
         try:
@@ -107,6 +111,7 @@ def sync_store_on_startup() -> dict[str, Any]:
 
 
 def read_store() -> dict[str, Any]:
+    """讀取目前伺服器端的計畫資料與自訂編號設定。"""
     if not DATA_FILE.exists():
         return sync_store_on_startup()
 
@@ -131,6 +136,7 @@ sync_store_on_startup()
 
 
 def login_required(fn):
+    """驗證管理者登入狀態的裝飾器。"""
     @wraps(fn)
     def wrapper(*args, **kwargs):
         admin_user = session.get("admin_user")
@@ -142,11 +148,13 @@ def login_required(fn):
 
 @app.get("/")
 def serve_index():
+    """回傳前端單頁應用程式 index.html。"""
     return send_from_directory(BASE_DIR, "index.html")
 
 
 @app.get("/api/auth/status")
 def auth_status():
+    """查詢目前 session 是否已登入管理者帳號。"""
     admin_user = session.get("admin_user")
     return jsonify({
         "ok": True,
@@ -157,6 +165,7 @@ def auth_status():
 
 @app.post("/api/auth/login")
 def auth_login():
+    """驗證管理者帳號密碼並建立登入 session。"""
     body = request.get_json(silent=True) or {}
     username = str(body.get("username", "")).strip()
     password = str(body.get("password", ""))
@@ -175,12 +184,14 @@ def auth_login():
 
 @app.post("/api/auth/logout")
 def auth_logout():
+    """清除管理者登入 session。"""
     session.pop("admin_user", None)
     return jsonify({"ok": True, "message": "已登出管理者帳號。"})
 
 
 @app.get("/api/plans")
 def get_plans():
+    """取得完整計畫清單與自訂編號。"""
     store = read_store()
     return jsonify({
         "ok": True,
@@ -192,6 +203,7 @@ def get_plans():
 @app.put("/api/plans")
 @login_required
 def update_plans():
+    """整批更新計畫清單與自訂編號並同步寫入磁碟。"""
     body = request.get_json(silent=True) or {}
     plans = body.get("plans")
     custom_codes = body.get("customCodes", {})
@@ -220,6 +232,7 @@ def update_plans():
 @app.put("/api/plans/<plan_id>")
 @login_required
 def update_single_plan(plan_id: str):
+    """更新或新增單筆計畫資料並寫入磁碟。"""
     body = request.get_json(silent=True) or {}
     updated_plan = body.get("plan")
     if not isinstance(updated_plan, dict):
@@ -256,6 +269,7 @@ def update_single_plan(plan_id: str):
 
 @app.errorhandler(Exception)
 def handle_unexpected_error(exc):
+    """捕捉未預期例外並回傳標準 JSON 錯誤訊息。"""
     app.logger.exception("未預期錯誤: %s", exc)
     return jsonify({"ok": False, "message": "伺服器發生未預期錯誤。"}), 500
 
