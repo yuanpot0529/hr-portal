@@ -19,6 +19,7 @@ app = Flask(__name__, static_folder=str(BASE_DIR), static_url_path="")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY") or secrets.token_hex(32)
 
+# 預設以種子檔同步初始化資料；若希望保留伺服器上已手動修改的 plans_data.json，可設環境變數 FORCE_SYNC_FROM_SEED=false
 FORCE_SYNC_FROM_SEED = os.environ.get("FORCE_SYNC_FROM_SEED", "true").strip().lower() != "false"
 
 app.config["SESSION_COOKIE_HTTPONLY"] = True
