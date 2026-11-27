@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 import os
 import secrets
+from datetime import datetime, timezone
 from functools import wraps
 from pathlib import Path
 from typing import Any
@@ -12,8 +13,8 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.security import check_password_hash, generate_password_hash
 
 BASE_DIR = Path(__file__).resolve().parent
-DATA_FILE = BASE_DIR / "plans_data.json"
-SEED_FILE = BASE_DIR / "hr_plans_backup_2026-11-23.json"
+DATA_FILE = Path(os.environ.get("PLANS_DATA_PATH", "").strip() or str(BASE_DIR / "plans_data.json"))
+SEED_FILE = Path(os.environ.get("PLANS_SEED_PATH", "").strip() or str(BASE_DIR / "hr_plans_backup_2026-11-23.json"))
 
 app = Flask(__name__, static_folder=str(BASE_DIR), static_url_path="")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
@@ -55,9 +56,9 @@ ADMIN_HASHES = load_admin_credentials()
 
 
 def write_store(payload: dict[str, Any]) -> None:
-    """以暫存檔原子替換方式寫入 plans_data.json，避免寫入中斷造成檔案損毀。"""
+    """以暫存檔原子替換方式寫入目標資料檔，避免寫入中斷造成檔案損毀。"""
     DATA_FILE.parent.mkdir(parents=True, exist_ok=True)
-    tmp_file = DATA_FILE.with_suffix(".json.tmp")
+    tmp_file = DATA_FILE.with_suffix(f"{DATA_FILE.suffix}.tmp")
     with tmp_file.open("w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, indent=2)
     tmp_file.replace(DATA_FILE)
@@ -85,13 +86,13 @@ def load_seed_payload() -> dict[str, Any]:
 
 
 def sync_store_on_startup() -> dict[str, Any]:
-    """啟動時依 FORCE_SYNC_FROM_SEED 決定是否以種子檔同步 plans_data.json。"""
+    """啟動時依 FORCE_SYNC_FROM_SEED 決定是否以種子檔同步資料檔。"""
     if FORCE_SYNC_FROM_SEED or not DATA_FILE.exists():
         seed_payload = load_seed_payload()
         try:
             write_store(seed_payload)
         except Exception as exc:
-            app.logger.warning("寫入 plans_data.json 失敗: %s", exc)
+            app.logger.warning("寫入資料檔失敗 (%s): %s", DATA_FILE, exc)
         return seed_payload
 
     try:
@@ -106,31 +107,42 @@ def sync_store_on_startup() -> dict[str, Any]:
                 data["customCodes"] = {}
             return data
     except Exception as exc:
-        app.logger.error("讀取 plans_data.json 失敗: %s", exc)
+        app.logger.error("讀取資料檔失敗 (%s): %s", DATA_FILE, exc)
 
     return load_seed_payload()
 
 
-def read_store() -> dict[str, Any]:
-    """讀取目前伺服器端的計畫資料與自訂編號設定。"""
+def read_store() -> tuple[dict[str, Any], str]:
+    """讀取目前伺服器端的計畫資料與自訂編號設定，並回傳資料來源標記。"""
     if not DATA_FILE.exists():
-        return sync_store_on_startup()
+        return sync_store_on_startup(), "seed"
 
     try:
         with DATA_FILE.open("r", encoding="utf-8") as f:
             data = json.load(f)
         if isinstance(data, list):
-            return {"plans": data, "customCodes": {}}
+            return {"plans": data, "customCodes": {}}, "store"
         if isinstance(data, dict):
             if not isinstance(data.get("plans"), list):
                 data["plans"] = []
             if not isinstance(data.get("customCodes"), dict):
                 data["customCodes"] = {}
-            return data
+            return data, "store"
     except Exception as exc:
-        app.logger.error("讀取 plans_data.json 失敗: %s", exc)
+        app.logger.error("讀取資料檔失敗 (%s): %s", DATA_FILE, exc)
 
-    return load_seed_payload()
+    return load_seed_payload(), "seed"
+
+
+def get_store_updated_at() -> str:
+    """回傳目前儲存檔的最後修改時間（ISO 8601 UTC），若不存在則回傳空字串。"""
+    try:
+        if DATA_FILE.exists():
+            ts = DATA_FILE.stat().st_mtime
+            return datetime.fromtimestamp(ts, tz=timezone.utc).isoformat()
+    except Exception:
+        pass
+    return ""
 
 
 sync_store_on_startup()
@@ -192,12 +204,17 @@ def auth_logout():
 
 @app.get("/api/plans")
 def get_plans():
-    """取得完整計畫清單與自訂編號。"""
-    store = read_store()
+    """取得完整計畫清單、自訂編號與儲存中繼資訊。"""
+    store, source = read_store()
+    plans = store.get("plans", [])
     return jsonify({
         "ok": True,
-        "plans": store.get("plans", []),
-        "customCodes": store.get("customCodes", {})
+        "plans": plans,
+        "customCodes": store.get("customCodes", {}),
+        "source": source,
+        "count": len(plans),
+        "updatedAt": get_store_updated_at(),
+        "forceSyncFromSeed": FORCE_SYNC_FROM_SEED
     })
 
 
@@ -221,12 +238,14 @@ def update_plans():
     try:
         write_store(payload)
     except Exception as exc:
-        app.logger.error("寫入 plans_data.json 失敗: %s", exc)
+        app.logger.error("寫入資料檔失敗: %s", exc)
         return jsonify({"ok": False, "message": "伺服器儲存資料失敗。"}), 500
 
     return jsonify({
         "ok": True,
-        "message": f"已同步更新 {len(plans)} 筆計畫至伺服器（操作者：{session.get('admin_user')}）。"
+        "message": f"已同步更新 {len(plans)} 筆計畫至伺服器（操作者：{session.get('admin_user')}）。",
+        "count": len(plans),
+        "updatedAt": get_store_updated_at()
     })
 
 
@@ -239,7 +258,7 @@ def update_single_plan(plan_id: str):
     if not isinstance(updated_plan, dict):
         return jsonify({"ok": False, "message": "缺少有效的計畫資料。"}), 400
 
-    store = read_store()
+    store, _ = read_store()
     plans: list[dict[str, Any]] = store.get("plans", [])
     found = False
 
@@ -264,7 +283,9 @@ def update_single_plan(plan_id: str):
     return jsonify({
         "ok": True,
         "message": f"已儲存計畫「{updated_plan.get('title', plan_id)}」，所有裝置已同步。",
-        "plan": updated_plan
+        "plan": updated_plan,
+        "count": len(plans),
+        "updatedAt": get_store_updated_at()
     })
 
 
