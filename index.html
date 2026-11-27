@@ -232,6 +232,26 @@
           + 新增計畫
         </button>
 
+        <button type="button" id="btnSyncServer" onclick="fetchPlansFromServer(true)" class="hidden px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-400 text-slate-950 text-xs font-bold transition cursor-pointer">
+          重新同步最新資料
+        </button>
+
+        <button type="button" id="btnRestoreRecentDeleted" onclick="restoreMostRecentDeletedPlan()" class="hidden px-3 py-1.5 rounded-lg bg-rose-100 hover:bg-rose-200 text-rose-900 border border-rose-300 text-xs font-bold transition cursor-pointer">
+          救回最近刪除 (<span id="recentDeletedCount">0</span>)
+        </button>
+
+        <button type="button" id="btnRestoreDefaultPlans" onclick="openRestoreDefaultConfirm()" class="hidden px-3 py-1.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-bold transition cursor-pointer">
+          還原內建 37 筆範本
+        </button>
+
+        <button type="button" id="btnImportJson" onclick="triggerJsonImport()" class="hidden px-3 py-1.5 rounded-lg bg-indigo-400 hover:bg-indigo-300 text-slate-950 text-xs font-bold transition cursor-pointer">
+          匯入備份 JSON
+        </button>
+
+        <button type="button" id="btnExportJson" onclick="exportJsonBackup()" class="hidden px-3 py-1.5 rounded-lg bg-slate-200 hover:bg-white text-[#0f294a] text-xs font-bold transition cursor-pointer">
+          匯出備份 JSON
+        </button>
+
         <button type="button" id="btnAdminLogin" onclick="openLoginModal()" class="px-3 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold transition cursor-pointer">
           管理者登入
         </button>
@@ -239,6 +259,7 @@
         <button type="button" id="btnAdminLogout" onclick="logoutAdmin()" class="hidden px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-white text-xs font-semibold transition cursor-pointer">
           登出
         </button>
+        <input type="file" id="jsonFileInput" accept=".json,application/json" class="hidden" onchange="handleJsonFileImport(event)">
       </div>
     </div>
   </header>
@@ -246,27 +267,40 @@
   <!-- 主要內容區 -->
   <main class="max-w-[1280px] w-full mx-auto px-4 py-5 flex-1">
 
-    <!-- 搜尋、分類篩選與備份工具列 -->
+    <!-- 伺服器有新版本提示橫幅（編輯中收到背景更新時顯示） -->
+    <div id="serverUpdateBanner" class="hidden mb-4 px-4 py-3 rounded-xl bg-amber-50 border border-amber-300 text-amber-950 flex items-center justify-between gap-3 flex-wrap shadow-sm">
+      <div class="text-xs sm:text-sm font-semibold">
+        偵測到伺服器已有最新計畫資料更新；若您目前正在編輯表單，可先完成或關閉編輯視窗後再套用最新資料。
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <button type="button" onclick="applyLatestServerUpdate()" class="px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold cursor-pointer">
+          立即載入最新資料
+        </button>
+        <button type="button" onclick="dismissServerUpdateBanner()" class="px-2.5 py-1.5 rounded-lg bg-white hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-semibold cursor-pointer">
+          稍後再說
+        </button>
+      </div>
+    </div>
+
+    <!-- 搜尋、分類篩選與版面切換工具列 -->
     <section class="bg-white border border-[#cbd5e1] rounded-xl p-4 sm:p-5 mb-5 space-y-3.5">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div class="relative flex-1">
-          <input type="text" id="searchInput" oninput="renderPlans()" placeholder="搜尋計畫編號、子類別（如：招募人才類、分署培訓人才類、先僱後訓類、提供實習類、自行辦訓類、委接分署辦訓類、勞工自行報名類、留用人才類）、名稱或關鍵字..." class="w-full pl-3.5 pr-12 py-2 rounded-lg border border-[#cbd5e1] text-sm focus:outline-none focus:ring-2 focus:ring-[#1e4e8c]">
+          <input type="text" id="searchInput" oninput="renderPlans()" placeholder="搜尋計畫編號、名稱、對象或關鍵字（支援空白分隔多詞與別名，如：無薪假、55Plus、中高齡、長照、先僱後訓）..." class="w-full pl-3.5 pr-12 py-2 rounded-lg border border-[#cbd5e1] text-sm focus:outline-none focus:ring-2 focus:ring-[#1e4e8c]">
           <button type="button" onclick="clearSearch()" title="清除搜尋" class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-900 text-xs font-bold px-1.5 py-0.5 cursor-pointer">
             清除
           </button>
         </div>
 
-        <div class="flex items-center gap-2 flex-wrap shrink-0">
-          <button type="button" onclick="fetchPlansFromServer(true)" class="px-3 py-1.5 rounded-lg bg-[#f0f5fa] hover:bg-sky-100 text-[#0f294a] border border-[#cbd5e1] text-xs font-bold transition cursor-pointer">
-            重新同步最新資料
+        <!-- 訪客與管理者皆可使用的首頁排列模式切換：一排一個方案 / 一排三個方案 -->
+        <div class="flex items-center gap-1.5 shrink-0 bg-[#f0f5fa] p-1 rounded-lg border border-[#cbd5e1]" role="group" aria-label="首頁方案排列方式">
+          <span class="text-xs font-bold text-[#0f294a] px-2">排列方式：</span>
+          <button type="button" id="btnLayoutSingle" onclick="setGridLayoutMode('single')" class="px-3 py-1 rounded-md text-xs font-bold bg-[#0f294a] text-white transition cursor-pointer">
+            一排 1 個方案
           </button>
-          <button type="button" onclick="triggerJsonImport()" class="px-3 py-1.5 rounded-lg bg-[#f0f5fa] hover:bg-sky-100 text-[#0f294a] border border-[#cbd5e1] text-xs font-bold transition cursor-pointer">
-            匯入備份 JSON
+          <button type="button" id="btnLayoutTriple" onclick="setGridLayoutMode('triple')" class="px-3 py-1 rounded-md text-xs font-bold text-[#075985] hover:bg-sky-100 transition cursor-pointer">
+            一排 3 個方案
           </button>
-          <button type="button" onclick="exportJsonBackup()" class="px-3 py-1.5 rounded-lg bg-[#0f294a] hover:bg-slate-800 text-white text-xs font-bold transition cursor-pointer">
-            匯出備份 JSON
-          </button>
-          <input type="file" id="jsonFileInput" accept=".json,application/json" class="hidden" onchange="handleJsonFileImport(event)">
         </div>
       </div>
 
@@ -287,8 +321,9 @@
           </button>
         </div>
 
-        <div class="text-xs text-slate-600 font-bold">
-          顯示 <span id="visibleCount" class="text-[#0f766e]">0</span> / <span id="totalCount">0</span> 筆計畫
+        <div class="flex items-center gap-3 flex-wrap text-xs text-slate-600 font-bold">
+          <span id="syncMetaStatus" class="hidden text-[11px] font-medium text-slate-500"></span>
+          <span>顯示 <span id="visibleCount" class="text-[#0f766e]">0</span> / <span id="totalCount">0</span> 筆計畫</span>
         </div>
       </div>
     </section>
@@ -348,45 +383,89 @@
       </div>
     </section>
 
-    <!-- 計畫卡片清單（首頁每列 3 筆專案排列） -->
-    <section id="plansGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-stretch"></section>
+    <!-- 計畫卡片清單 -->
+    <div id="plansGrid" class="grid grid-cols-1 gap-4"></div>
   </main>
 
-  <!-- 頁尾 -->
-  <footer class="bg-white border-t border-[#cbd5e1] py-4 px-4 text-center text-xs text-slate-500">
-    企業人資補助與就業資源檢索平台・實際補助額度與申請期限請以勞動部勞動力發展署最新公告為準
-  </footer>
+  <!-- Toast 提示訊息（支援一鍵復原剛刪除的計畫） -->
+  <div id="toast" class="hidden fixed bottom-5 right-5 z-50 max-w-md px-4 py-3 rounded-xl bg-[#0f294a] text-white text-xs sm:text-sm font-semibold shadow-xl border border-slate-700 flex items-center gap-3">
+    <span id="toastText" class="flex-1"></span>
+    <button type="button" id="toastUndoBtn" onclick="undoLastDeletedPlan()" class="hidden shrink-0 px-3 py-1 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold cursor-pointer">
+      復原刪除
+    </button>
+  </div>
 
-  <!-- Toast 提示訊息 -->
-  <div id="toast" class="hidden fixed bottom-5 right-5 z-50 max-w-sm px-4 py-3 rounded-xl bg-[#0f294a] text-white text-xs sm:text-sm font-semibold shadow-xl border border-slate-700"></div>
-
-  <!-- 計畫詳細內容彈窗 -->
-  <div id="detailModal" onclick="closeDetailModal(event)" class="hidden fixed inset-0 z-40 bg-slate-950/60 flex items-center justify-center p-4">
-    <div class="bg-white rounded-xl border border-[#cbd5e1] max-w-[960px] w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
-      <div class="px-6 py-4 border-b border-[#cbd5e1] flex items-start justify-between gap-3 bg-[#f8fafc]">
+  <!-- 刪除前二次確認對話框 -->
+  <div id="deleteConfirmModal" onclick="closeDeleteConfirmModal(event)" class="hidden fixed inset-0 z-[60] bg-slate-950/70 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl border border-rose-300 max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-start gap-3">
+        <div class="w-9 h-9 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center font-bold shrink-0">!</div>
         <div>
-          <div class="mb-1.5 text-xs">
-            <span id="detailCode" class="badge-num"></span>
+          <h3 class="text-base font-bold text-rose-900">確認要刪除此筆計畫嗎？</h3>
+          <p id="deleteConfirmTargetName" class="text-xs sm:text-sm font-bold text-slate-800 mt-1"></p>
+          <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">
+            刪除後將立即從所有裝置同步移除（10 秒內可點選右下角「復原刪除」，或於上方「救回最近刪除」隨時還原）。
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
+        <button type="button" onclick="hideDeleteConfirmModal()" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs sm:text-sm font-semibold cursor-pointer">
+          取消
+        </button>
+        <button type="button" onclick="confirmDeletePlan()" class="px-4 py-2 rounded-lg bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-bold cursor-pointer">
+          確認刪除
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 還原內建 37 筆範本確認對話框 -->
+  <div id="restoreDefaultModal" onclick="closeRestoreDefaultModal(event)" class="hidden fixed inset-0 z-[60] bg-slate-950/70 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl border border-amber-300 max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div>
+        <h3 class="text-base font-bold text-[#0f294a]">確認還原為「內建 37 筆範本」？</h3>
+        <p class="text-xs text-slate-600 mt-1.5 leading-relaxed">
+          此操作會覆蓋目前清單並回復成程式碼內建的最新 37 筆範本（會蓋掉您在網頁後台另外新增或手動改過的內容）。若是想救回自己編修過的資料，建議改用「<strong>匯入備份 JSON</strong>」。
+        </p>
+      </div>
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
+        <button type="button" onclick="hideRestoreDefaultModal()" class="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs sm:text-sm font-semibold cursor-pointer">
+          取消
+        </button>
+        <button type="button" onclick="confirmRestoreDefaultPlans()" class="px-4 py-2 rounded-lg bg-[#0f766e] hover:bg-teal-800 text-white text-xs sm:text-sm font-bold cursor-pointer">
+          仍要還原內建範本
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 計畫完整內容檢視彈窗 -->
+  <div id="detailModal" onclick="closeDetailModal(event)" class="hidden fixed inset-0 z-50 bg-slate-950/60 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl border border-[#cbd5e1] max-w-4xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden">
+      <div class="px-5 py-4 border-b border-[#cbd5e1] bg-[#f8fafc] flex items-start justify-between gap-3">
+        <div>
+          <div class="flex items-center gap-1.5 flex-wrap mb-1.5">
             <span id="detailCategory" class="badge"></span>
+            <span id="detailCode" class="badge-num"></span>
             <span id="detailSubGroup" class="badge-sub"></span>
           </div>
-          <h2 id="detailTitle" class="m-0 text-lg font-bold text-[#0f294a]"></h2>
+          <h2 id="detailTitle" class="text-lg sm:text-xl font-bold text-[#0f294a] m-0"></h2>
         </div>
-        <button type="button" onclick="hideDetailModal()" class="px-3 py-1.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold cursor-pointer">
+        <button type="button" onclick="hideDetailModal()" class="px-3 py-1 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold cursor-pointer shrink-0">
           關閉
         </button>
       </div>
 
-      <div id="detailBody" class="p-6 overflow-y-auto flex-1"></div>
+      <div id="detailBody" class="p-5 overflow-y-auto flex-1"></div>
 
-      <div class="px-6 py-3.5 border-t border-[#cbd5e1] bg-[#f8fafc] flex items-center justify-between gap-2 flex-wrap">
+      <div class="px-5 py-3.5 border-t border-[#cbd5e1] bg-[#f8fafc] flex items-center justify-between gap-2 flex-wrap">
         <div id="detailDmArea"></div>
-        <div class="flex items-center gap-2">
-          <button type="button" id="btnDetailEdit" class="hidden px-4 py-2 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs sm:text-sm font-bold cursor-pointer">
+        <div class="flex items-center gap-2 ml-auto">
+          <button type="button" id="btnDetailEdit" class="hidden px-3.5 py-1.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold cursor-pointer">
             編輯此計畫
           </button>
-          <button type="button" onclick="hideDetailModal()" class="px-4 py-2 rounded-lg bg-[#0f294a] hover:bg-slate-800 text-white text-xs sm:text-sm font-semibold cursor-pointer">
-            返回清單
+          <button type="button" onclick="hideDetailModal()" class="px-4 py-1.5 rounded-lg bg-[#0f294a] hover:bg-slate-800 text-white text-xs font-bold cursor-pointer">
+            關閉視窗
           </button>
         </div>
       </div>
@@ -459,8 +538,8 @@
             <input type="text" id="editPlanNum" placeholder="例如：1. 或留白" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm">
           </div>
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">計畫分類（招募、培訓、留用）</label>
-            <select id="editPlanCategory" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm bg-white">
+            <label class="block text-xs font-bold text-slate-700 mb-1">主分類（招募、培訓、留用）</label>
+            <select id="editPlanCategory" onchange="handleCategorySelectionChange()" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm bg-white">
               <option value="招募">招募</option>
               <option value="培訓">培訓</option>
               <option value="留用">留用</option>
@@ -469,8 +548,11 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">細分類別（選填）</label>
-          <input type="text" id="editSubGroup" placeholder="例如：招募人才類、分署培訓人才類、先僱後訓類、提供實習類、自行辦訓類、委接分署辦訓類、勞工自行報名類、留用人才類" class="w-full px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm">
+          <label class="block text-xs font-bold text-slate-700 mb-1">細分類別（可選用對應主分類項目或自行輸入）</label>
+          <div class="flex flex-col sm:flex-row gap-2">
+            <select id="editSubGroupPreset" onchange="applySubGroupPreset(this.value)" class="sm:w-1/2 px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm bg-white"></select>
+            <input type="text" id="editSubGroup" placeholder="例如：招募人才類、分署培訓人才類、留用人才類" class="sm:w-1/2 px-3 py-2 rounded-lg border border-[#cbd5e1] text-sm">
+          </div>
         </div>
 
         <div>
@@ -567,6 +649,9 @@
             <button type="button" onmousedown="event.preventDefault(); insertEditorSnippet('table')" title="插入標準補助表格" class="px-2.5 py-1 rounded bg-white hover:bg-slate-100 border border-[#cbd5e1] text-xs font-bold text-slate-800 cursor-pointer">
               + 表格框格
             </button>
+            <button type="button" onmousedown="event.preventDefault(); cleanVisualEditorStyles()" title="清理多餘行內樣式並整理版面" class="px-2.5 py-1 rounded bg-amber-50 hover:bg-amber-100 border border-amber-300 text-xs font-bold text-amber-950 cursor-pointer">
+              清理多餘樣式
+            </button>
             <button type="button" onmousedown="event.preventDefault(); execEditorCmd('removeFormat')" title="清除選取文字格式" class="px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 border border-slate-300 text-xs font-semibold text-slate-600 cursor-pointer">
               清除格式
             </button>
@@ -618,7 +703,302 @@
 
   <script>
     const CAN_USE_SERVER_API = window.location.protocol === 'http:' || window.location.protocol === 'https:';
-    const PREVIEW_STORAGE_KEY = 'hr_portal_ordered_1_37_v3';
+    const PREVIEW_STORAGE_KEY = 'hr_portal_ordered_1_37_v4';
+    const LAYOUT_STORAGE_KEY = 'hr_portal_grid_layout_mode_v1';
+
+    // 單一分類對應表（Single Source of Truth）：主分類與合法細分類別對照
+    const MAIN_CATEGORIES = ['招募', '培訓', '留用'];
+    const SUBGROUP_BY_MAIN_CATEGORY = {
+      '招募': ['招募人才類'],
+      '培訓': [
+        '分署培訓人才類',
+        '先僱後訓類',
+        '提供實習類',
+        '自行辦訓類',
+        '委接分署辦訓類',
+        '勞工自行報名類'
+      ],
+      '留用': ['留用人才類']
+    };
+
+    const SUBGROUP_TO_MAIN_CATEGORY = Object.entries(SUBGROUP_BY_MAIN_CATEGORY).reduce((acc, [mainCat, subs]) => {
+      subs.forEach(sub => {
+        acc[sub.trim()] = mainCat;
+      });
+      return acc;
+    }, {});
+
+    // 搜尋同義詞／別名對照群組
+    const SEARCH_SYNONYM_GROUPS = [
+      ['無薪假', '減班休息'],
+      ['55plus', '55+', '55＋', '壯世代', '五五就業促進'],
+      ['長照', '照顧服務', '照顧服務業'],
+      ['職訓', '職業訓練', '訓練'],
+      ['身障', '身心障礙'],
+      ['中高齡', '45～65 歲', '45~65歲', '45至65歲'],
+      ['高齡', '逾 65 歲', '65 歲以上', '65歲以上', '屆滿 65 歲'],
+      ['先僱後訓', '工作崗位訓練'],
+      ['產攜', '產學訓專班'],
+      ['預聘', '大專青年預聘'],
+      ['職務再設計', '輔具', '改善工作環境']
+    ];
+
+    function buildApiUrl(path) {
+      return path;
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function stripHtmlToText(html) {
+      const div = document.createElement('div');
+      div.innerHTML = String(html ?? '');
+      return (div.textContent || div.innerText || '').replace(/\s+/g, ' ').trim();
+    }
+
+    function sanitizeInlineStyle(rawStyle) {
+      const cleaned = String(rawStyle || '')
+        .replace(/mso-[^;:"']+:[^;:"']+;?/gi, '')
+        .replace(/font-family\s*:[^;:"']+;?/gi, '')
+        .replace(/(?:max-)?width\s*:[^;:"']+;?/gi, '')
+        .replace(/(?:max-)?height\s*:[^;:"']+;?/gi, '')
+        .replace(/position\s*:[^;:"']+;?/gi, '')
+        .trim();
+      return cleaned;
+    }
+
+    function sanitizeRichHtml(rawHtml, options = {}) {
+      const stripAllInlineStyle = Boolean(options.stripAllInlineStyle);
+      const tpl = document.createElement('template');
+      tpl.innerHTML = String(rawHtml ?? '');
+      tpl.content.querySelectorAll('script, style, iframe, object, embed, link, meta, o\\:p').forEach(el => el.remove());
+      tpl.content.querySelectorAll('*').forEach(el => {
+        if (el.tagName && el.tagName.includes(':')) {
+          el.removeAttribute('class');
+        }
+        if (typeof el.className === 'string' && /msonormal/i.test(el.className)) {
+          el.className = el.className.replace(/\bMso[A-Za-z0-9_-]*\b/g, '').trim();
+          if (!el.className) el.removeAttribute('class');
+        }
+        el.removeAttribute('width');
+        el.removeAttribute('height');
+
+        Array.from(el.attributes).forEach(attr => {
+          const name = attr.name.toLowerCase();
+          const val = attr.value.trim().toLowerCase();
+          if (name.startsWith('on') || ((name === 'href' || name === 'src') && val.startsWith('javascript:'))) {
+            el.removeAttribute(attr.name);
+          } else if (name === 'style') {
+            if (stripAllInlineStyle) {
+              el.removeAttribute('style');
+            } else {
+              const safeStyle = sanitizeInlineStyle(attr.value);
+              if (safeStyle) {
+                el.setAttribute('style', safeStyle);
+              } else {
+                el.removeAttribute('style');
+              }
+            }
+          }
+        });
+      });
+      return tpl.innerHTML.trim();
+    }
+
+    function buildDataVersionSignature(planList, codesObj) {
+      const safePlans = Array.isArray(planList) ? planList : [];
+      const compact = safePlans.map(p => ({
+        id: p.id,
+        code: p.code ?? p.num ?? '',
+        category: p.category ?? '',
+        subGroup: p.subGroup ?? '',
+        title: p.title ?? p.name ?? '',
+        summary: p.summary ?? p.desc ?? '',
+        highlight: p.highlight ?? p.amount ?? '',
+        target: p.target ?? '',
+        content: p.content ?? '',
+        dmUrl: p.dmUrl ?? '',
+        dmName: p.dmName ?? '',
+        cardBg: p.cardBg ?? '#ffffff',
+        textColor: p.textColor ?? '#1e293b'
+      }));
+      return JSON.stringify({ plans: compact, customCodes: codesObj || {} });
+    }
+
+    function isUserEditingForm() {
+      const editModal = document.getElementById('editModal');
+      const loginModal = document.getElementById('loginModal');
+      const deleteModal = document.getElementById('deleteConfirmModal');
+      const restoreModal = document.getElementById('restoreDefaultModal');
+      return Boolean(
+        (editModal && !editModal.classList.contains('hidden')) ||
+        (loginModal && !loginModal.classList.contains('hidden')) ||
+        (deleteModal && !deleteModal.classList.contains('hidden')) ||
+        (restoreModal && !restoreModal.classList.contains('hidden'))
+      );
+    }
+
+    function updateServerUpdateBanner() {
+      const banner = document.getElementById('serverUpdateBanner');
+      if (!banner) return;
+      if (hasUnappliedServerUpdate) {
+        banner.classList.remove('hidden');
+      } else {
+        banner.classList.add('hidden');
+      }
+    }
+
+    function updateSyncMetaDisplay(sourceLabel = '') {
+      const metaEl = document.getElementById('syncMetaStatus');
+      if (!metaEl) return;
+      if (!isAdmin) {
+        metaEl.classList.add('hidden');
+        return;
+      }
+      const nowTime = new Date().toLocaleTimeString('zh-TW', { hour12: false, hour: '2-digit', minute: '2-digit' });
+      const labelText = sourceLabel ? `${sourceLabel}・` : '';
+      metaEl.textContent = `${labelText}已同步 ${nowTime}`;
+      metaEl.classList.remove('hidden');
+    }
+
+    function updateRecentDeletedUI() {
+      const btn = document.getElementById('btnRestoreRecentDeleted');
+      const countEl = document.getElementById('recentDeletedCount');
+      if (!btn || !countEl) return;
+      countEl.textContent = String(recentDeletedStack.length);
+      if (isAdmin && recentDeletedStack.length > 0) {
+        btn.classList.remove('hidden');
+      } else {
+        btn.classList.add('hidden');
+      }
+    }
+
+    function showToast(message, options = {}) {
+      const toastEl = document.getElementById('toast');
+      const textEl = document.getElementById('toastText');
+      const undoBtn = document.getElementById('toastUndoBtn');
+      if (!toastEl || !textEl) return;
+
+      textEl.textContent = message;
+      if (undoBtn) {
+        if (options.showUndo) {
+          undoBtn.classList.remove('hidden');
+        } else {
+          undoBtn.classList.add('hidden');
+        }
+      }
+
+      toastEl.classList.remove('hidden');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toastEl.classList.add('hidden');
+        if (undoBtn) undoBtn.classList.add('hidden');
+      }, options.showUndo ? 10000 : 4500);
+    }
+
+    function getRawCode(plan) {
+      if (!plan) return '';
+      const id = String(plan.id ?? '');
+      if (id && Object.prototype.hasOwnProperty.call(customCodes, id)) {
+        return String(customCodes[id] ?? '').trim();
+      }
+      return String(plan.code ?? plan.num ?? '').trim();
+    }
+
+    function extractNumericOrder(codeStr) {
+      const clean = String(codeStr ?? '').trim().replace(/\.+$/, '');
+      if (!clean) return Number.POSITIVE_INFINITY;
+      const num = parseFloat(clean);
+      return Number.isFinite(num) ? num : Number.POSITIVE_INFINITY;
+    }
+
+    function sortPlansByNumberThenUnnumbered(list) {
+      if (!Array.isArray(list)) return [];
+      return [...list].sort((a, b) => {
+        const na = extractNumericOrder(getRawCode(a));
+        const nb = extractNumericOrder(getRawCode(b));
+        if (na !== nb) return na - nb;
+        return String(a?.id ?? '').localeCompare(String(b?.id ?? ''));
+      });
+    }
+
+    function coerceToMainCategory(cat, subGroup, title, desc) {
+      const raw = String(cat ?? '').trim();
+      if (MAIN_CATEGORIES.includes(raw)) return raw;
+      const cleanSub = String(subGroup ?? '').trim();
+      if (cleanSub && Object.prototype.hasOwnProperty.call(SUBGROUP_TO_MAIN_CATEGORY, cleanSub)) {
+        return SUBGROUP_TO_MAIN_CATEGORY[cleanSub];
+      }
+      const combined = `${raw} ${cleanSub} ${title ?? ''} ${desc ?? ''}`;
+      if (/培訓|訓練|專班|產攜|預聘|辦訓|人力提升|投資方案|充電起飛/.test(combined)) return '培訓';
+      if (/留用|退休|繼續僱用|五五|輔導團|職務再設計|充電再出發|減班休息|僱用安定/.test(combined)) return '留用';
+      return '招募';
+    }
+
+    function populateSubGroupPresetSelect(mainCat, currentSubGroup = '') {
+      const selectEl = document.getElementById('editSubGroupPreset');
+      if (!selectEl) return;
+      const validMain = MAIN_CATEGORIES.includes(mainCat) ? mainCat : '招募';
+      const options = SUBGROUP_BY_MAIN_CATEGORY[validMain] || [];
+      const matched = options.includes(String(currentSubGroup || '').trim()) ? String(currentSubGroup || '').trim() : '';
+
+      selectEl.innerHTML = [
+        '<option value="">選擇建議細分類別...</option>',
+        ...options.map(sub => `<option value="${escapeHtml(sub)}" ${sub === matched ? 'selected' : ''}>${escapeHtml(sub)}</option>`)
+      ].join('');
+    }
+
+    function handleCategorySelectionChange() {
+      const catEl = document.getElementById('editPlanCategory');
+      const subInput = document.getElementById('editSubGroup');
+      if (!catEl || !subInput) return;
+      const chosenCat = catEl.value;
+      populateSubGroupPresetSelect(chosenCat, subInput.value);
+      const allowedSubs = SUBGROUP_BY_MAIN_CATEGORY[chosenCat] || [];
+      if (subInput.value.trim() && !allowedSubs.includes(subInput.value.trim()) && allowedSubs.length === 1) {
+        subInput.value = allowedSubs[0];
+      }
+    }
+
+    function applySubGroupPreset(val) {
+      const subInput = document.getElementById('editSubGroup');
+      if (subInput && val) {
+        subInput.value = val;
+      }
+    }
+
+    function resolveDmTargetUrl(plan) {
+      if (!plan) return '';
+      const url = String(plan.dmUrl ?? '').trim();
+      if (url) return url;
+      const dataUrl = String(plan.dmDataUrl ?? '').trim();
+      if (!dataUrl) return '';
+      const key = String(plan.id || plan.title || 'dm');
+      if (blobUrlRegistry.has(key)) return blobUrlRegistry.get(key);
+      if (dataUrl.startsWith('data:')) {
+        try {
+          const [header, base64] = dataUrl.split(',');
+          const mimeMatch = header.match(/data:(.*?);base64/);
+          const mime = mimeMatch ? mimeMatch[1] : 'application/pdf';
+          const binary = atob(base64);
+          const bytes = new Uint8Array(binary.length);
+          for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+          const blob = new Blob([bytes], { type: mime });
+          const blobUrl = URL.createObjectURL(blob);
+          blobUrlRegistry.set(key, blobUrl);
+          return blobUrl;
+        } catch (e) {
+          return dataUrl;
+        }
+      }
+      return dataUrl;
+    }
 
     const YUANLIN_PHONE_TABLE_HTML = `
       <h4>員林就業中心及所屬就業服務台洽詢電話</h4>
@@ -1176,22 +1556,22 @@
         name: '特定行業及照顧服務就業獎勵(補助勞工)',
         title: '特定行業及照顧服務就業獎勵(補助勞工)',
         target: '符合《鼓勵失業勞工受僱特定行業作業要點》（特定製程／特殊時程行業）或《鼓勵失業勞工受僱照顧服務業作業要點》（居家式、社區式、住宿式長照及喘息服務單位）之失業勞工（合併請領最長 18 個月）',
-        amount: '第 1～6 月每月 5,000 元｜第 7～12 月每月 6,000 元｜第 13～18 月每月 7,000 元（最長 18 個月，最高 108,000 元）',
+        amount: '第 1～6 月 5,000 元/月｜第 7～12 月 6,000 元/月｜第 13～18 月 7,000 元/月（最長 18 個月，最高 108,000 元）',
         highlight: '第 1～6 月 5,000 元/月｜第 7～12 月 6,000 元/月｜第 13～18 月 7,000 元/月（最長 18 個月，最高 108,000 元）',
         summary: '合併「特定行業就業獎勵」與「照顧服務就業獎勵」：失業勞工經公立就服機構推介受僱滿 30 日起按月核發 5,000～7,000 元，最長 18 個月、最高 108,000 元。',
         desc: '合併「特定行業就業獎勵」與「照顧服務就業獎勵」：失業勞工經公立就服機構推介受僱滿 30 日起按月核發 5,000～7,000 元，最長 18 個月、最高 108,000 元。',
         content: `<div class="plan-quick-grid">
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>一句話看懂</strong></div>
-              <div class="plan-quick-val">公家推介進入特定行業或照顧服務業並連續工作滿 30 日，每月領 5,000～7,000 元，最長 18 個月、最高 108,000 元。</div>
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>一句話看懂</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">公家推介進入特定行業或照顧服務業並連續工作滿 30 日，每月領 5,000～7,000 元，最長 18 個月、最高 108,000 元。</div>
             </div>
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>誰可以申請</strong></div>
-              <div class="plan-quick-val">符合特定行業（特定製程／特殊時程）或照顧服務業規定之失業勞工，須先經公立就服機構推介並取得推介卡。</div>
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>誰可以申請</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">符合特定行業（特定製程／特殊時程）或照顧服務業規定之失業勞工，須先經公立就服機構推介並取得推介卡。</div>
             </div>
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>申請黃金期限</strong></div>
-              <div class="plan-quick-val">連續受僱每滿 30 日之次日起 90 日內向公立就業服務機構提出申請；兩項合併請領最長以 18 個月為限。</div>
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>申請黃金期限</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">連續受僱每滿 30 日之次日起 90 日內向公立就業服務機構提出申請；兩項合併請領最長以 18 個月為限。</div>
             </div>
           </div>
           <h4>計畫目的與適用對象（特定行業＋照顧服務業）</h4>
@@ -1240,7 +1620,7 @@
           </table>
           <h4>申請流程與關鍵提醒</h4>
           <ul>
-            <li><strong>先推介、再受僱</strong>：務必先向公立就業服務機構辦理求職登記並取得推介卡後再受僱；自行應徵或未先取得推介卡即上工者，不符合請領資格。</li>
+            <li><strong>先推介、再受僱</strong>：務必先向公立就業服務機構辦理求職登記並取得推介卡後再受僱。(注意:自行應徵或未先取得推介卡即上工者，不符合請領資格。)</li>
             <li><strong>申請期限與文件</strong>：於連續受僱每滿 30 日之次日起 90 日內，檢附申請書、身分證明、薪資證明及金融機構存摺影本等向公立就業服務機構提出申請（逾期不受理）。</li>
             <li><strong>併領與限制</strong>：特定行業就業獎勵與照顧服務就業獎勵合併請領最長以 18 個月為限；亦不得與其他相同性質之就業獎勵或津貼重複請領，且須遵守公職人員利益衝突迴避法等相關規定。</li>
           </ul>
@@ -1687,7 +2067,7 @@
         target: '符合資格之高齡求職者／失業者（通常為年滿 65 歲以上高齡失業者，依各班次招生公告為準）',
         amount: '依各分署高齡者專班及《失業者職業訓練實施基準》辦理訓練費用補助與職訓生活津貼',
         highlight: '針對高齡者開設之專屬職前訓練班次，協助重返職場或延續工作參與',
-        summary: '考量高齡者學習節奏與職場需求開設專屬職前訓練班次，協助重返職場或延續工作參與。',
+        summary: '考量高齡者學習節奏與職場需求開設專屬職前訓練專班，協助重返職場或延續工作參與。',
         desc: '針對高齡者開設專屬職前訓練專班，搭配適性課程與輔導協助重返職場，實際班次與補助條件依各分署公告為準。',
         content: `<div class="plan-quick-grid">
             <div class="plan-quick-item">
@@ -1805,22 +2185,22 @@
         name: '青年就業旗艦計畫',
         title: '青年就業旗艦計畫',
         target: '僱用 15～29 歲本國籍青年並指派職場導師進行工作崗位訓練之事業單位／團體／學校',
-        amount: '起薪未達 34,000 元補助 3 個月（最高 36,000 元）；起薪達 34,000 元（含）以上補助 6 個月（最高 54,000 元）；同年度單一單位最高 180 萬元',
+        amount: '起薪達 34,000 元最高補助 54,000 元（6 個月）；未達則最高 36,000 元（3 個月）',
         highlight: '起薪達 34,000 元最高補助 54,000 元（6 個月）；未達則最高 36,000 元（3 個月）',
         summary: '協助 15～29 歲本國籍青年採「先僱後訓」做中學，由職場導師指導，同年度單一單位最高補助 180 萬元。',
-        desc: '針對 15 至 29 歲本國籍青年（排除日間部在學學生）採「先僱用後訓練」做中學，薪資未達 34,000 元補助 3 個月（最高 36,000 元），薪資達 34,000 元（含）以上補助 6 個月（最高 54,000 元），同年度同一訓練單位最高補助 180 萬元。',
+        desc: '協助 15～29 歲本國籍青年採「先僱後訓」做中學，由職場導師指導，同年度單一單位最高補助 180 萬元。',
         content: `<div class="plan-quick-grid">
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>一句話看懂</strong></div>
-              <div class="plan-quick-val">先聘用 15～29 歲青年並派職場導師帶訓，依起薪標準補助 3 或 6 個月，單一單位同年度最高 180 萬元。</div>
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>一句話看懂</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">先聘用 15～29 歲青年並派職場導師帶訓，依起薪標準補助 3 或 6 個月，單一單位同年度最高 180 萬元。</div>
             </div>
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>誰可以申請</strong></div>
-              <div class="plan-quick-val">僱用 15～29 歲本國籍失待業青年（不含日間部在學學生）並指派職場導師辦理工作崗位訓練之事業單位、團體或私立學校。</div>
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>誰可以申請</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">僱用 15～29 歲本國籍失待業青年（不含日間部在學學生）並指派職場導師辦理工作崗位訓練之事業單位、團體或私立學校。</div>
             </div>
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>申請黃金期限</strong></div>
-              <div class="plan-quick-val">須於訓練計畫核定與青年受僱依《青年就業旗艦計畫》規定之期間內辦理並提出申請。</div>
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>申請黃金期限</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">須於訓練計畫核定與青年受僱依《青年就業旗艦計畫》規定之期間內辦理並提出申請。</div>
             </div>
           </div>
           <h4>計畫目的與訓練條件</h4>
@@ -1859,7 +2239,7 @@
             <li>須依規定為受僱青年辦理勞保、就保及職災保，並落實職場導師指導與訓練紀錄。</li>
           </ul>
           ${YUANLIN_PHONE_TABLE_HTML}`,
-        dmUrl: '',
+        dmUrl: 'https://drive.google.com/file/d/1bhEpC_h2QA8GNCemEeg-VmyfkRiGn4hi/view?usp=drive_link',
         dmDataUrl: '',
         dmType: '',
         dmName: '',
@@ -2042,22 +2422,22 @@
         name: '大專青年預聘計畫',
         title: '大專青年預聘計畫',
         target: '正式聘僱大專校院畢業前 1 年本國籍在校生並進行工作崗位訓練之企業',
-        amount: '國家重點產業每名補助企業最高 7.2 萬元、其他產業最高 3.6 萬元（總訓練時數 ≥ 320 小時）；青年畢業後全時留任滿 30 日另發留任獎勵金 1 萬元',
+        amount: '國家重點產業每名補助企業最高 7.2 萬元、其他產業最高 3.6 萬元',
         highlight: '國家重點產業每名補助企業最高 7.2 萬元、其他產業最高 3.6 萬元',
         summary: '正式聘僱大專校院畢業前 1 年在校生進行工作崗位訓練（總訓練時數至少 320 小時），國家重點產業每名最高補助 7.2 萬元、其他產業最高 3.6 萬元。',
-        desc: '正式聘僱大專校院畢業前 1 年本國籍在校生（不含碩、博士生）並指派職場導師進行工作崗位訓練，總訓練時數不得低於 320 小時；國家重點產業每名最高補助企業 7.2 萬元、其他產業每名最高 3.6 萬元；青年畢業後全時留任原單位滿 30 日發給留任獎勵金 1 萬元。',
+        desc: '正式聘僱大專校院畢業前 1 年本國籍在校生（不含碩、博士生）並指派職場導師進行工作崗位訓練（總訓練時數不得低於 320 小時），國家重點產業每名最高補助 7.2 萬元、其他產業每名最高 3.6 萬元。',
         content: `<div class="plan-quick-grid">
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>一句話看懂</strong></div>
-              <div class="plan-quick-val">大四／畢業前 1 年先聘僱並帶訓，企業最高補 7.2 萬（其他產業 3.6 萬），畢業後留任滿 30 日青年另領 1 萬元。</div>
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>一句話看懂</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">大四／畢業前 1 年先聘僱並帶訓，企業最高補 7.2 萬（其他產業 3.6 萬），畢業後留任滿 30 日青年另領 1 萬元。</div>
             </div>
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>誰可以申請</strong></div>
-              <div class="plan-quick-val">正式聘僱大專校院畢業前 1 年本國籍在校生（不含碩、博士生）並指派職場導師辦理工作崗位訓練之企業。</div>
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>誰可以申請</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">正式聘僱大專校院畢業前 1 年本國籍在校生（不含碩、博士生）並指派職場導師辦理工作崗位訓練之企業。</div>
             </div>
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>申請黃金期限</strong></div>
-              <div class="plan-quick-val">須依勞動部《大專青年預聘計畫》公告之申請與核銷期限提出，總訓練時數不得低於 320 小時。</div>
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>申請黃金期限</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">須依勞動部《大專青年預聘計畫》公告之申請與核銷期限提出，總訓練時數不得低於 320 小時。</div>
             </div>
           </div>
           <h4>補助與留任獎勵標準表</h4>
@@ -2094,7 +2474,7 @@
             <li>聘僱期間須依法辦理勞保、就保、職災保及提繳勞工退休金，詳細資格與申請期限以勞動部《大專青年預聘計畫》公告為準。</li>
           </ul>
           ${YUANLIN_PHONE_TABLE_HTML}`,
-        dmUrl: '',
+        dmUrl: 'https://drive.google.com/file/d/1FzCbBEEzyGyvzWrl5DwvlbAG-qTQcnRE/view?usp=drive_link',
         dmDataUrl: '',
         dmType: '',
         dmName: '',
@@ -2110,22 +2490,22 @@
         name: '小型企業人力提升計畫',
         title: '小型企業人力提升計畫',
         target: '僱用受僱勞工參加就業保險人數 50 人以下之民間投保單位',
-        amount: '第 1～3 年 100% 全額補助；第 4 年起依年資與規定核算補助比率／額度（AI 或淨零碳排課程依規定辦理）',
+        amount: '50 人以下小型企業人才培訓輔導與課程費用補助（第 1～3 年 100% 全額補助）',
         highlight: '50 人以下小型企業人才培訓輔導與課程費用補助（第 1～3 年 100% 全額補助）',
         summary: '專為就保人數 50 人以下小型企業設計，協助建立人才培訓制度與辦理在職訓練課程。',
-        desc: '專為就保人數 50 人以下小型企業設計，由政府補助人才培訓輔導與訓練課程費用，協助建立人才培訓制度。',
+        desc: '專為就保人數 50 人以下小型企業設計，協助建立人才培訓制度與辦理在職訓練課程。',
         content: `<div class="plan-quick-grid">
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>一句話看懂</strong></div>
-              <div class="plan-quick-val">就保 50 人以下小型企業辦員工訓練與顧問輔導，前 3 年 100% 全額補助，第 4 年起依年資與規定核算。</div>
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>一句話看懂</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">就保 50 人以下小型企業辦員工訓練與顧問輔導，前 3 年 100% 全額補助，第 4 年起依年資與規定核算。</div>
             </div>
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>誰可以申請</strong></div>
-              <div class="plan-quick-val">僱用受僱勞工參加就業保險人數 50 人以下之民間投保單位。</div>
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>誰可以申請</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">僱用受僱勞工參加就業保險人數 50 人以下之民間投保單位。</div>
             </div>
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>申請黃金期限</strong></div>
-              <div class="plan-quick-val">依各分署公告之年度受理期間提出計畫申請，經核定後始得開課。</div>
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>申請黃金期限</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">依各分署公告之年度受理期間提出計畫申請，經核定後始得開課。</div>
             </div>
           </div>
           <h4>計畫目的與補助規定表</h4>
@@ -2171,22 +2551,22 @@
         name: '企業人力資源提升計畫',
         title: '企業人力資源提升計畫',
         target: '就保 51 人以上（或具 TTQS 合格等條件之未滿 51 人）事業單位',
-        amount: '個別型最高 95 萬元、聯合型 190 萬元、產業推升型 200 萬元（補助比率 50%～70%）',
+        amount: '個別型最高 95 萬、聯合型 190 萬、產業推升型 200 萬（補助比率 50%～70%）',
         highlight: '個別型最高 95 萬、聯合型 190 萬、產業推升型 200 萬（補助比率 50%～70%）',
         summary: '補助事業單位辦理在職員工進修訓練，個別型最高 95 萬、聯合型 190 萬、產業推升型 200 萬，補助比率 50%～70%。',
-        desc: '協助就保 51 人以上（或符合資格之未滿 51 人）事業單位辦理在職員工訓練，個別型最高 95 萬元、聯合型最高 190 萬元、產業推升型最高 200 萬元；一般課程最高補助 50%，政策性課程、青年／中高齡參訓或數位轉型等符合規定者最高補助 70%。',
+        desc: '補助事業單位辦理在職員工進修訓練，個別型最高 95 萬、聯合型 190 萬、產業推升型 200 萬，補助比率 50%～70%。',
         content: `<div class="plan-quick-grid">
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>一句話看懂</strong></div>
-              <div class="plan-quick-val">中大型企業或符合資格單位辦員工訓練，補助比率 50%～70%，個別型最高 95 萬、聯合型 190 萬、產業推升型 200 萬。</div>
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>一句話看懂</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">中大型企業或符合資格單位辦員工訓練，補助比率 50%～70%，個別型最高 95 萬、聯合型 190 萬、產業推升型 200 萬。</div>
             </div>
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>誰可以申請</strong></div>
-              <div class="plan-quick-val">就保 51 人以上事業單位（或符合 TTQS 等規定條件之未滿 51 人單位）。</div>
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>誰可以申請</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">就保 51 人以上事業單位（或符合 TTQS 等規定條件之未滿 51 人單位）。</div>
             </div>
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>申請黃金期限</strong></div>
-              <div class="plan-quick-val">依各分署公告之受理期間提出申請（通常於前一年底受理次年度計畫，實際依分署公告為準）。</div>
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>申請黃金期限</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">依各分署公告之受理期間提出申請（通常於前一年底受理次年度計畫，實際依分署公告為準）。</div>
             </div>
           </div>
           <h4>計畫類型與補助上限表</h4>
@@ -2219,7 +2599,7 @@
             </tbody>
           </table>
           ${YUANLIN_PHONE_TABLE_HTML}`,
-        dmUrl: '',
+        dmUrl: 'https://drive.google.com/file/d/1rlmSwjQ0NXbNiqcxHT9xaQHo8FpgAaZh/view?usp=drive_link',
         dmDataUrl: '',
         dmType: '',
         dmName: '',
@@ -2235,22 +2615,22 @@
         name: '充電起飛計畫-協助事業單位辦理在職訓練',
         title: '充電起飛計畫-協助事業單位辦理在職訓練',
         target: '因應貿易自由化受影響產業之就業保險民間投保事業單位',
-        amount: '個別型最高 200 萬元、聯合型 300 萬元、加強輔導／受衝擊受損產業最高 350 萬元',
+        amount: '企業辦訓最高補助 200 萬～350 萬元（依計畫類型）',
         highlight: '企業辦訓最高補助 200 萬～350 萬元（依計畫類型）',
         summary: '協助因應貿易自由化受影響產業之事業單位辦理在職訓練，個別型最高 200 萬、聯合型 300 萬、受衝擊產業最高 350 萬。',
-        desc: '針對因應貿易自由化受影響產業之事業單位，補助辦理在職員工訓練課程，個別型最高 200 萬元、聯合型 300 萬元、加強輔導／受衝擊受損產業最高 350 萬元。',
+        desc: '協助因應貿易自由化受影響產業之事業單位辦理在職訓練，個別型最高 200 萬、聯合型 300 萬、受衝擊產業最高 350 萬。',
         content: `<div class="plan-quick-grid">
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>一句話看懂</strong></div>
-              <div class="plan-quick-val">協助受貿易自由化影響產業的企業辦在職訓練，個別型最高 200 萬、聯合型 300 萬、受衝擊／受損產業最高 350 萬。</div>
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>一句話看懂</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">協助受貿易自由化影響產業的企業辦在職訓練，個別型最高 200 萬、聯合型 300 萬、受衝擊／受損產業最高 350 萬。</div>
             </div>
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>誰可以申請</strong></div>
-              <div class="plan-quick-val">符合因應貿易自由化產業調整支援方案適用範圍之就保民間投保事業單位。</div>
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>誰可以申請</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">符合因應貿易自由化產業調整支援方案適用範圍之就保民間投保事業單位。</div>
             </div>
             <div class="plan-quick-item">
-              <div class="plan-quick-label"><strong>申請黃金期限</strong></div>
-              <div class="plan-quick-val">依勞動部勞動力發展署《充電起飛計畫》公告之受理期間提出申請。</div>
+              <div class="plan-quick-label" style="font-weight: 700;"><strong>申請黃金期限</strong></div>
+              <div class="plan-quick-val" style="font-weight: 400;">依勞動部勞動力發展署《充電起飛計畫》公告之受理期間提出申請。</div>
             </div>
           </div>
           <h4>補助額度標準表</h4>
@@ -2281,7 +2661,7 @@
             </tbody>
           </table>
           ${YUANLIN_PHONE_TABLE_HTML}`,
-        dmUrl: '',
+        dmUrl: 'https://drive.google.com/file/d/1rlmSwjQ0NXbNiqcxHT9xaQHo8FpgAaZh/view?usp=drive_link',
         dmDataUrl: '',
         dmType: '',
         dmName: '',
@@ -2710,7 +3090,7 @@
           </div>
           <h4>輔導重點</h4>
           <ul>
-            <li>結合專業顧問資源輔導事業單位推動中高齡及高齡者友善職場、職務調整、人力資源管理與留才措施，協助企業降低資深人力流失，詳細申請方式依勞動部及各分署公告為準。</li>
+            <li>結合專業顧問資源輔導事業單位推動中高齡及高齡者友善職場、職務調整與留才措施，協助企業降低資深人力流失，詳細申請方式依勞動部及各分署公告為準。</li>
           </ul>
           ${YUANLIN_PHONE_TABLE_HTML}`,
         dmUrl: 'https://drive.google.com/file/d/19aFV9wGi2ovbqFSBsj-XKoIPxdbJiR4q/view?usp=drive_link',
@@ -2907,194 +3287,152 @@
       'plan-05': '5.',
       plan_6: '6',
       plan_7: '7',
+      plan_8: '8',
+      plan_9: '9',
+      plan_10: '10',
+      plan_11: '11',
+      plan_12: '12',
+      plan_13: '13',
+      plan_14: '14',
+      plan_15: '15',
+      plan_16: '16',
+      plan_17: '17',
       plan_18: '18',
+      plan_19: '19',
+      plan_20: '20',
+      plan_21: '21',
       plan_22: '22',
+      plan_23: '23',
+      plan_24: '24',
+      plan_25: '25',
+      plan_26: '26',
+      plan_27: '27',
       plan_28: '28',
+      plan_29: '29',
+      plan_30: '30',
+      plan_31: '31',
       plan_32: '32',
       plan_33: '33',
       plan_34: '34',
+      plan_35: '35',
+      plan_36: '36',
       plan_37: '37'
     };
     let currentCategory = 'ALL';
+    let gridLayoutMode = 'single'; // 'single'（一排一個方案） | 'triple'（一排三個方案）
     let isAdmin = false;
     let adminUsername = '';
     let activeDetailPlanId = null;
     let toastTimer = null;
     let currentEditorMode = 'visual';
+    let pendingDeletePlanId = null;
+    let lastDeletedRecord = null;
+    const recentDeletedStack = [];
+    let latestServerVersionSig = '';
+    let hasUnappliedServerUpdate = false;
+    let hasPendingImportedData = false;
+    let autoSyncTimer = null;
     const expandedCardIds = new Set();
     const blobUrlRegistry = new Map();
 
-    function buildApiUrl(path) {
-      return new URL(path, window.location.origin).toString();
-    }
-
-    function escapeHtml(val) {
-      return String(val ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
-
-    function sanitizeRichHtml(rawHtml) {
-      const html = String(rawHtml ?? '').trim();
-      if (!html) return '';
+    function loadGridLayoutMode() {
       try {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(`<div>${html}</div>`, 'text/html');
-        const container = doc.body.firstElementChild;
-        if (!container) return escapeHtml(html);
-
-        container.querySelectorAll('script, iframe, object, embed, link, meta, style').forEach(el => el.remove());
-        container.querySelectorAll('*').forEach(el => {
-          [...el.attributes].forEach(attr => {
-            if (/^on/i.test(attr.name) || (/^(href|src|xlink:href)$/i.test(attr.name) && /^javascript:/i.test(attr.value.trim()))) {
-              el.removeAttribute(attr.name);
-            }
-          });
-        });
-
-        container.querySelectorAll('.plan-quick-label').forEach(el => {
-          const text = String(el.textContent || '').trim();
-          if (/一句話看懂|誰可以申請|申請黃金期限|申請期限/.test(text)) {
-            el.style.fontWeight = '700';
-            if (!el.querySelector('strong')) {
-              el.innerHTML = `<strong>${el.innerHTML}</strong>`;
-            }
-          }
-        });
-
-        container.querySelectorAll('.plan-quick-val').forEach(el => {
-          el.style.fontWeight = '400';
-          el.querySelectorAll('strong, b').forEach(boldEl => {
-            const parent = boldEl.parentNode;
-            while (boldEl.firstChild) {
-              parent.insertBefore(boldEl.firstChild, boldEl);
-            }
-            boldEl.remove();
-          });
-        });
-
-        return container.innerHTML;
-      } catch (e) {
-        return escapeHtml(html);
-      }
-    }
-
-    function stripHtmlToText(rawHtml) {
-      if (!rawHtml) return '';
-      const div = document.createElement('div');
-      div.innerHTML = sanitizeRichHtml(rawHtml);
-      return (div.textContent || div.innerText || '').trim();
-    }
-
-    function resolveDmTargetUrl(plan) {
-      const rawUrl = String(plan?.dmUrl || '').trim();
-      const dataUrl = String(plan?.dmDataUrl || '').trim();
-      const source = rawUrl || dataUrl;
-      if (!source) return '';
-
-      if (source.startsWith('data:')) {
-        const cacheKey = `${plan.id}_${source.slice(0, 64)}_${source.length}`;
-        if (blobUrlRegistry.has(cacheKey)) {
-          return blobUrlRegistry.get(cacheKey);
+        const saved = localStorage.getItem(LAYOUT_STORAGE_KEY);
+        if (saved === 'single' || saved === 'triple') {
+          gridLayoutMode = saved;
         }
-        try {
-          const commaIdx = source.indexOf(',');
-          if (commaIdx !== -1) {
-            const meta = source.slice(5, commaIdx);
-            const isBase64 = /;base64/i.test(meta);
-            const mimeMatch = meta.match(/^([^;]+)/);
-            const mimeType = mimeMatch ? mimeMatch[1] : 'application/pdf';
-            const body = source.slice(commaIdx + 1);
-            const binaryStr = isBase64 ? atob(body) : decodeURIComponent(body);
-            const len = binaryStr.length;
-            const bytes = new Uint8Array(len);
-            for (let i = 0; i < len; i++) {
-              bytes[i] = binaryStr.charCodeAt(i);
-            }
-            const blob = new Blob([bytes], { type: mimeType });
-            const blobUrl = URL.createObjectURL(blob);
-            blobUrlRegistry.set(cacheKey, blobUrl);
-            return blobUrl;
-          }
-        } catch (err) {
-          console.warn('轉換內嵌 DM Data URL 失敗:', err);
-        }
-      }
-
-      return source;
+      } catch (e) {}
+      syncGridLayoutUI();
     }
 
-    function showToast(msg) {
-      const el = document.getElementById('toast');
-      el.textContent = msg;
-      el.classList.remove('hidden');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => el.classList.add('hidden'), 3200);
+    function setGridLayoutMode(mode) {
+      gridLayoutMode = mode === 'triple' ? 'triple' : 'single';
+      try {
+        localStorage.setItem(LAYOUT_STORAGE_KEY, gridLayoutMode);
+      } catch (e) {}
+      syncGridLayoutUI();
+      renderPlans();
     }
 
-    function coerceToMainCategory(rawCategory, subGroupText = '', titleText = '', descText = '') {
-      const cat = String(rawCategory || '').trim();
-      if (cat === '招募' || cat === '培訓' || cat === '留用') {
-        return cat;
+    function syncGridLayoutUI() {
+      const grid = document.getElementById('plansGrid');
+      const btnSingle = document.getElementById('btnLayoutSingle');
+      const btnTriple = document.getElementById('btnLayoutTriple');
+
+      if (grid) {
+        grid.className = gridLayoutMode === 'triple'
+          ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
+          : 'grid grid-cols-1 gap-4';
       }
-      const combined = `${cat} ${subGroupText} ${titleText} ${descText}`;
-      if (/留用|繼續僱用|職務再設計|僱用安定|減班休息|傳承|職場支持輔導費|企業輔導團/.test(combined)) {
-        return '留用';
-      }
-      if (/培訓|訓練|專班|產攜|預聘|領航|旗艦|就業通|人提|充電|委接|包班|產業人才投資/.test(combined)) {
-        return '培訓';
-      }
-      return '招募';
-    }
 
-    function getRawCode(plan) {
-      if (plan && Object.prototype.hasOwnProperty.call(customCodes, plan.id)) {
-        return String(customCodes[plan.id] ?? '').trim();
-      }
-      return String(plan?.code ?? plan?.num ?? '').trim();
-    }
-
-    function parseSortNumber(codeStr) {
-      const cleaned = String(codeStr || '').trim().replace(/\.+$/, '');
-      if (!cleaned) return null;
-      const num = Number(cleaned);
-      return Number.isFinite(num) && /^\d+(\.\d+)?$/.test(cleaned) ? num : null;
-    }
-
-    function sortPlansByNumberThenUnnumbered(list) {
-      return [...list].sort((a, b) => {
-        const codeA = getRawCode(a);
-        const codeB = getRawCode(b);
-        const hasA = codeA !== '';
-        const hasB = codeB !== '';
-
-        if (hasA && !hasB) return -1;
-        if (!hasA && hasB) return 1;
-        if (!hasA && !hasB) return 0;
-
-        const numA = parseSortNumber(codeA);
-        const numB = parseSortNumber(codeB);
-
-        if (numA !== null && numB !== null) {
-          if (numA !== numB) return numA - numB;
-        } else if (numA !== null && numB === null) {
-          return -1;
-        } else if (numA === null && numB !== null) {
-          return 1;
+      if (btnSingle && btnTriple) {
+        if (gridLayoutMode === 'triple') {
+          btnTriple.className = 'px-3 py-1 rounded-md text-xs font-bold bg-[#0f294a] text-white transition cursor-pointer';
+          btnSingle.className = 'px-3 py-1 rounded-md text-xs font-bold text-[#075985] hover:bg-sky-100 transition cursor-pointer';
         } else {
-          const cmp = codeA.localeCompare(codeB, 'zh-Hant', { numeric: true });
-          if (cmp !== 0) return cmp;
+          btnSingle.className = 'px-3 py-1 rounded-md text-xs font-bold bg-[#0f294a] text-white transition cursor-pointer';
+          btnTriple.className = 'px-3 py-1 rounded-md text-xs font-bold text-[#075985] hover:bg-sky-100 transition cursor-pointer';
+        }
+      }
+    }
+
+    function dismissServerUpdateBanner() {
+      hasUnappliedServerUpdate = false;
+      updateServerUpdateBanner();
+    }
+
+    async function applyLatestServerUpdate() {
+      hasUnappliedServerUpdate = false;
+      updateServerUpdateBanner();
+      await fetchPlansFromServer(true);
+    }
+
+    async function pollServerForUpdates() {
+      if (!CAN_USE_SERVER_API || document.hidden) return;
+      try {
+        const res = await fetch(buildApiUrl('/api/plans'), { credentials: 'same-origin' });
+        const data = await res.json();
+        if (!res.ok || !data.ok) return;
+
+        const serverPlans = normalizePlansList(data.plans);
+        const effectivePlans = serverPlans.length > 0 ? serverPlans : normalizePlansList(DEFAULT_PLANS);
+        const effectiveCodes = (data.customCodes && typeof data.customCodes === 'object') ? data.customCodes : {};
+        const nextSig = buildDataVersionSignature(effectivePlans, effectiveCodes);
+
+        if (!latestServerVersionSig) {
+          latestServerVersionSig = nextSig;
+          return;
         }
 
-        const idxA = DEFAULT_PLANS.findIndex(p => String(p.id) === String(a.id));
-        const idxB = DEFAULT_PLANS.findIndex(p => String(p.id) === String(b.id));
-        if (idxA !== -1 && idxB !== -1) return idxA - idxB;
-        if (idxA !== -1) return -1;
-        if (idxB !== -1) return 1;
-        return 0;
+        if (nextSig !== latestServerVersionSig) {
+          latestServerVersionSig = nextSig;
+          if (isUserEditingForm()) {
+            hasUnappliedServerUpdate = true;
+            updateServerUpdateBanner();
+            showToast('伺服器已有最新資料更新，關閉編輯視窗後即可點選更新');
+          } else {
+            plans = effectivePlans;
+            customCodes = effectiveCodes;
+            savePreviewCache();
+            hasUnappliedServerUpdate = false;
+            updateServerUpdateBanner();
+            updateSyncMetaDisplay(data.source === 'seed' ? '種子檔' : '伺服器');
+            renderPlans();
+            showToast('已自動同步伺服器最新計畫資料');
+          }
+        }
+      } catch (err) {
+        // 背景輪詢失敗時靜默略過，不干擾使用者操作
+      }
+    }
+
+    function startBackgroundUpdateWatcher() {
+      if (autoSyncTimer) clearInterval(autoSyncTimer);
+      autoSyncTimer = setInterval(pollServerForUpdates, 30000);
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && CAN_USE_SERVER_API) {
+          pollServerForUpdates();
+        }
       });
     }
 
@@ -3111,7 +3449,7 @@
       const contentHtml = String(raw.content || fallbackDefault?.content || raw.desc || '');
       const titleVal = String(raw.title || raw.name || fallbackDefault?.title || '未命名計畫').trim();
       const rawCode = String(raw.code ?? raw.num ?? fallbackDefault?.code ?? '').trim();
-      const subGroupVal = String(raw.subGroup || fallbackDefault?.subGroup || '').trim();
+      const subGroupVal = String(raw.subGroup ?? fallbackDefault?.subGroup ?? '').trim();
       const summaryVal = String(raw.summary || '').trim() || String(fallbackDefault?.summary || '').trim();
       const descVal = isCleanPlainDesc(raw.desc) ? String(raw.desc).trim() : (summaryVal || String(fallbackDefault?.desc || '').trim());
 
@@ -3179,6 +3517,10 @@
       const btnLogin = document.getElementById('btnAdminLogin');
       const btnLogout = document.getElementById('btnAdminLogout');
       const btnAdd = document.getElementById('btnAddPlan');
+      const btnSync = document.getElementById('btnSyncServer');
+      const btnRestore = document.getElementById('btnRestoreDefaultPlans');
+      const btnImport = document.getElementById('btnImportJson');
+      const btnExport = document.getElementById('btnExportJson');
       const modeSuffix = CAN_USE_SERVER_API ? '' : '（預覽模式）';
 
       if (isAdmin) {
@@ -3187,13 +3529,24 @@
         btnLogin.classList.add('hidden');
         btnLogout.classList.remove('hidden');
         btnAdd.classList.remove('hidden');
+        if (btnSync) btnSync.classList.remove('hidden');
+        if (btnRestore) btnRestore.classList.remove('hidden');
+        if (btnImport) btnImport.classList.remove('hidden');
+        if (btnExport) btnExport.classList.remove('hidden');
+        updateSyncMetaDisplay('已連線');
       } else {
         badge.textContent = `訪客檢視模式${modeSuffix}`;
         badge.className = 'px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-200 border border-slate-700';
         btnLogin.classList.remove('hidden');
         btnLogout.classList.add('hidden');
         btnAdd.classList.add('hidden');
+        if (btnSync) btnSync.classList.add('hidden');
+        if (btnRestore) btnRestore.classList.add('hidden');
+        if (btnImport) btnImport.classList.add('hidden');
+        if (btnExport) btnExport.classList.add('hidden');
+        updateSyncMetaDisplay('');
       }
+      updateRecentDeletedUI();
       renderPlans();
     }
 
@@ -3264,8 +3617,13 @@
         adminUsername = data.username || username;
         hideLoginModal();
         syncAuthUI();
-        await fetchPlansFromServer(false);
-        showToast(data.message || '管理者登入成功');
+        if (hasPendingImportedData) {
+          hasPendingImportedData = false;
+          await persistPlansToServer(plans, customCodes, `登入成功！已自動將先前匯入的 ${plans.length} 筆計畫同步寫入伺服器`);
+        } else {
+          await fetchPlansFromServer(false);
+          showToast(data.message || '管理者登入成功');
+        }
       } catch (err) {
         showToast('登入時發生網路錯誤');
       }
@@ -3303,6 +3661,12 @@
         const serverPlans = normalizePlansList(data.plans);
         plans = serverPlans.length > 0 ? serverPlans : normalizePlansList(DEFAULT_PLANS);
         customCodes = (data.customCodes && typeof data.customCodes === 'object') ? data.customCodes : {};
+        latestServerVersionSig = buildDataVersionSignature(plans, customCodes);
+        hasUnappliedServerUpdate = false;
+        hasPendingImportedData = false;
+        savePreviewCache();
+        updateServerUpdateBanner();
+        updateSyncMetaDisplay(data.source === 'seed' ? '種子檔' : '線上檔');
         renderPlans();
         if (notify) showToast(`已從伺服器同步最新資料（共 ${plans.length} 筆計畫）`);
       } catch (err) {
@@ -3339,9 +3703,16 @@
 
       plans = orderedPlans;
       customCodes = nextCodes;
+      latestServerVersionSig = buildDataVersionSignature(plans, customCodes);
+      hasUnappliedServerUpdate = false;
+      hasPendingImportedData = false;
       savePreviewCache();
+      updateServerUpdateBanner();
+      updateSyncMetaDisplay('已同步');
       renderPlans();
-      showToast(successText || data.message || '已同步更新至伺服器');
+      if (successText) {
+        showToast(successText || data.message || '已同步更新至伺服器');
+      }
       return true;
     }
 
@@ -3358,6 +3729,44 @@
 
     function getPlanHighlight(plan) {
       return String(plan?.highlight || plan?.amount || '').trim();
+    }
+
+    function expandTermWithSynonyms(token) {
+      const clean = String(token || '').trim().toLowerCase();
+      if (!clean) return [];
+      const expanded = new Set([clean]);
+      SEARCH_SYNONYM_GROUPS.forEach(group => {
+        const lowerGroup = group.map(item => String(item).toLowerCase());
+        if (lowerGroup.some(term => term.includes(clean) || clean.includes(term))) {
+          lowerGroup.forEach(term => expanded.add(term));
+        }
+      });
+      return Array.from(expanded);
+    }
+
+    function matchesSearchQuery(plan, mainCat, rawQuery) {
+      const tokens = String(rawQuery || '').trim().split(/\s+/).filter(Boolean);
+      if (tokens.length === 0) return true;
+
+      const haystack = [
+        getRawCode(plan),
+        mainCat,
+        plan.subGroup,
+        getPlanTitle(plan),
+        plan.target,
+        plan.amount,
+        plan.highlight,
+        plan.summary,
+        plan.desc,
+        stripHtmlToText(plan.content),
+        plan.dmUrl,
+        plan.dmName
+      ].join(' ').toLowerCase();
+
+      return tokens.every(token => {
+        const candidates = expandTermWithSynonyms(token);
+        return candidates.some(term => haystack.includes(term));
+      });
     }
 
     function setCategoryFilter(category) {
@@ -3429,7 +3838,7 @@
 
     function renderPlans() {
       const grid = document.getElementById('plansGrid');
-      const kw = document.getElementById('searchInput').value.trim().toLowerCase();
+      const kw = document.getElementById('searchInput').value.trim();
 
       const ordered = sortPlansByNumberThenUnnumbered(plans);
       const filtered = ordered.filter(plan => {
@@ -3437,22 +3846,7 @@
         if (currentCategory !== 'ALL' && mainCat !== currentCategory) {
           return false;
         }
-        if (!kw) return true;
-        const haystack = [
-          getRawCode(plan),
-          mainCat,
-          plan.subGroup,
-          getPlanTitle(plan),
-          plan.target,
-          plan.amount,
-          plan.highlight,
-          plan.summary,
-          plan.desc,
-          stripHtmlToText(plan.content),
-          plan.dmUrl,
-          plan.dmName
-        ].join(' ').toLowerCase();
-        return haystack.includes(kw);
+        return matchesSearchQuery(plan, mainCat, kw);
       });
 
       document.getElementById('visibleCount').textContent = filtered.length;
@@ -3677,6 +4071,27 @@
       }
     }
 
+    function cleanVisualEditorStyles() {
+      focusVisualEditor();
+      const visualEl = document.getElementById('editPlanVisualEditor');
+      if (!visualEl) return;
+      visualEl.innerHTML = sanitizeRichHtml(visualEl.innerHTML, { stripAllInlineStyle: true });
+      syncVisualToTextarea();
+      showToast('已清理多餘行內樣式並整理版面');
+    }
+
+    function handleVisualEditorPaste(event) {
+      const clipboardData = event.clipboardData || window.clipboardData;
+      if (!clipboardData) return;
+      const htmlData = clipboardData.getData('text/html');
+      if (!htmlData) return;
+
+      event.preventDefault();
+      const cleanedHtml = sanitizeRichHtml(htmlData, { stripAllInlineStyle: false });
+      document.execCommand('insertHTML', false, cleanedHtml);
+      syncVisualToTextarea();
+    }
+
     function resetEditorToStandardTemplate() {
       const currentPlanObj = {
         summary: document.getElementById('editPlanSummary')?.value || '',
@@ -3817,7 +4232,8 @@
         document.getElementById('editPlanId').value = '';
         document.getElementById('editPlanNum').value = '';
         document.getElementById('editPlanCategory').value = '招募';
-        document.getElementById('editSubGroup').value = '';
+        document.getElementById('editSubGroup').value = '招募人才類';
+        populateSubGroupPresetSelect('招募', '招募人才類');
         document.getElementById('editPlanName').value = '';
         document.getElementById('editPlanAmount').value = '';
         document.getElementById('editPlanSummary').value = '';
@@ -3832,13 +4248,15 @@
       } else {
         const plan = plans.find(p => String(p.id) === String(planId));
         if (!plan) return;
+        const mainCat = coerceToMainCategory(plan.category, plan.subGroup, getPlanTitle(plan), plan.desc);
         const existingContent = buildFormattedContentBody(plan) || String(plan.content || plan.desc || '').trim();
         const initialContentHtml = existingContent || buildStandardPlanTemplate(plan);
         document.getElementById('editModalHeading').textContent = `編輯計畫｜${getPlanTitle(plan)}`;
         document.getElementById('editPlanId').value = plan.id;
         document.getElementById('editPlanNum').value = getRawCode(plan);
-        document.getElementById('editPlanCategory').value = coerceToMainCategory(plan.category, plan.subGroup, getPlanTitle(plan), plan.desc);
+        document.getElementById('editPlanCategory').value = mainCat;
         document.getElementById('editSubGroup').value = plan.subGroup || '';
+        populateSubGroupPresetSelect(mainCat, plan.subGroup || '');
         document.getElementById('editPlanName').value = String(plan.title || plan.name || '').trim();
         document.getElementById('editPlanAmount').value = getPlanHighlight(plan);
         document.getElementById('editPlanSummary').value = String(plan.summary || plan.desc || '').trim();
@@ -3881,7 +4299,7 @@
       const titleVal = document.getElementById('editPlanName').value.trim();
       const amountVal = document.getElementById('editPlanAmount').value.trim();
       const summaryVal = document.getElementById('editPlanSummary').value.trim();
-      const contentVal = document.getElementById('editPlanContent').value.trim();
+      const contentVal = sanitizeRichHtml(document.getElementById('editPlanContent').value.trim());
       const plainSummary = summaryVal || stripHtmlToText(contentVal).slice(0, 180);
 
       const updated = {
@@ -3924,24 +4342,138 @@
       if (!isAdmin) return;
       const planId = document.getElementById('editPlanId').value.trim();
       if (!planId) return;
+      const targetPlan = plans.find(p => String(p.id) === planId);
+      if (!targetPlan) return;
+
+      pendingDeletePlanId = planId;
+      document.getElementById('deleteConfirmTargetName').textContent = `即將刪除：${getPlanTitle(targetPlan)}`;
+      document.getElementById('deleteConfirmModal').classList.remove('hidden');
+    }
+
+    function hideDeleteConfirmModal() {
+      document.getElementById('deleteConfirmModal').classList.add('hidden');
+      pendingDeletePlanId = null;
+    }
+
+    function closeDeleteConfirmModal(e) {
+      if (e.target.id === 'deleteConfirmModal') hideDeleteConfirmModal();
+    }
+
+    async function confirmDeletePlan() {
+      if (!isAdmin || !pendingDeletePlanId) return;
+      const planId = pendingDeletePlanId;
+      const deletedPlan = plans.find(p => String(p.id) === planId);
+      const deletedCode = Object.prototype.hasOwnProperty.call(customCodes, planId) ? customCodes[planId] : null;
 
       const nextPlans = plans.filter(p => String(p.id) !== planId);
       const nextCodes = { ...customCodes };
       delete nextCodes[planId];
 
       try {
-        await persistPlansToServer(nextPlans, nextCodes, '已刪除該計畫並同步至伺服器');
+        await persistPlansToServer(nextPlans, nextCodes, '');
+        if (deletedPlan) {
+          const snapshot = {
+            plan: JSON.parse(JSON.stringify(deletedPlan)),
+            code: deletedCode
+          };
+          lastDeletedRecord = snapshot;
+          recentDeletedStack.unshift(snapshot);
+          if (recentDeletedStack.length > 5) {
+            recentDeletedStack.length = 5;
+          }
+          updateRecentDeletedUI();
+        }
+        hideDeleteConfirmModal();
         hideEditModal();
+        showToast(`已刪除「${deletedPlan ? getPlanTitle(deletedPlan) : planId}」（10 秒內可點右側復原）`, { showUndo: true });
       } catch (err) {
+        hideDeleteConfirmModal();
         showToast(err.message || '刪除失敗');
       }
     }
 
+    async function restoreDeletedSnapshot(snapshot) {
+      if (!isAdmin || !snapshot || !snapshot.plan) return;
+      const restoredPlan = snapshot.plan;
+      const restoredCode = snapshot.code;
+      const exists = plans.some(p => String(p.id) === String(restoredPlan.id));
+      const nextPlans = exists ? plans : [...plans, restoredPlan];
+      const nextCodes = { ...customCodes };
+      if (restoredCode !== null && restoredCode !== undefined) {
+        nextCodes[restoredPlan.id] = restoredCode;
+      }
+
+      try {
+        await persistPlansToServer(nextPlans, nextCodes, `已成功復原「${getPlanTitle(restoredPlan)}」並同步至伺服器！`);
+        const idx = recentDeletedStack.findIndex(item => String(item.plan?.id) === String(restoredPlan.id));
+        if (idx >= 0) recentDeletedStack.splice(idx, 1);
+        if (lastDeletedRecord && String(lastDeletedRecord.plan?.id) === String(restoredPlan.id)) {
+          lastDeletedRecord = null;
+        }
+        updateRecentDeletedUI();
+      } catch (err) {
+        showToast(err.message || '復原失敗');
+      }
+    }
+
+    async function undoLastDeletedPlan() {
+      if (!lastDeletedRecord) return;
+      await restoreDeletedSnapshot(lastDeletedRecord);
+    }
+
+    async function restoreMostRecentDeletedPlan() {
+      if (!isAdmin || recentDeletedStack.length === 0) return;
+      await restoreDeletedSnapshot(recentDeletedStack[0]);
+    }
+
+    function openRestoreDefaultConfirm() {
+      if (!isAdmin) {
+        showToast('請先以管理者帳密登入');
+        return;
+      }
+      document.getElementById('restoreDefaultModal').classList.remove('hidden');
+    }
+
+    function hideRestoreDefaultModal() {
+      document.getElementById('restoreDefaultModal').classList.add('hidden');
+    }
+
+    function closeRestoreDefaultModal(e) {
+      if (e.target.id === 'restoreDefaultModal') hideRestoreDefaultModal();
+    }
+
+    async function confirmRestoreDefaultPlans() {
+      if (!isAdmin) return;
+      const restoredList = normalizePlansList(DEFAULT_PLANS);
+      const restoredCodes = {};
+      restoredList.forEach(p => {
+        if (p.code) restoredCodes[p.id] = p.code;
+      });
+      try {
+        await persistPlansToServer(restoredList, restoredCodes, `已還原內建 ${restoredList.length} 筆範本並同步至伺服器！`);
+        hideRestoreDefaultModal();
+      } catch (err) {
+        hideRestoreDefaultModal();
+        showToast(err.message || '還原失敗');
+      }
+    }
+
     function triggerJsonImport() {
+      if (!isAdmin) {
+        showToast('匯入備份 JSON 需先登入管理者帳號');
+        openLoginModal();
+        return;
+      }
       document.getElementById('jsonFileInput').click();
     }
 
     function handleJsonFileImport(event) {
+      if (!isAdmin) {
+        event.target.value = '';
+        showToast('匯入備份 JSON 需先登入管理者帳號');
+        openLoginModal();
+        return;
+      }
       const file = event.target.files && event.target.files[0];
       event.target.value = '';
       if (!file) return;
@@ -3958,14 +4490,6 @@
           const importedPlans = normalizePlansList(rawList);
           const importedCodes = (parsed && typeof parsed.customCodes === 'object' && parsed.customCodes) ? parsed.customCodes : {};
 
-          if (CAN_USE_SERVER_API && !isAdmin) {
-            plans = importedPlans;
-            customCodes = importedCodes;
-            renderPlans();
-            showToast(`已載入 ${plans.length} 筆計畫（請登入管理者帳密後按任一計畫儲存，即可寫入伺服器永久同步）`);
-            return;
-          }
-
           await persistPlansToServer(importedPlans, importedCodes, `已成功匯入 ${importedPlans.length} 筆計畫並同步至伺服器！`);
         } catch (err) {
           showToast('匯入失敗：請確認為有效的 JSON 備份檔');
@@ -3975,6 +4499,11 @@
     }
 
     function exportJsonBackup() {
+      if (!isAdmin) {
+        showToast('匯出備份 JSON 需先登入管理者帳號');
+        openLoginModal();
+        return;
+      }
       const payload = {
         exportedAt: new Date().toISOString(),
         plans: sortPlansByNumberThenUnnumbered(plans),
@@ -3989,12 +4518,18 @@
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showToast(`已匯出 ${plans.length} 筆計畫備份檔`);
+      showToast(`已匯出 ${plans.length} 筆計畫備份檔（建議妥善留存，誤刪時可直接匯入還原）`);
     }
 
     window.addEventListener('DOMContentLoaded', async () => {
+      const visualEditor = document.getElementById('editPlanVisualEditor');
+      if (visualEditor) {
+        visualEditor.addEventListener('paste', handleVisualEditorPaste);
+      }
+      loadGridLayoutMode();
       await checkAuthStatus();
       await fetchPlansFromServer(false);
+      startBackgroundUpdateWatcher();
     });
   </script>
 </body>
